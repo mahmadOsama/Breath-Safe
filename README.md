@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/breathsafe-logo.svg" alt="BreathSafe logo" width="92" height="92">
+  <img src="docs/assets/breathsafe-emerald-logo.svg" alt="BreathSafe emerald airflow logo" width="92" height="92">
 </p>
 
 <h1 align="center">BreathSafe</h1>
@@ -7,7 +7,7 @@
 <p align="center"><strong>A student project exploring gas-sensor monitoring, live dashboards, and user alerts.</strong></p>
 
 <p align="center">
-  <img src="docs/assets/breathsafe-banner.svg" alt="Abstract BreathSafe sensor and airflow banner" width="100%">
+  <img src="docs/assets/breathsafe-emerald-banner.svg" alt="BreathSafe emerald and mint airflow banner" width="100%">
 </p>
 
 <p align="center">
@@ -36,7 +36,7 @@ The intended physical setup is a microcontroller such as an ESP32 connected to g
 The graphic below summarizes the intended relationship between a sensor source, Firebase data, the user dashboard, and administrator tools. It describes the prototype’s concept; it does not imply that a secure or production-ready backend is configured.
 
 <p align="center">
-  <img src="docs/assets/system-flow.svg" alt="Conceptual BreathSafe data flow: sensors, Firebase, user dashboard, and administrator console" width="100%">
+  <img src="docs/assets/breathsafe-emerald-system-flow.svg" alt="BreathSafe data flow: sensors, Firebase, user dashboard, and administrator console" width="100%">
 </p>
 
 ## How the application is organized
