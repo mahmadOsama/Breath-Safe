@@ -1,0 +1,669 @@
+/* ==========================================
+   BREATHSAFE ADMIN DASHBOARD
+   FILE 4: TABLES & USER MANAGEMENT - COMPLETE
+   Table Controls, User Table, Badges, Actions
+   ========================================== */
+
+/* ========== TABLE CONTROLS ========== */
+.table-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  background: var(--accent);
+  transition: background var(--transition);
+  position: relative;
+  z-index: 1;
+}
+
+.search-box {
+  flex: 1 1 220px;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-box i {
+  position: absolute;
+  left: 13px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 11px 14px 11px 38px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 0.9rem;
+  outline: none;
+  transition: all var(--transition);
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.search-box input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.search-box input::placeholder {
+  color: var(--muted);
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  transition: all var(--transition);
+  font-weight: 500;
+  white-space: nowrap;
+  min-width: 120px;
+  font-family: inherit;
+}
+
+.filter-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.filter-select:hover {
+  background: var(--hover);
+}
+
+.table-actions {
+  display: flex !important;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ========== TABLE WRAPPER (ZOOM RESPONSIVE) ========== */
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 300px);
+  min-height: 400px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  transition: max-height var(--transition);
+}
+
+@media (min-height: 900px) {
+  .table-wrapper {
+    max-height: calc(100vh - 280px);
+    min-height: 500px;
+  }
+}
+
+@media (min-height: 1080px) {
+  .table-wrapper {
+    max-height: calc(100vh - 240px);
+    min-height: 600px;
+  }
+}
+
+/* Table Focus Mode */
+body.table-focus .table-wrapper {
+  max-height: calc(100vh - 200px) !important;
+  min-height: 600px !important;
+}
+
+/* ========== USERS TABLE ========== */
+.users-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.users-table thead {
+  position: sticky;
+  top: 0;
+  background: var(--accent);
+  z-index: 10;
+  box-shadow: 0 1px 0 var(--border);
+}
+
+.users-table th {
+  text-align: left;
+  padding: 14px 18px;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+  background: var(--accent);
+  transition: all var(--transition);
+}
+
+.users-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+
+.users-table tbody tr {
+  transition: background var(--transition);
+  cursor: pointer;
+}
+
+.users-table tbody tr:hover {
+  background: var(--hover);
+}
+
+.users-table input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  accent-color: var(--primary);
+  flex-shrink: 0;
+}
+
+/* Current Admin Row */
+.current-admin-row {
+  position: relative;
+  background: rgba(16, 185, 129, 0.03) !important;
+}
+
+body.dark .current-admin-row {
+  background: rgba(16, 185, 129, 0.08) !important;
+}
+
+.current-admin-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--primary);
+}
+
+.current-admin-row:hover {
+  background: rgba(16, 185, 129, 0.05) !important;
+}
+
+body.dark .current-admin-row:hover {
+  background: rgba(16, 185, 129, 0.12) !important;
+}
+
+/* Disabled Checkbox */
+.user-checkbox[disabled] {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+
+/* ========== USER CELL ========== */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.user-avatar-table {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.user-initials-table {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.admin-badge-table {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border: 2px solid var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.5rem;
+  color: white;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
+  transition: border-color var(--transition);
+}
+
+.user-name-table {
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 180px;
+  transition: color var(--transition);
+}
+
+/* Avatar Variants */
+.user-initials-table.variant-1 {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.user-initials-table.variant-2 {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.user-initials-table.variant-3 {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+}
+
+.user-initials-table.variant-4 {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.user-initials-table.variant-5 {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* ========== BADGES (DARK MODE FIXED) ========== */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 7px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.role-badge.admin {
+  background: rgba(59, 130, 246, 0.12);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+body.dark .role-badge.admin {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.role-badge.user {
+  background: rgba(107, 114, 128, 0.12);
+  color: var(--muted);
+  border-color: rgba(107, 114, 128, 0.2);
+}
+
+body.dark .role-badge.user {
+  background: rgba(107, 114, 128, 0.2);
+  color: #9ca3af;
+  border-color: rgba(107, 114, 128, 0.3);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.status-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.status-badge.active {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--primary);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+body.dark .status-badge.active {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.status-badge.pending {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--warning);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+body.dark .status-badge.pending {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.status-badge i {
+  font-size: 0.5rem;
+}
+
+/* ========== TABLE ACTION BUTTON ========== */
+.table-action-btn {
+  padding: 7px 13px;
+  border: none;
+  border-radius: 7px;
+  background: var(--primary);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.table-action-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+/* ========== RESPONSIVE TABLES ========== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .table-wrapper {
+    max-height: 500px;
+    min-height: 350px;
+  }
+
+  .users-table {
+    min-width: 700px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .table-controls {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .search-box {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .filters {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .table-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-left: 0;
+  }
+
+  .table-wrapper {
+    max-height: 400px;
+    min-height: 300px;
+  }
+
+  .users-table {
+    min-width: 650px;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 12px 10px;
+    font-size: 0.85rem;
+  }
+
+  .user-initials-table {
+    width: 32px;
+    height: 32px;
+    font-size: 0.7rem;
+  }
+
+  .admin-badge-table {
+    width: 12px;
+    height: 12px;
+    font-size: 0.4rem;
+  }
+
+  .role-badge,
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+
+  .table-action-btn {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .table-wrapper {
+    max-height: 350px;
+  }
+
+  .users-table {
+    min-width: 600px;
+  }
+
+  .users-table th,
+  .users-table td {
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+
+  /* Hide joined date column on small screens */
+  .users-table thead th:nth-child(6),
+  .users-table tbody td:nth-child(6) {
+    display: none;
+  }
+}
+/* ========== CURRENT USER ROW FIXES ========== */
+.current-admin-row {
+    position: relative;
+    background: rgba(16, 185, 129, 0.03) !important;
+    border-left: 3px solid var(--primary);
+}
+
+body.dark .current-admin-row {
+    background: rgba(16, 185, 129, 0.08) !important;
+}
+
+.current-admin-row:hover {
+    background: rgba(16, 185, 129, 0.05) !important;
+}
+
+body.dark .current-admin-row:hover {
+    background: rgba(16, 185, 129, 0.12) !important;
+}
+
+/* Fix the "you" label */
+.current-user-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 6px;
+    padding: 2px 6px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--primary);
+    white-space: nowrap;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+body.dark .current-user-indicator {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #34d399;
+}
+
+/* Ensure user name cell doesn't overflow */
+.user-name-table {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 200px;
+    overflow: visible;
+}
+
+.user-name-table .current-user-indicator {
+    flex-shrink: 0;
+}
+/* ========== FIXED: USER NAME CELL STYLING ========== */
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.user-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.user-name-text {
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+/* You Badge - Styled nicely */
+.you-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+/* Current Admin Row Highlight */
+.current-admin-row {
+    background: rgba(16, 185, 129, 0.04) !important;
+    position: relative;
+}
+
+.current-admin-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+    border-radius: 0 2px 2px 0;
+}
+
+body.dark .current-admin-row {
+    background: rgba(16, 185, 129, 0.08) !important;
+}
+
+.current-admin-row:hover {
+    background: rgba(16, 185, 129, 0.08) !important;
+}
+
+body.dark .current-admin-row:hover {
+    background: rgba(16, 185, 129, 0.12) !important;
+}
+
+/* Ensure table doesn't break */
+.users-table td:nth-child(2) {
+    max-width: 250px;
+}
+
+@media (max-width: 768px) {
+    .user-name-text {
+        max-width: 100px;
+    }
+    
+    .you-badge {
+        font-size: 0.6rem;
+        padding: 2px 6px;
+    }
+    
+    .users-table td:nth-child(2) {
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-name-text {
+        max-width: 80px;
+    }
+    
+    .users-table td:nth-child(2) {
+        max-width: 140px;
+    }
+}

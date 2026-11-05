@@ -1,0 +1,3082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Admin Dashboard - BreathSafe</title>
+
+    <!-- ========== AVATAR PRE-LOADER v4.1 ========== -->
+    <script>
+    (function(){
+        try {
+            var STORAGE_KEY = 'breathsafe_avatar_v4';
+            var saved = localStorage.getItem(STORAGE_KEY);
+            var s = JSON.parse(sessionStorage.getItem('breathsafeAdmin') || '{}');
+            
+            var icon, color, grad, initials;
+
+            if (saved) {
+                var data = JSON.parse(saved);
+                icon = data.icon;
+                color = data.color;
+                grad = data.gradient;
+                initials = data.initials;
+            } else if (s.id) {
+                icon = s.avatarIcon || null;
+                color = s.avatarBgColor || '#10b981';
+                grad = s.avatarBgGradient !== undefined ? s.avatarBgGradient : true;
+                
+                var f = (s.firstName || '')[0] || '';
+                var l = (s.lastName || '')[0] || '';
+                initials = (f + l).toUpperCase() || (s.username || 'AD').substring(0, 2).toUpperCase();
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    icon: icon,
+                    color: color,
+                    gradient: grad,
+                    initials: initials,
+                    timestamp: Date.now()
+                }));
+            }
+            
+            icon = icon || null;
+            color = color || '#10b981';
+            grad = grad !== undefined ? grad : true;
+            initials = initials || 'AD';
+            
+            var colors = {
+                '#10b981': '#059669', '#3b82f6': '#2563eb', '#8b5cf6': '#7c3aed',
+                '#ef4444': '#dc2626', '#f59e0b': '#d97706', '#ec4899': '#db2777',
+                '#06b6d4': '#0891b2', '#eab308': '#ca8a04', '#374151': '#1f2937',
+                '#64748b': '#475569', '#6366f1': '#4f46e5', '#14b8a6': '#0d9488'
+            };
+            
+            var bg = grad && colors[color] ? 'linear-gradient(135deg,' + color + ',' + colors[color] + ')' : color;
+            
+            window.__PRE_AVATAR__ = { 
+                icon: icon, 
+                initials: initials, 
+                bg: bg,
+                username: s.username || 'Admin',
+                fullName: ((s.firstName || '') + ' ' + (s.lastName || '')).trim() || s.username || 'Admin User',
+                email: s.email || 'admin@breathsafe.com'
+            };
+        } catch(e) {
+            console.error('Pre-loader error:', e);
+        }
+    })();
+    </script>
+    
+<!-- CSS Files -->
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-core.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-header.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-widgets.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-tables.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-modals.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-user-monitoring-part1.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-user-monitoring-part2.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-homepage.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-activity-monitoring.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-activity-production.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-responsive-fixes.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-bugfixes.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-security-enhanced-fixed.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-notifications-part1.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-notifications-part2.css">
+
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link 
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    >
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" 
+        rel="stylesheet"
+        referrerpolicy="no-referrer"
+    >
+    <style>
+        /* ========== INLINE CRITICAL STYLES ========== */
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .user-name-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .user-name-text {
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+
+        .you-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 8px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+        }
+
+        .current-admin-row {
+            background: rgba(16, 185, 129, 0.04) !important;
+            position: relative;
+        }
+
+        .current-admin-row::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+            border-radius: 0 2px 2px 0;
+        }
+
+        body.dark .current-admin-row {
+            background: rgba(16, 185, 129, 0.08) !important;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--panel);
+            color: var(--text);
+            font-size: 16px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .form-help {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.75rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* ========== ACTIVITY FILTER WRAPPER ========== */
+        .activity-filter-wrapper {
+            position: relative;
+            min-width: 180px;
+        }
+
+        .activity-filter-wrapper::before {
+            content: '';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 6px;
+            z-index: 2;
+            pointer-events: none;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+        }
+
+        .activity-filter-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 22px;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            width: 7px;
+            height: 7px;
+            border-right: 2.5px solid white;
+            border-bottom: 2.5px solid white;
+            z-index: 3;
+            pointer-events: none;
+            margin-top: -2px;
+            transition: transform 0.2s ease;
+        }
+
+        /* ========== AVATAR ICON SUPPORT ========== */
+        .avatar-circle.avatar--has-icon {
+            font-size: 1rem;
+        }
+
+        .avatar-circle.avatar--has-icon i {
+            line-height: 1;
+            color: white;
+        }
+
+        .user-avatar-header.large .avatar-circle.avatar--has-icon {
+            font-size: 1.4rem;
+        }
+
+        .avatar-circle {
+            -webkit-transition: background 0.3s ease;
+            -moz-transition: background 0.3s ease;
+            -o-transition: background 0.3s ease;
+            transition: background 0.3s ease;
+        }
+
+        /* ========== ACTIVITY MODAL STYLES ========== */
+        .activity-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px;
+        }
+
+        .activity-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .activity-modal-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+            pointer-events: none;
+        }
+
+        .activity-modal {
+            background: var(--panel);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .activity-modal-overlay.active .activity-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .activity-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ef4444, #f97316, #ef4444);
+            background-size: 200% 100%;
+            animation: modalGradientShift 3s ease infinite;
+        }
+
+        @keyframes modalGradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .activity-modal-header {
+            display: flex;
+            justify-content: center;
+            padding: 32px 24px 16px;
+            position: relative;
+        }
+
+        .activity-modal-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+            animation: modalIconBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+        }
+
+        @keyframes modalIconBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .activity-modal-icon.danger {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+            color: #ef4444;
+            border: 3px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .activity-modal-icon.warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+            color: #f59e0b;
+            border: 3px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .activity-modal-icon.success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+            color: #10b981;
+            border: 3px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .activity-modal-icon-ring {
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            opacity: 0.3;
+            animation: modalRingPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes modalRingPulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+        }
+
+        .activity-modal-body {
+            padding: 8px 32px 24px;
+            text-align: center;
+        }
+
+        .activity-modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+            margin: 0 0 12px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .activity-modal-description {
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 0 0 20px 0;
+        }
+
+        .activity-modal-description strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .activity-modal-warning {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #b45309;
+            text-align: left;
+        }
+
+        .activity-modal-warning i {
+            font-size: 1.1rem;
+            color: #f59e0b;
+            flex-shrink: 0;
+        }
+
+        body.dark .activity-modal-warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
+            color: #fbbf24;
+        }
+
+        .activity-modal-footer {
+            display: flex;
+            gap: 12px;
+            padding: 0 24px 24px;
+        }
+
+        .activity-modal-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 20px;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .activity-modal-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .activity-modal-btn:hover::before {
+            left: 100%;
+        }
+
+        .activity-modal-btn.cancel {
+            background: var(--accent-bg);
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .activity-modal-btn.cancel:hover {
+            background: var(--hover);
+            border-color: var(--muted);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-modal-btn.confirm.danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .activity-modal-btn.confirm.danger:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+        }
+
+        .activity-modal-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .activity-modal-btn.loading i {
+            animation: modalSpin 0.8s linear infinite;
+        }
+
+        @keyframes modalSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .activity-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-bg);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .activity-modal-close:hover {
+            background: var(--hover);
+            color: var(--text);
+            transform: rotate(90deg);
+            border-color: var(--muted);
+        }
+
+        /* ========== TOAST NOTIFICATIONS ========== */
+        .activity-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--panel);
+            border-radius: 16px;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            z-index: 10000;
+            min-width: 320px;
+            max-width: 420px;
+            transform: translateX(calc(100% + 30px));
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+        }
+
+        .activity-toast.active {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .activity-toast.hiding {
+            transform: translateX(calc(100% + 30px));
+            opacity: 0;
+        }
+
+        .activity-toast-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .activity-toast.success .activity-toast-icon {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08));
+            color: #10b981;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .activity-toast.error .activity-toast-icon {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+            color: #ef4444;
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .activity-toast.warning .activity-toast-icon {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
+            color: #f59e0b;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .activity-toast.info .activity-toast-icon {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.08));
+            color: #3b82f6;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .activity-toast-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .activity-toast-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .activity-toast-message {
+            font-size: 0.85rem;
+            color: var(--muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .activity-toast-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--accent-bg);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .activity-toast-close:hover {
+            background: var(--hover);
+            color: var(--text);
+        }
+
+        .activity-toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), #3b82f6);
+            width: 100%;
+            transform-origin: left;
+            animation: toastProgress 4s linear forwards;
+        }
+
+        .activity-toast.success .activity-toast-progress {
+            background: linear-gradient(90deg, #10b981, #059669);
+        }
+
+        .activity-toast.error .activity-toast-progress {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+        }
+
+        .activity-toast.warning .activity-toast-progress {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        @keyframes toastProgress {
+            0% { transform: scaleX(1); }
+            100% { transform: scaleX(0); }
+        }
+
+        /* Dark mode for modal and toast */
+        body.dark .activity-modal {
+            background: #1e293b;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        body.dark .activity-modal-title {
+            color: #f1f5f9;
+        }
+
+        body.dark .activity-modal-description {
+            color: #94a3b8;
+        }
+
+        body.dark .activity-modal-description strong {
+            color: #e2e8f0;
+        }
+
+        body.dark .activity-modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        body.dark .activity-modal-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark .activity-modal-close {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+        }
+
+        body.dark .activity-modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        body.dark .activity-toast {
+            background: #1e293b;
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+
+        body.dark .activity-toast-title {
+            color: #f1f5f9;
+        }
+
+        body.dark .activity-toast-message {
+            color: #94a3b8;
+        }
+
+        body.dark .activity-toast-close {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Mobile responsive for modal and toast */
+        @media (max-width: 480px) {
+            .activity-modal-overlay {
+                padding: 16px;
+                align-items: flex-end;
+            }
+            
+            .activity-modal {
+                border-radius: 24px 24px 0 0;
+                max-width: 100%;
+            }
+            
+            .activity-modal-header {
+                padding: 28px 20px 12px;
+            }
+            
+            .activity-modal-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 1.75rem;
+            }
+            
+            .activity-modal-body {
+                padding: 8px 24px 20px;
+            }
+            
+            .activity-modal-title {
+                font-size: 1.3rem;
+            }
+            
+            .activity-modal-footer {
+                flex-direction: column-reverse;
+                padding: 0 20px 20px;
+                gap: 10px;
+            }
+            
+            .activity-modal-btn {
+                padding: 16px;
+            }
+            
+            .activity-toast {
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+                min-width: auto;
+                max-width: none;
+                transform: translateY(100px);
+            }
+            
+            .activity-toast.active {
+                transform: translateY(0);
+            }
+        }
+
+        /* Counter update animation */
+        .counter-update {
+            animation: counterPulse 0.3s ease-out;
+        }
+
+        @keyframes counterPulse {
+            0% { 
+                transform: scale(1); 
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(1.15); 
+                color: var(--primary);
+                opacity: 0.8;
+            }
+            100% { 
+                transform: scale(1); 
+                opacity: 1;
+            }
+        }
+
+        /* Make counter values inline-block for animation to work */
+        .card-stat-value,
+        .quick-stat-value,
+        .stat-value,
+        .big-num {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="light">
+    
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo" onclick="showHomepage()">
+                <div class="logo-icon">
+                    <i class="fas fa-wind"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">BreathSafe</span>
+                    <span class="logo-subtitle">Admin Panel</span>
+                </div>
+            </div>
+
+            <div class="breadcrumb" id="breadcrumb">
+                <span class="breadcrumb-item active" onclick="showHomepage()">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </span>
+            </div>
+
+            <div class="header-right">
+                <div class="user-menu" id="userMenu">
+                    <div class="user-menu-trigger">
+                        <div class="user-avatar-header">
+                            <div class="avatar-circle" id="headerAvatar">
+                                <script>
+                                    (function(){
+                                        var p = window.__PRE_AVATAR__;
+                                        var el = document.currentScript.parentElement;
+                                        if (p && /^(?:#[0-9a-f]{6}|linear-gradient\(135deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\))$/i.test(p.bg || '')) el.style.background = p.bg;
+                                        if (p && /^fa-[a-z0-9-]+$/i.test(p.icon || '')) {
+                                            var icon = document.createElement('i');
+                                            icon.className = 'fas ' + p.icon;
+                                            el.replaceChildren(icon);
+                                            el.classList.add('avatar--has-icon');
+                                        } else {
+                                            var initials = document.createElement('span');
+                                            initials.id = 'headerAvatarText';
+                                            initials.textContent = p && typeof p.initials === 'string' ? p.initials.slice(0, 4) : 'AD';
+                                            el.replaceChildren(initials);
+                                        }
+                                    })();
+                                </script>
+                            </div>
+                            <span class="admin-badge-header">
+                                <i class="fas fa-shield-alt"></i>
+                            </span>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name" id="headerUsername">
+                                <script>
+                                    (function(){
+                                        var p = window.__PRE_AVATAR__;
+                                        document.currentScript.parentElement.textContent = p && typeof p.username === 'string' ? p.username : 'Admin User';
+                                    })();
+                                </script>
+                            </span>
+                            <span class="user-role">
+                                <i class="fas fa-shield-alt"></i>
+                                Administrator
+                            </span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </div>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <div class="user-avatar-header large">
+                                <div class="avatar-circle" id="dropdownAvatar">
+                                    <script>
+                                        (function(){
+                                            var p = window.__PRE_AVATAR__;
+                                            var el = document.currentScript.parentElement;
+                                            if (p && /^(?:#[0-9a-f]{6}|linear-gradient\(135deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\))$/i.test(p.bg || '')) el.style.background = p.bg;
+                                            if (p && /^fa-[a-z0-9-]+$/i.test(p.icon || '')) {
+                                                var icon = document.createElement('i');
+                                                icon.className = 'fas ' + p.icon;
+                                                el.replaceChildren(icon);
+                                                el.classList.add('avatar--has-icon');
+                                            } else {
+                                                var initials = document.createElement('span');
+                                                initials.id = 'dropdownAvatarText';
+                                                initials.textContent = p && typeof p.initials === 'string' ? p.initials.slice(0, 4) : 'AD';
+                                                el.replaceChildren(initials);
+                                            }
+                                        })();
+                                    </script>
+                                </div>
+                                <span class="admin-badge-header">
+                                    <i class="fas fa-shield-alt"></i>
+                                </span>
+                            </div>
+                            <div class="dropdown-user-info">
+                                <span class="dropdown-user-name" id="dropdownUsername">
+                                    <script>
+                                        (function(){
+                                            var p = window.__PRE_AVATAR__;
+                                            document.currentScript.parentElement.textContent = p && typeof p.fullName === 'string' ? p.fullName : 'Admin User';
+                                        })();
+                                    </script>
+                                </span>
+                                <span class="dropdown-user-email" id="dropdownEmail">
+                                    <script>
+                                        (function(){
+                                            var p = window.__PRE_AVATAR__;
+                                            document.currentScript.parentElement.textContent = p && typeof p.email === 'string' ? p.email : 'admin@breathsafe.com';
+                                        })();
+                                    </script>
+                                </span>
+                                <span class="dropdown-user-role">
+                                    <i class="fas fa-shield-alt"></i> Administrator
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="admin-profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                        
+       
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item danger" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="main-content">
+        
+        <!-- ========== HOMEPAGE CONTAINER ========== -->
+        <div id="homepageContainer" class="homepage-container">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">BreathSafe Dashboard</h1>
+                    <p class="page-subtitle muted">Choose a section to manage your gas leak detection system</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn-outline" id="refreshBtn" onclick="location.reload()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <div class="quick-stat-item">
+                    <div class="quick-stat-icon primary">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <span class="quick-stat-label">System Status</span>
+                        <span class="quick-stat-value" id="quickSystemStatus">Safe</span>
+                    </div>
+                </div>
+                <div class="quick-stat-item">
+                    <div class="quick-stat-icon success">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="quick-stat-content">
+                        <span class="quick-stat-label">Total Users</span>
+                        <span class="quick-stat-value" id="quickTotalUsers">0</span>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="dashboard-cards-grid">
+                <div class="dashboard-card" data-card="readings" onclick="showReadings()">
+                    <div class="dashboard-card-icon readings">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <h3 class="dashboard-card-title">Real-Time Readings</h3>
+                        <p class="dashboard-card-description">Monitor live sensor data, air quality status, and environmental conditions</p>
+                        <div class="dashboard-card-stats">
+                            <div class="card-stat">
+                                <span class="card-stat-label">Current Status</span>
+                                <span class="card-stat-value" id="cardReadingStatus">Safe</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">Last Update</span>
+                                <span class="card-stat-value" id="cardLastUpdate">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="dashboard-card" data-card="users" onclick="showUserManagement()">
+                    <div class="dashboard-card-icon users">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <h3 class="dashboard-card-title">User Management</h3>
+                        <p class="dashboard-card-description">Manage users, administrators, permissions, and account settings</p>
+                        <div class="dashboard-card-stats">
+                            <div class="card-stat">
+                                <span class="card-stat-label">Total Users</span>
+                                <span class="card-stat-value" id="cardUserCount">0</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">Active</span>
+                                <span class="card-stat-value" id="cardActiveUsers">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <!-- ========== USER SETUP AND MONITORING CARD ========== -->
+                <div class="dashboard-card" data-card="user-monitoring" onclick="showUserMonitoring(event)">
+                    <div class="dashboard-card-icon monitoring">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <h3 class="dashboard-card-title">User Setup and Monitoring</h3>
+                        <p class="dashboard-card-description">Manage user sensors, monitor active sessions, and control user access</p>
+                        <div class="dashboard-card-stats">
+                            <div class="card-stat">
+                                <span class="card-stat-label">Pending Approval</span>
+                                <span class="card-stat-value" id="cardPendingApproval">0</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">Online Now</span>
+                                <span class="card-stat-value" id="cardOnlineNow">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="dashboard-card" data-card="analytics" onclick="showAnalytics()">
+                    <div class="dashboard-card-icon analytics">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="dashboard-card-content">
+                        <h3 class="dashboard-card-title">System Analytics</h3>
+                        <p class="dashboard-card-description">Historical data analysis, trends, and comprehensive reports</p>
+                        <div class="dashboard-card-stats">
+                            <div class="card-stat">
+                                <span class="card-stat-label">Data Points</span>
+                                <span class="card-stat-value" id="cardDataPoints">1.2K</span>
+                            </div>
+                            <div class="card-stat">
+                                <span class="card-stat-label">Uptime</span>
+                                <span class="card-stat-value">99.8%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== RECENT ACTIVITY SECTION ========== -->
+            <div class="recent-activity-section">
+                <div class="activity-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-clock"></i>
+                        Recent Activity
+                        <span class="activity-count" id="activityCount">0</span>
+                    </h3>
+
+                    <div class="activity-controls">
+                        <div class="activity-filter-wrapper">
+                            <select class="activity-filter" id="activityFilter">
+                                <option value="all">All Activities</option>
+                                <optgroup label="👤 User Management">
+                                    <option value="create">➕ Created Users</option>
+                                    <option value="delete">🗑️ Deleted Users</option>
+                                    <option value="user_approved">✅ User Approvals</option>
+                                    <option value="user_reactivated">🔁 User Reactivations</option>
+                                </optgroup>
+                                <optgroup label="📡 Sensor Management">
+                                    <option value="sensor_assign">📡 Sensor Assignments</option>
+                                    <option value="sensor_modify">⚙️ Sensor Modifications</option>
+                                </optgroup>
+                                <optgroup label="🔐 Session Activities">
+                                    <option value="login">🔓 Login Activities</option>
+                                    <option value="logout">🔒 Logout Activities</option>
+                                    <option value="session_end">⛔ Session Ended</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <!-- Export Button -->
+                        <button class="activity-btn" id="exportActivityBtn">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                        <!-- Clear Button -->
+                        <button class="activity-btn danger" id="clearActivityBtn">
+                            <i class="fas fa-trash"></i>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <div class="activity-body" id="activityBody">
+                    <div class="activity-loading">
+                        <div class="activity-loading-spinner"></div>
+                        <p>Loading activities...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== READINGS CONTAINER ========== -->
+        <div id="readingsContainer" class="section-container" style="display: none;">
+            <div class="section-header">
+                <button class="btn-outline back-btn" onclick="showHomepage()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+                <div class="section-title-group">
+                    <h1 class="page-title">Real-Time Readings</h1>
+                    <p class="page-subtitle muted">Live sensor monitoring & air quality analysis</p>
+                </div>
+            </div>
+
+            <div class="readings-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-wind"></i>
+                            Air Quality Monitor
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="orb-container">
+                            <div class="air-orb" id="airOrb">
+                                <div class="orb-ring"></div>
+                                <div class="orb-core">
+                                    <i class="fas fa-wind"></i>
+                                </div>
+                                <div class="orb-glow"></div>
+                            </div>
+                        </div>
+                        <div class="air-status">
+                            <span class="air-status-text" id="airStatusText">Normal</span>
+                            <span class="air-status-desc muted" id="airStatusDesc">Air quality is within safe levels</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-thermometer-half"></i>
+                            Environment Monitor
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="environment-grid">
+                            <div class="env-item temperature">
+                                <div class="env-icon">
+                                    <i class="fas fa-temperature-high"></i>
+                                </div>
+                                <div class="env-content">
+                                    <span class="env-label muted">Temperature</span>
+                                    <div class="env-value-wrapper">
+                                        <span class="env-value" id="temperatureValue">0</span>
+                                        <span class="env-unit">°C</span>
+                                    </div>
+                                    <div class="env-bar">
+                                        <div class="env-bar-fill temp-bar" id="tempBar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="env-item humidity">
+                                <div class="env-icon">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                                <div class="env-content">
+                                    <span class="env-label muted">Humidity</span>
+                                    <div class="env-value-wrapper">
+                                        <span class="env-value" id="humidityValue">0</span>
+                                        <span class="env-unit">%</span>
+                                    </div>
+                                    <div class="env-bar">
+                                        <div class="env-bar-fill humidity-bar" id="humidityBar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-microchip"></i>
+                            Sensor Readings
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="sensor-item">
+                            <div class="sensor-header">
+                                <div class="sensor-icon mq6">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="sensor-info">
+                                    <h4>MQ6 Sensor</h4>
+                                    <p class="muted">LPG / Propane</p>
+                                </div>
+                                <div class="sensor-trend" id="mq6Trend">
+                                    <i class="fas fa-minus"></i>
+                                </div>
+                            </div>
+                            <div class="sensor-value-wrapper">
+                                <span class="sensor-value" id="mq6Value">0</span>
+                                <span class="sensor-unit muted">ppm</span>
+                            </div>
+                            <div class="sensor-bar">
+                                <div class="sensor-bar-fill mq6-bar" id="mq6Bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="sensor-item">
+                            <div class="sensor-header">
+                                <div class="sensor-icon mq7">
+                                    <i class="fas fa-smog"></i>
+                                </div>
+                                <div class="sensor-info">
+                                    <h4>MQ7 Sensor</h4>
+                                    <p class="muted">Carbon Monoxide</p>
+                                </div>
+                                <div class="sensor-trend" id="mq7Trend">
+                                    <i class="fas fa-minus"></i>
+                                </div>
+                            </div>
+                            <div class="sensor-value-wrapper">
+                                <span class="sensor-value" id="mq7Value">0</span>
+                                <span class="sensor-unit muted">ppm</span>
+                            </div>
+                            <div class="sensor-bar">
+                                <div class="sensor-bar-fill mq7-bar" id="mq7Bar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-line"></i>
+                            Real-time Monitoring
+                        </h3>
+                        <div class="card-actions">
+                            <button class="icon-btn small" id="pauseChart">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button class="icon-btn small" id="clearChart">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-wrapper">
+                            <canvas id="sensorChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== USER MANAGEMENT CONTAINER ========== -->
+        <div id="userManagementContainer" class="section-container" style="display: none;">
+            <div class="section-header">
+                <button class="btn-outline back-btn" onclick="showHomepage()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+                <div class="section-title-group">
+                    <h1 class="page-title">User Management</h1>
+                    <p class="page-subtitle muted">Manage users, administrators & permissions</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn-primary" id="addAdminBtn">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Add Admin</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card card">
+                    <div class="stat-header">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i> 12%
+                        </span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-label muted">Total Users</span>
+                        <span class="big-num" id="totalUsers">0</span>
+                    </div>
+                </div>
+                <div class="stat-card card">
+                    <div class="stat-header">
+                        <div class="stat-icon success">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <span class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i> 8%
+                        </span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-label muted">Active Users</span>
+                        <span class="big-num" id="activeUsers">0</span>
+                    </div>
+                </div>
+                <div class="stat-card card">
+                    <div class="stat-header">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-user-clock"></i>
+                        </div>
+                        <span class="stat-trend neutral">
+                            <i class="fas fa-minus"></i> 0%
+                        </span>
+                    </div>
+                    <div class="stat-body">
+                        <span class="stat-label muted">Pending</span>
+                        <span class="big-num" id="pendingUsers">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-users-cog"></i>
+                        User Management
+                    </h3>
+                </div>
+                
+                <div class="table-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search users..." id="searchUsers">
+                    </div>
+                    <div class="filters">
+                        <select id="filterRole" class="filter-select">
+                            <option value="all">All Roles</option>
+                            <option value="admin">🛡️ Admins</option>
+                            <option value="user">Users</option>
+                        </select>
+                        <select id="filterStatus" class="filter-select">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    <div class="table-actions">
+                        <button class="icon-btn" id="toggleTableFocus" title="Table Focus Mode (F)">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button class="icon-btn" id="zoomOutTable" title="Zoom Out (-)">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button class="icon-btn" id="zoomInTable" title="Zoom In (+)">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                        <button class="icon-btn" id="exportCsvBtn" title="Export CSV">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="icon-btn danger" id="deleteSelectedBtn" title="Delete Selected">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                 <th>Sensor</th>
+                                <th>Joined</th>
+                                <th style="width: 80px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="7" class="loading-cell">
+                                    <div class="spinner"></div>
+                                    <span class="muted">Loading users...</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== DIAGRAM CONTAINER ========== -->
+        <div id="diagramContainer" class="section-container" style="display: none;">
+            <div class="section-header">
+                <button class="btn-outline back-btn" onclick="showHomepage()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+                <div class="section-title-group">
+                    <h1 class="page-title">Real-Time System Diagram</h1>
+                    <p class="page-subtitle muted">Interactive visualization of sensor network</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body" style="padding: 60px; text-align: center;">
+                    <i class="fas fa-project-diagram" style="font-size: 4rem; color: var(--muted); margin-bottom: 20px; display: block;"></i>
+                    <h3 style="color: var(--text); margin-bottom: 10px;">System Diagram Coming Soon</h3>
+                    <p class="muted">Interactive real-time sensor network visualization will be available here</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== USER MONITORING CONTAINER ========== -->
+        <div id="userMonitoringContainer" class="section-container" style="display: none;">
+            <div class="section-header">
+                <button class="btn-outline back-btn" onclick="showHomepage()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+                <div class="section-title-group">
+                    <h1 class="page-title">User Setup & Monitoring</h1>
+                    <p class="page-subtitle muted">Approve users, assign sensors, monitor sessions</p>
+                </div>
+                <div class="page-actions">
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        <span>Live Updates</span>
+                    </div>
+                    <button class="btn-outline" onclick="UserMonitoring.refreshAll()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Compact Stats Bar -->
+            <div class="monitoring-stats-bar compact">
+                <div class="stat-item warning">
+                    <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="pendingApprovalNum">0</span>
+                        <span class="stat-label">Pending Approval</span>
+                    </div>
+                </div>
+                <div class="stat-item info">
+                    <div class="stat-icon"><i class="fas fa-microchip"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="pendingSetup">0</span>
+                        <span class="stat-label">Need Sensors</span>
+                    </div>
+                </div>
+                <div class="stat-item success">
+                    <div class="stat-icon"><i class="fas fa-globe"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="onlineNow">0</span>
+                        <span class="stat-label">Online Now</span>
+                    </div>
+                </div>
+                <div class="stat-item primary">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="totalActiveUsers">0</span>
+                        <span class="stat-label">Active Users</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Approval Section -->
+            <div class="card monitoring-section" id="pendingApprovalSection">
+                <div class="card-header compact">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-clock"></i>
+                        Pending Approval
+                        <span class="status-badge warning" id="pendingApprovalCount">0 pending</span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="pending-approval-grid" id="pendingApprovalGrid">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <span>Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Need Sensors Section -->
+            <div class="card monitoring-section">
+                <div class="card-header compact">
+                    <h3 class="card-title">
+                        <i class="fas fa-microchip"></i>
+                        Active Users - Need Sensors
+                        <span class="status-badge info" id="pendingCount">0 need sensors</span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="pending-setup-grid" id="pendingSetupGrid">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <span>Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Sessions -->
+            <div class="card monitoring-section">
+                <div class="card-header compact">
+                    <h3 class="card-title">
+                        <i class="fas fa-broadcast-tower"></i>
+                        Active Sessions
+                        <span class="live-badge">LIVE</span>
+                    </h3>
+                    <div class="card-actions">
+                        <input type="text" class="search-sessions" id="searchSessions" placeholder="Search users...">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="active-sessions-list" id="activeSessionsList">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <span>Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== ANALYTICS CONTAINER ========== -->
+        <div id="analyticsContainer" class="section-container" style="display: none;">
+            <div class="section-header">
+                <button class="btn-outline back-btn" onclick="showHomepage()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+                <div class="section-title-group">
+                    <h1 class="page-title">System Analytics</h1>
+                    <p class="page-subtitle muted">Data analysis, historical trends & security monitoring</p>
+                </div>
+                <div class="page-actions">
+                    <div class="date-range-pill">
+                        <i class="fas fa-calendar-alt"></i> Last 30 Days
+                    </div>
+                    <button class="btn-primary" onclick="if(window.Analytics) Analytics.generateReport()">
+                        <i class="fas fa-file-download"></i>
+                        <span>Export Report</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="card full-width-card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-chart-area"></i> Gas Level Trends (24h)</h3>
+                        <div class="card-actions">
+                            <span class="status-badge active" id="analyticsGasStatus">Live</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-wrapper large">
+                            <canvas id="gasTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-user-plus"></i> User Registration Analytics</h3>
+                        <div class="card-actions">
+                            <button class="icon-btn small" onclick="Analytics.loadUserStatistics()" title="Refresh">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-wrapper">
+                            <canvas id="userGrowthChart"></canvas>
+                        </div>
+                        <div class="stat-footer">
+                            <div class="stat-item">
+                                <span class="muted">Active</span>
+                                <strong class="text-success" id="statActiveUsers">0</strong>
+                                <small class="muted" id="statActivePercent">0%</small>
+                            </div>
+                            <div class="stat-item">
+                                <span class="muted">Pending</span>
+                                <strong class="text-warning" id="statPendingUsers">0</strong>
+                                <small class="muted" id="statPendingPercent">0%</small>
+                            </div>
+                            <div class="stat-item">
+                                <span class="muted">Growth</span>
+                                <strong class="text-success" id="statGrowthRate">+0%</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-temperature-high"></i> Environment Stability</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-wrapper">
+                            <canvas id="envChart"></canvas>
+                        </div>
+                        <div class="stat-footer">
+                            <div class="stat-item">
+                                <span class="muted">Avg Temp</span>
+                                <strong id="analyticsAvgTemp">--</strong>
+                            </div>
+                            <div class="stat-item">
+                                <span class="muted">Avg Humidity</span>
+                                <strong id="analyticsAvgHum">--</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== SECURITY EVENT LOG SECTION ========== -->
+                <div class="card full-width-card security-log-section">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-shield-alt"></i> 
+                            Security Event Log
+                            <span class="realtime-indicator" title="Real-time updates active">
+                                <i class="fas fa-circle"></i> Live
+                            </span>
+                        </h3>
+                        <div class="card-actions">
+                            <button class="icon-btn small" title="Export Logs" onclick="SecurityTracker.exportSecurityLogs()">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="icon-btn small" title="Refresh" onclick="SecurityTracker.applySecurityLogFilter()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="icon-btn small reset-btn" title="Reset Security Data (Testing)" onclick="SecurityTracker.showResetSecurityModal()">
+                                <i class="fas fa-flask"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Stats Bar -->
+                    <div class="security-stats-container">
+                        <div class="security-stats" id="securityStats">
+                            <div class="security-stat-card">
+                                <div class="security-stat-icon warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="security-stat-value" id="statTotalLockouts">0</div>
+                                <div class="security-stat-label">Total Lockouts</div>
+                            </div>
+                            <div class="security-stat-card">
+                                <div class="security-stat-icon danger">
+                                    <i class="fas fa-user-secret"></i>
+                                </div>
+                                <div class="security-stat-value" id="statSuspicious">0</div>
+                                <div class="security-stat-label">Suspicious</div>
+                            </div>
+                            <div class="security-stat-card">
+                                <div class="security-stat-icon info">
+                                    <i class="fas fa-fingerprint"></i>
+                                </div>
+                                <div class="security-stat-value" id="statBlockedIPs">0</div>
+                                <div class="security-stat-label">Blocked Devices/IPs</div>
+                            </div>
+                            <div class="security-stat-card">
+                                <div class="security-stat-icon success">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="security-stat-value" id="statReviewed">0</div>
+                                <div class="security-stat-label">Reviewed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter Bar -->
+                    <div class="security-filter-bar">
+                        <div class="security-filter-controls">
+                            <label for="securityLogFilter" class="filter-label">
+                                <i class="fas fa-filter"></i>
+                                <span>Filter Events</span>
+                            </label>
+                            <select id="securityLogFilter" class="filter-select">
+                                <option value="all">All Events</option>
+                                <option value="admin">👤 Admin Only</option>
+                                <option value="user">👥 User Only</option>
+                                <option value="blocked">🚫 Blocked</option>
+                                <option value="critical">🚨 Critical</option>
+                                <option value="suspicious">⚠️ Suspicious</option>
+                            </select>
+                        </div>
+                        <div class="filter-info">
+                            <span class="filter-count">
+                                <i class="fas fa-list"></i>
+                                <span id="securityLogCount">0</span> events
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Security Table -->
+                    <div class="card-body">
+                        <div class="table-wrapper security-table-wrapper">
+                            <table class="users-table security-table">
+                                <thead>
+                                    <tr>
+                                        <th class="th-time">Time</th>
+                                        <th class="th-severity">Severity</th>
+                                        <th class="th-user">User</th>
+                                        <th class="th-device">Device</th>
+                                        <th class="th-ip">IP Address</th>
+                                        <th class="th-status">Status</th>
+                                        <th class="th-actions">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="securityLogBody">
+                                    <tr>
+                                        <td colspan="7" class="loading-cell">
+                                            <div class="spinner"></div>
+                                            <span class="muted">Loading security events...</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Security Event Log -->
+
+            </div>
+        </div>
+        <!-- End Analytics Container -->
+
+    </main>
+    <!-- End Main Content -->
+
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="theme-toggle">
+        <i class="fas fa-sun"></i>
+    </button>
+    <!-- ========== ADD ADMIN MODAL ========== -->
+    <div id="addAdminModal" class="modal">
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-user-shield"></i>
+                    Add New Administrator
+                </h3>
+                <button class="icon-btn" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="addAdminForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="adminUsername" placeholder="Enter username" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-id-card"></i> First Name</label>
+                            <input type="text" id="adminFirstName" placeholder="First name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="adminLastName" placeholder="Last name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="adminEmail" placeholder="admin@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="adminPhone" placeholder="+1234567890">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="adminPassword" placeholder="Enter password" required>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-crown"></i> Administrator Level</label>
+                        <select id="adminRole" class="form-select" required>
+                            <option value="regular">Regular Administrator</option>
+                            <option value="executive">Executive Administrator</option>
+                        </select>
+                        <small class="form-help">
+                            <strong>Regular:</strong> Can manage users and view logs<br>
+                            <strong>Executive:</strong> Full system access including admin management, device/IP blocking, and security controls
+                        </small>
+                    </div>
+                    <div class="alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <span>This user will be created with administrator privileges based on the selected level.</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-outline" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-user-shield"></i>
+                        Create Administrator
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== USER DETAILS MODAL ========== -->
+    <div id="userDetailsModal" class="modal">
+        <div class="modal-backdrop" id="userDetailsBackdrop"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-user-circle"></i>
+                    User Details
+                </h3>
+                <button class="icon-btn" id="closeUserDetailsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="user-details-avatar-section">
+                    <div class="user-details-avatar">
+                        <div class="avatar-circle-large" id="userDetailsAvatar">
+                            <span id="userDetailsInitials">JD</span>
+                        </div>
+                        <span class="user-details-badge" id="userDetailsBadge"></span>
+                    </div>
+                    <div class="user-details-name-section">
+                        <h4 id="userDetailsName">John Doe</h4>
+                        <p class="muted" id="userDetailsEmail">john@example.com</p>
+                    </div>
+                </div>
+                <div class="user-details-grid">
+                    <div class="detail-item">
+                        <label><i class="fas fa-user"></i> Username</label>
+                        <span id="detailUsername">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-id-card"></i> First Name</label>
+                        <span id="detailFirstName">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-id-card"></i> Last Name</label>
+                        <span id="detailLastName">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <span id="detailEmail">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-phone"></i> Phone Number</label>
+                        <span id="detailPhone">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-shield-alt"></i> Role</label>
+                        <span id="detailRole">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-circle"></i> Status</label>
+                        <span id="detailStatus">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-calendar"></i> Created At</label>
+                        <span id="detailCreatedAt">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <label><i class="fas fa-calendar-check"></i> Activated At</label>
+                        <span id="detailActivatedAt">-</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>
+                            <i class="fas fa-key"></i> API Token
+                            <button class="copy-btn" id="copyTokenBtn" type="button" title="Copy to clipboard">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </label>
+                        <code class="api-token" id="detailApiToken">-</code>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-outline" id="closeUserDetailsBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== DELETE CONFIRM MODAL ========== -->
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-backdrop" id="deleteBackdrop"></div>
+        <div class="modal-dialog modal-sm">
+            <div class="modal-header">
+                <h3 class="modal-title danger-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Confirm Deletion
+                </h3>
+                <button class="icon-btn" id="closeDeleteModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-danger">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div>
+                        <strong>Are you sure?</strong>
+                        <p>You are about to delete <strong id="deleteCount">0</strong> user(s). This action cannot be undone.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-outline" id="cancelDeleteBtn">Cancel</button>
+                <button type="button" class="btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Delete Users</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ACTIVITY CLEAR CONFIRMATION MODAL ========== -->
+    <div class="activity-modal-overlay" id="clearActivityModal">
+        <div class="activity-modal">
+            <div class="activity-modal-header">
+                <div class="activity-modal-icon danger">
+                    <i class="fas fa-trash-alt"></i>
+                    <div class="activity-modal-icon-ring"></div>
+                </div>
+            </div>
+            <div class="activity-modal-body">
+                <h3 class="activity-modal-title">Clear Activity Log?</h3>
+                <p class="activity-modal-description">
+                    You're about to delete <strong id="clearActivityCount">all</strong> activity records. 
+                    This action cannot be undone.
+                </p>
+                <div class="activity-modal-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>This will permanently remove all selected activity history.</span>
+                </div>
+            </div>
+            <div class="activity-modal-footer">
+                <button class="activity-modal-btn cancel" id="cancelClearActivity">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button class="activity-modal-btn confirm danger" id="confirmClearActivity">
+                    <i class="fas fa-trash-alt"></i>
+                    Yes, Clear All
+                </button>
+            </div>
+            <button class="activity-modal-close" id="closeClearActivityModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== SUCCESS TOAST NOTIFICATION ========== -->
+    <div class="activity-toast" id="activityToast">
+        <div class="activity-toast-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="activity-toast-content">
+            <span class="activity-toast-title">Success!</span>
+            <span class="activity-toast-message">Activity log has been cleared.</span>
+        </div>
+        <button class="activity-toast-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="activity-toast-progress"></div>
+    </div>
+
+    <!-- Toast Notification (Original) -->
+    <div id="toast" class="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<!-- Central Activity Logger -->
+<script src="admin-dashboard-js/breathsafe-activity-logger.js"></script>
+
+<!-- IMPORTANT: SharedState must load FIRST -->
+<script src="admin-dashboard-js/admin-shared-state.js"></script>
+    <!-- Counter Manager (v1.9 - Homepage Card) -->
+    <script>
+    // ==========================================
+    // BREATHSAFE COUNTER MANAGER v1.9
+    // Homepage User Monitoring card shows Pending Approval
+    // ==========================================
+    const CounterManager = (() => {
+        'use strict';
+
+        let initialized = false;
+        let refreshInterval = null;
+        let lastCountsJson = '';
+
+        function getCounts() {
+            const counts = {
+                totalAll: 0,
+                totalAdmins: 0,
+                totalRegularUsers: 0,
+                activeAll: 0,
+                activeRegularUsers: 0,
+                pendingApproval: 0,
+                needsSensors: 0,
+                onlineUsers: 0,
+                activities: 0
+            };
+
+            if (!window.SharedState?.initialized) {
+                return counts;
+            }
+
+            const SS = SharedState;
+            
+            if (SS.allUsers instanceof Map) {
+                SS.allUsers.forEach(user => {
+                    counts.totalAll++;
+                    
+                    if (user.isAdmin) {
+                        counts.totalAdmins++;
+                        counts.activeAll++;
+                    } else {
+                        counts.totalRegularUsers++;
+                        const status = (user.status || 'pending').toLowerCase();
+                        
+                        if (status === 'active') {
+                            counts.activeAll++;
+                            counts.activeRegularUsers++;
+                        }
+                    }
+                });
+            }
+            
+            if (SS.pendingUsers instanceof Map) {
+                counts.pendingApproval = SS.pendingUsers.size;
+            }
+            
+            if (SS.needsSensorUsers instanceof Map) {
+                counts.needsSensors = SS.needsSensorUsers.size;
+            }
+            
+            if (SS.onlineUsers instanceof Map) {
+                counts.onlineUsers = SS.onlineUsers.size;
+            }
+            
+            if (Array.isArray(SS.filteredActivities)) {
+                counts.activities = SS.filteredActivities.length;
+            }
+
+            return counts;
+        }
+
+        function updateElement(id, value) {
+            const el = document.getElementById(id);
+            if (!el) return false;
+            
+            const newValue = String(value);
+            if (el.textContent !== newValue) {
+                el.textContent = newValue;
+                return true;
+            }
+            return false;
+        }
+
+        function updateAllCounters() {
+            const c = getCounts();
+            
+            const json = JSON.stringify(c);
+            if (json === lastCountsJson) return;
+            lastCountsJson = json;
+            
+            // Homepage - Quick Stats
+            updateElement('quickTotalUsers', c.totalAll);
+            
+            // Homepage - User Management Card
+            updateElement('cardUserCount', c.totalAll);
+            updateElement('cardActiveUsers', c.activeAll);
+            
+            // Homepage - User Monitoring Card
+            updateElement('activeUsersLive', c.onlineUsers);
+            updateElement('pendingSetupCount', c.needsSensors);
+            updateElement('cardPendingApproval', c.pendingApproval);
+            updateElement('cardOnlineNow', c.onlineUsers);
+            
+            // User Management Page - Stat Cards
+            updateElement('totalUsers', c.totalAll);
+            updateElement('activeUsers', c.activeAll);
+            updateElement('pendingUsers', c.pendingApproval);
+            
+            // User Monitoring Page - Compact Stats Bar
+            updateElement('pendingApprovalNum', c.pendingApproval);
+            updateElement('pendingSetup', c.needsSensors);
+            updateElement('onlineNow', c.onlineUsers);
+            updateElement('totalActiveUsers', c.activeRegularUsers);
+            
+            // Activity Section
+            updateElement('activityCount', c.activities);
+            updateElement('activityTabCount', c.activities);
+            updateElement('monitoringTabCount', c.pendingApproval + c.needsSensors);
+            updateElement('sessionsTabCount', c.onlineUsers);
+            
+            // Activity Live Stats Bar
+            updateElement('liveOnlineCount', c.onlineUsers);
+            updateElement('livePendingCount', c.pendingApproval);
+            updateElement('liveNeedSensorsCount', c.needsSensors);
+            updateElement('liveActiveCount', c.activeRegularUsers);
+        }
+
+        function forceUpdate() {
+            lastCountsJson = '';
+            updateAllCounters();
+        }
+
+        function init() {
+            if (initialized) return;
+            
+            forceUpdate();
+            
+            refreshInterval = setInterval(updateAllCounters, 1500);
+            
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    forceUpdate();
+                }
+            });
+            
+            hookNavigation();
+            
+            initialized = true;
+        }
+        
+        function hookNavigation() {
+            const origShowUserMonitoring = window.showUserMonitoring;
+            const origShowHomepage = window.showHomepage;
+            const origShowUserManagement = window.showUserManagement;
+            
+            if (typeof origShowUserMonitoring === 'function') {
+                window.showUserMonitoring = async function(event) {
+                    const result = await origShowUserMonitoring.apply(this, arguments);
+                    forceUpdate();
+                    setTimeout(forceUpdate, 200);
+                    setTimeout(forceUpdate, 500);
+                    return result;
+                };
+            }
+            
+            if (typeof origShowHomepage === 'function') {
+                window.showHomepage = function() {
+                    const result = origShowHomepage.apply(this, arguments);
+                    setTimeout(forceUpdate, 100);
+                    return result;
+                };
+            }
+            
+            if (typeof origShowUserManagement === 'function') {
+                window.showUserManagement = function() {
+                    const result = origShowUserManagement.apply(this, arguments);
+                    setTimeout(forceUpdate, 100);
+                    return result;
+                };
+            }
+        }
+
+        function destroy() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+            initialized = false;
+        }
+
+        return {
+            init,
+            destroy,
+            update: updateAllCounters,
+            updateNow: forceUpdate,
+            getCounts,
+            get initialized() { return initialized; }
+        };
+    })();
+
+    window.CounterManager = CounterManager;
+    </script>
+
+<!-- Application Scripts (in correct order) -->
+<script src="security/secureToken.js"></script>
+<script src="admin-dashboard-js/admin-dashboard-core.js"></script>
+<script src="admin-dashboard-js/admin-dashboard-sensors.js"></script>
+<script src="admin-dashboard-js/admin-dashboard-table-controls-fixed.js"></script>
+<script src="admin-dashboard-js/admin-dashboard-navigation.js"></script>
+<script src="admin-dashboard-js/admin-dashboard-analytics.js"></script>
+<script src="admin-dashboard-js/admin-dashboard-activity.js"></script>
+<script src="admin-dashboard-js/admin-user-monitoring.js"></script>
+<script src="admin-dashboard-js/admin-security-tracker.js"></script>
+<script src="admin-dashboard-js/admin-notifications.js"></script>
+<!-- ========== AVATAR SYNC v4.1 - COMPLETE FIX ========== -->
+<script>
+(function() {
+    'use strict';
+    
+    console.log('🔄 Avatar Sync v4.1 initializing...');
+
+    var STORAGE_KEY = 'breathsafe_avatar_v4';
+    
+    var COLORS = {
+        '#10b981': '#059669', '#3b82f6': '#2563eb', '#8b5cf6': '#7c3aed',
+        '#ef4444': '#dc2626', '#f59e0b': '#d97706', '#ec4899': '#db2777',
+        '#06b6d4': '#0891b2', '#eab308': '#ca8a04', '#374151': '#1f2937',
+        '#64748b': '#475569', '#6366f1': '#4f46e5', '#14b8a6': '#0d9488'
+    };
+
+    function getBackground(color, gradient) {
+        if (!Object.prototype.hasOwnProperty.call(COLORS, color)) color = '#10b981';
+        if (!gradient) return color;
+        return COLORS[color] ? 'linear-gradient(135deg, ' + color + ', ' + COLORS[color] + ')' : color;
+    }
+
+    function normalizeAvatarData(data) {
+        if (!data || typeof data !== 'object') return { icon: null, color: '#10b981', gradient: true, initials: 'AD' };
+        return {
+            icon: typeof data.icon === 'string' && /^fa-[a-z0-9-]+$/i.test(data.icon) ? data.icon : null,
+            color: Object.prototype.hasOwnProperty.call(COLORS, data.color) ? data.color : '#10b981',
+            gradient: data.gradient === true,
+            initials: typeof data.initials === 'string' ? data.initials.slice(0, 4) : 'AD'
+        };
+    }
+
+    function applyToElement(id, icon, initials, bg) {
+        var el = document.getElementById(id);
+        if (!el) {
+            console.warn('Element not found:', id);
+            return;
+        }
+        
+        if (/^(?:#[0-9a-f]{6}|linear-gradient\(135deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\))$/i.test(bg || '')) el.style.background = bg;
+        
+        if (typeof icon === 'string' && /^fa-[a-z0-9-]+$/i.test(icon)) {
+            var iconElement = document.createElement('i');
+            iconElement.className = 'fas ' + icon;
+            el.replaceChildren(iconElement);
+            el.classList.add('avatar--has-icon');
+        } else {
+            var initialsElement = document.createElement('span');
+            initialsElement.textContent = typeof initials === 'string' ? initials.slice(0, 4) : 'AD';
+            el.replaceChildren(initialsElement);
+            el.classList.remove('avatar--has-icon');
+        }
+        
+        console.log('✅ Updated avatar:', id, icon ? 'icon:' + icon : 'initials:' + initials);
+    }
+
+    function getAvatarData() {
+        var icon = null;
+        var color = '#10b981';
+        var gradient = true;
+        var initials = 'AD';
+        
+        // 1. Try localStorage first (persistent storage)
+        try {
+            var saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                var data = JSON.parse(saved);
+                console.log('📦 Found in localStorage:', data);
+                return normalizeAvatarData(data);
+            }
+        } catch(e) {
+            console.warn('localStorage read error:', e);
+        }
+        
+        // 2. Fallback to sessionStorage and SAVE to localStorage
+        try {
+            var session = JSON.parse(sessionStorage.getItem('breathsafeAdmin') || '{}');
+            if (session.id) {
+                icon = session.avatarIcon || null;
+                color = session.avatarBgColor || '#10b981';
+                gradient = session.avatarBgGradient !== undefined ? session.avatarBgGradient : true;
+                
+                var f = (session.firstName || '')[0] || '';
+                var l = (session.lastName || '')[0] || '';
+                initials = (f + l).toUpperCase() || (session.username || 'AD').substring(0, 2).toUpperCase();
+                
+                // ⭐ CRITICAL: Save to localStorage for persistence
+                var avatarData = normalizeAvatarData({
+                    icon: icon,
+                    color: color,
+                    gradient: gradient,
+                    initials: initials,
+                    timestamp: Date.now()
+                });
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(avatarData));
+                
+                return avatarData;
+            }
+        } catch(e) {
+        }
+        
+        // 3. Return defaults
+        return normalizeAvatarData(null);
+    }
+
+    function syncAvatars() {
+        console.log('🔍 Syncing avatar from storage...');
+        
+        var data = getAvatarData();
+        var bg = getBackground(data.color, data.gradient);
+        
+        console.log('🎨 Applying avatar - Icon:', data.icon, 'Color:', data.color, 'Gradient:', data.gradient);
+        
+        applyToElement('headerAvatar', data.icon, data.initials, bg);
+        applyToElement('dropdownAvatar', data.icon, data.initials, bg);
+        
+        console.log('✅ Avatar sync complete');
+    }
+
+    // ========== EVENT LISTENERS ==========
+    
+    // 1. Run immediately
+    syncAvatars();
+    
+    // 2. On DOMContentLoaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📋 DOMContentLoaded');
+            syncAvatars();
+        });
+    }
+    
+    // 3. On pageshow (back/forward navigation)
+    window.addEventListener('pageshow', function(e) {
+        console.log('📄 pageshow event, persisted:', e.persisted);
+        syncAvatars();
+    });
+    
+    // 4. On visibility change
+    document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+            console.log('👁️ Page visible');
+            syncAvatars();
+        }
+    });
+    
+    // 5. On focus
+    window.addEventListener('focus', function() {
+        console.log('🎯 Window focused');
+        syncAvatars();
+    });
+    
+    // 6. On storage change (other tabs)
+    window.addEventListener('storage', function(e) {
+        if (e.key === STORAGE_KEY || e.key === 'breathsafe_avatar_changed') {
+            console.log('📡 Storage change detected');
+            syncAvatars();
+        }
+    });
+    
+    // 7. Delayed syncs for safety
+    setTimeout(syncAvatars, 100);
+    setTimeout(syncAvatars, 500);
+    setTimeout(syncAvatars, 1500);
+    
+    // Export for debugging
+    window.AvatarSync = {
+        sync: syncAvatars,
+        getData: getAvatarData,
+        clear: function() {
+            localStorage.removeItem(STORAGE_KEY);
+            console.log('🗑️ Avatar cleared from localStorage');
+        },
+        debug: function() {
+            return Boolean(localStorage.getItem(STORAGE_KEY));
+        }
+    };
+    
+    console.log('✅ Avatar Sync v4.1 initialized');
+    console.log('💡 Debug commands: AvatarSync.sync(), AvatarSync.debug(), AvatarSync.clear()');
+
+})();
+</script>
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            
+            try {
+                // 1. Initialize SharedState first
+                await SharedState.init();
+                
+                // 2. Initialize CounterManager
+                CounterManager.init();
+                
+                // 3. Initialize Core
+                if (typeof initCore === 'function') {
+                    initCore();
+                }
+                
+                // 4. Initialize Sensors
+                if (typeof initSensors === 'function') {
+                    initSensors();
+                }
+                
+                // 5. Initialize Table Controls
+                if (window.TableControls?.init) {
+                    window.TableControls.init();
+                }
+                
+                // 6. Initialize Navigation
+                if (typeof initNavigation === 'function') {
+                    initNavigation();
+                }
+                
+                // 7. Initialize Activity Tracker
+                if (window.ActivityTracker?.init) {
+                    await window.ActivityTracker.init();
+                    
+// In the DOMContentLoaded event listener, find this section:
+if (sessionStorage.getItem('shouldLogLogin') === 'true') {
+    sessionStorage.removeItem('shouldLogLogin');
+    if (typeof SharedState.logLogin === 'function') {
+        // Add a small delay to prevent race conditions
+        setTimeout(async () => {
+            await SharedState.logLogin();
+            console.log('✅ Login activity logged');
+        }, 500);
+    }
+}
+                }
+                
+                // 8. Initialize Analytics (delayed)
+                setTimeout(() => {
+                    if (window.Analytics?.init) {
+                        window.Analytics.init();
+                    }
+                }, 500);
+                
+                // 9. Initialize Notifications
+                if (window.AdminNotifications?.init) {
+                    await window.AdminNotifications.init();
+                }
+                
+                // 10. Initialize Security Tracker
+                if (window.SecurityTracker?.init) {
+                    await window.SecurityTracker.init();
+                }
+                
+                // 11. Force counter update
+                setTimeout(() => {
+                    CounterManager.updateNow();
+                }, 1000);
+                
+                // 12. Update dashboard avatars
+                if (window.DashboardAvatar?.update) {
+                    window.DashboardAvatar.update();
+                }
+                
+            } catch (error) {
+                
+                const activityBody = document.getElementById('activityBody');
+                if (activityBody) {
+                    activityBody.innerHTML = `
+                        <div class="activity-empty">
+                            <div class="activity-empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <h4>Initialization Error</h4>
+                            <p class="initialization-error-message"></p>
+                            <button type="button" class="btn-primary initialization-reload" style="margin-top: 15px;">
+                                <i class="fas fa-redo"></i> Reload Page
+                            </button>
+                        </div>
+                    `;
+                    activityBody.querySelector('.initialization-error-message').textContent = String(error?.message || 'An unexpected error occurred').slice(0, 500);
+                    activityBody.querySelector('.initialization-reload').addEventListener('click', () => window.location.reload());
+                }
+            }
+        });
+    </script>
+   
+<!-- ==========================================
+LOGOUT CONFIRMATION MODAL SYSTEM v2.0
+========================================== -->
+<script>
+// ==========================================
+// LOGOUT CONFIRMATION MODAL - v2.0
+// Uses live admin data from SharedState/AdminCore
+// ==========================================
+
+function showLogoutConfirmation() {
+    // Get LIVE admin data from multiple sources (priority order)
+    let adminData = null;
+    
+    // 1. Try SharedState first (most reliable)
+    if (window.SharedState && window.SharedState.currentAdmin) {
+        adminData = window.SharedState.currentAdmin;
+    }
+    // 2. Try AdminCore
+    else if (window.AdminCore && window.AdminCore.currentAdminData) {
+        adminData = window.AdminCore.currentAdminData;
+    }
+    // 3. Fallback to sessionStorage
+    else {
+        try {
+            adminData = JSON.parse(sessionStorage.getItem('breathsafeAdmin') || '{}');
+        } catch (e) {
+            adminData = {};
+            console.error('❌ Logout Modal: Failed to get admin data');
+        }
+    }
+    
+    // Extract user info
+    const firstName = adminData.firstName || '';
+    const lastName = adminData.lastName || '';
+    const username = adminData.username || 'Admin';
+    const email = adminData.email || 'admin@breathsafe.com';
+    const role = adminData.role || 'regular';
+    
+    // Generate initials
+    let initials = 'AD';
+    if (firstName && lastName) {
+        initials = (firstName[0] + lastName[0]).toUpperCase();
+    } else if (username) {
+        initials = username.substring(0, 2).toUpperCase();
+    }
+    
+    // Generate full name
+    const fullName = [firstName, lastName].filter(Boolean).join(' ') || username;
+    
+    // Role display
+    const roleDisplay = role === 'executive' ? 'Executive Administrator' : 
+                       role === 'regular' ? 'Administrator' : 
+                       'Administrator';
+    
+    console.log('📊 Logout Modal Data:', {
+        fullName,
+        email,
+        role: roleDisplay,
+        initials,
+        source: window.SharedState ? 'SharedState' : 
+               window.AdminCore ? 'AdminCore' : 
+               'SessionStorage'
+    });
+    
+    // Create modal HTML
+    const modalHTML = `
+        <div class="logout-confirm-overlay" id="logoutConfirmOverlay">
+            <div class="logout-modal-backdrop" onclick="closeLogoutModal()"></div>
+            <div class="logout-modal">
+                <div class="logout-modal-header">
+                    <h3>
+                        <i class="fas fa-sign-out-alt"></i>
+                        Confirm Logout
+                    </h3>
+                </div>
+                <div class="logout-modal-body">
+                    <div class="logout-user-info">
+                        <div class="logout-avatar">${initials}</div>
+                        <div class="logout-details">
+                            <strong>${fullName}</strong>
+                            <span>
+                                <i class="fas fa-envelope"></i>
+                                ${email}
+                            </span>
+                            <span style="margin-top: 2px;">
+                                <i class="fas fa-shield-alt"></i>
+                                ${roleDisplay}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="logout-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Are you sure you want to logout? Your current session will be terminated and you'll need to login again.</p>
+                    </div>
+                </div>
+                <div class="logout-modal-footer">
+                    <button class="logout-btn cancel" onclick="closeLogoutModal()">
+                        <i class="fas fa-times"></i>
+                        <span>Cancel</span>
+                    </button>
+                    <button class="logout-btn confirm" onclick="confirmLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Yes, Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove any existing modal first
+    const existingModal = document.getElementById('logoutConfirmOverlay');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add to body
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+    
+    // Show with animation
+    setTimeout(() => {
+        const overlay = document.getElementById('logoutConfirmOverlay');
+        if (overlay) {
+            overlay.classList.add('active');
+        }
+    }, 10);
+}
+
+function closeLogoutModal() {
+    const overlay = document.getElementById('logoutConfirmOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            overlay.remove();
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}
+
+async function confirmLogout() {
+    const btn = document.querySelector('.logout-btn.confirm');
+    const cancelBtn = document.querySelector('.logout-btn.cancel');
+    
+    if (btn) {
+        btn.disabled = true;
+        btn.classList.add('loading');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Logging out...</span>';
+    }
+    
+    if (cancelBtn) {
+        cancelBtn.disabled = true;
+    }
+    
+    try {
+        // Call AdminCore's performLogout if available
+        if (window.AdminCore && typeof window.AdminCore.performLogout === 'function') {
+            console.log('🔓 Using AdminCore.performLogout()');
+            await window.AdminCore.performLogout();
+            return;
+        }
+        
+        // Fallback manual logout
+        console.log('🔓 Using fallback logout');
+        
+        // Log the logout
+        if (window.BreathSafeLogger && typeof window.BreathSafeLogger.logLogout === 'function') {
+            await window.BreathSafeLogger.logLogout();
+        } else if (window.SharedState && typeof window.SharedState.logActivity === 'function') {
+            await window.SharedState.logActivity('logout', null, { 
+                reason: 'User initiated logout',
+                timestamp: new Date().toISOString()
+            });
+        }
+    } catch (e) {
+        console.error('Failed to log logout:', e);
+    }
+    
+    // Clear all session data
+    sessionStorage.removeItem('breathsafeAdmin');
+    sessionStorage.removeItem('breathsafeAdminToken');
+    sessionStorage.clear();
+    
+    // Show success message
+    if (window.SharedState && typeof window.SharedState.notify === 'function') {
+        window.SharedState.notify('Logged out successfully', 'success');
+    }
+    
+    // Redirect after short delay
+    setTimeout(() => {
+        window.location.href = './Login-codes/breathsafe-admin-login.html';
+    }, 500);
+}
+
+// ==========================================
+// AUTO-INITIALIZE ON DOM READY
+// ==========================================
+function initLogoutModal() {
+    console.log('✅ Logout Modal System v2.0 initialized');
+    
+    // Expose globally
+    window.showLogoutConfirmation = showLogoutConfirmation;
+    window.closeLogoutModal = closeLogoutModal;
+    window.confirmLogout = confirmLogout;
+}
+
+// Initialize immediately if DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLogoutModal);
+} else {
+    initLogoutModal();
+}
+
+console.log('✅ Logout Modal Script Loaded v2.0');
+</script>
+
+<!-- Logout Modal CSS -->
+<style>
+/* ==========================================
+LOGOUT CONFIRMATION MODAL STYLES
+========================================== */
+
+.logout-confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 20px;
+}
+
+.logout-confirm-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.logout-modal-backdrop {
+    position: absolute;
+    inset: 0;
+}
+
+.logout-modal {
+    background: var(--panel);
+    border-radius: 20px;
+    max-width: 440px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 24px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border);
+}
+
+.logout-confirm-overlay.active .logout-modal {
+    transform: scale(1) translateY(0);
+}
+
+/* Header */
+.logout-modal-header {
+    padding: 32px 28px 24px;
+    background: linear-gradient(135deg, var(--accent-bg) 0%, var(--panel) 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+}
+
+.logout-modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--danger), #dc2626);
+}
+
+.logout-modal-header h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.logout-modal-header h3 i {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15));
+    border: 2px solid rgba(239, 68, 68, 0.3);
+    border-radius: 50%;
+    color: var(--danger);
+    font-size: 1.4rem;
+    animation: logoutPulse 2s infinite;
+}
+
+@keyframes logoutPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+    }
+}
+
+/* Body */
+.logout-modal-body {
+    padding: 32px 28px;
+}
+
+.logout-user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: var(--accent-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 24px;
+}
+
+.logout-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.logout-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.logout-details strong {
+    color: var(--text);
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.logout-details span {
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout-details span i {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    color: var(--primary);
+}
+
+.logout-details span:last-child {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.logout-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 12px;
+    color: #92400e;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+body.dark .logout-warning {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #fbbf24;
+}
+
+.logout-warning i {
+    color: #f59e0b;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.logout-warning p {
+    margin: 0;
+    color: inherit;
+}
+
+/* Footer */
+.logout-modal-footer {
+    display: flex;
+    gap: 12px;
+    padding: 24px 28px 28px;
+    background: var(--accent-bg);
+    border-top: 1px solid var(--border);
+}
+
+.logout-btn {
+    flex: 1;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.logout-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.logout-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.logout-btn.cancel {
+    background: var(--panel);
+    color: var(--text);
+    border: 2px solid var(--border);
+}
+
+.logout-btn.cancel:hover {
+    background: var(--hover);
+    border-color: var(--muted);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.logout-btn.confirm {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.logout-btn.confirm:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+}
+
+.logout-btn:active {
+    transform: scale(0.98);
+}
+
+.logout-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.logout-btn i {
+    font-size: 1.05rem;
+    position: relative;
+    z-index: 1;
+}
+
+.logout-btn span {
+    position: relative;
+    z-index: 1;
+}
+
+/* Loading State */
+.logout-btn.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Dark Theme Enhancements */
+body.dark .logout-modal {
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.6),
+        0 8px 24px rgba(0, 0, 0, 0.4);
+    border-color: #1f2937;
+}
+
+body.dark .logout-user-info {
+    background: #1a2332;
+    border-color: #1f2937;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .logout-modal {
+        max-width: calc(100vw - 32px);
+        border-radius: 16px;
+    }
+    
+    .logout-modal-header,
+    .logout-modal-body,
+    .logout-modal-footer {
+        padding: 24px 20px;
+    }
+    
+    .logout-modal-header h3 {
+        font-size: 1.15rem;
+    }
+    
+    .logout-modal-header h3 i {
+        width: 46px;
+        height: 46px;
+        font-size: 1.2rem;
+    }
+    
+    .logout-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 1.05rem;
+    }
+    
+    .logout-modal-footer {
+        flex-direction: column;
+    }
+    
+    .logout-btn {
+        width: 100%;
+    }
+}
+</style>
+</body>
+</html>

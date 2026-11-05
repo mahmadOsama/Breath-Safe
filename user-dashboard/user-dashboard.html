@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#10b981">
+    <meta name="description" content="BreathSafe User Dashboard - Real-time Air Quality Monitoring">
+    <title>BreathSafe - User Dashboard</title>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Google Fonts - Inter with more weights -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="dashboard.css">
+    
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2310b981'/%3E%3Ctext x='16' y='21' font-family='sans-serif' font-size='18' font-weight='bold' fill='white' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    
+    <!-- Audio Elements -->
+    <audio id="alarmSound" loop preload="none">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleQEAKqa1tKaLXjhId6ve2qRgGAY+nt/fqGEABHWz4NahWwAAi8rYmVIAAKTZ0YdGAACv3M1+OwAAr9zNfTsAAK/czX07AACv3M19OwAAr9zNfTsAAK/czX07AACv3M19OwAAr9zNfTsAAK/czX07AACv3M19OwAA" type="audio/wav">
+    </audio>
+    <audio id="notificationSound" preload="none">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="successSound" preload="none">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="warningSound" preload="none">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2900/2900-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="clickSound" preload="none">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
+    </audio>
+</head>
+<body class="light" data-loading="true">
+    
+    <!-- Initial Loading Screen -->
+    <div class="initial-loader" id="initialLoader">
+        <div class="loader-content">
+            <div class="loader-logo">
+                <div class="loader-icon">
+                    <i class="fas fa-wind"></i>
+                    <div class="loader-pulse"></div>
+                </div>
+                <h1 class="loader-title">BreathSafe</h1>
+            </div>
+            <div class="loader-progress">
+                <div class="loader-bar">
+                    <div class="loader-fill" id="loaderFill"></div>
+                </div>
+                <p class="loader-text" id="loaderText">Initializing...</p>
+            </div>
+            <div class="loader-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="pageTransition">
+        <div class="transition-content">
+            <div class="transition-circle"></div>
+            <div class="transition-logo">
+                <i class="fas fa-wind"></i>
+            </div>
+            <p class="transition-text">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Emergency Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="emergency-sidebar" id="emergencySidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <span>Safety Center</span>
+            </div>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-content">
+            <!-- Emergency Contact -->
+            <div class="emergency-contact">
+                <div class="emergency-header">
+                    <div class="emergency-pulse"></div>
+                    <span class="emergency-label">Emergency Hotline</span>
+                </div>
+                <div class="emergency-number">
+                    <i class="fas fa-phone-alt"></i>
+                    <span class="emergency-digits">911</span>
+                </div>
+                <button class="call-now-btn" onclick="window.handleEmergencyCall()" aria-label="Call 911">
+                    <div class="btn-bg"></div>
+                    <i class="fas fa-phone-volume"></i>
+                    <span>Call Now</span>
+                    <div class="btn-shine"></div>
+                </button>
+            </div>
+            
+            <!-- Emergency Guidelines -->
+            <div class="sidebar-section">
+                <h3 class="section-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Emergency Guidelines
+                </h3>
+                
+                <!-- Gas Leak Guidelines -->
+                <div class="guideline-card" data-guideline="gasLeak">
+                    <div class="guideline-header" onclick="toggleGuideline('gasLeak')">
+                        <div class="guideline-icon gas">
+                            <i class="fas fa-gas-pump"></i>
+                        </div>
+                        <div class="guideline-title">
+                            <span>Gas Leak Emergency</span>
+                            <small>Critical safety steps</small>
+                        </div>
+                        <div class="guideline-chevron">
+                            <i class="fas fa-chevron-down" id="gasLeakChevron"></i>
+                        </div>
+                    </div>
+                    <div class="guideline-content" id="gasLeakContent">
+                        <ul class="safety-steps">
+                            <li data-step="1">
+                                <div class="step-icon"><i class="fas fa-door-open"></i></div>
+                                <div class="step-content">
+                                    <strong>Ventilate Immediately</strong>
+                                    <span>Open all windows and doors</span>
+                                </div>
+                            </li>
+                            <li data-step="2">
+                                <div class="step-icon"><i class="fas fa-power-off"></i></div>
+                                <div class="step-content">
+                                    <strong>Avoid Sparks</strong>
+                                    <span>DO NOT use electrical switches</span>
+                                </div>
+                            </li>
+                            <li data-step="3">
+                                <div class="step-icon"><i class="fas fa-mobile-alt"></i></div>
+                                <div class="step-content">
+                                    <strong>No Phones Inside</strong>
+                                    <span>Call from outside only</span>
+                                </div>
+                            </li>
+                            <li data-step="4">
+                                <div class="step-icon"><i class="fas fa-valve"></i></div>
+                                <div class="step-content">
+                                    <strong>Shut Off Gas</strong>
+                                    <span>Turn off main valve if safe</span>
+                                </div>
+                            </li>
+                            <li data-step="5">
+                                <div class="step-icon"><i class="fas fa-running"></i></div>
+                                <div class="step-content">
+                                    <strong>Evacuate Now</strong>
+                                    <span>Leave and call 911 outside</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- High Temperature Guidelines -->
+                <div class="guideline-card" data-guideline="highTemp">
+                    <div class="guideline-header" onclick="toggleGuideline('highTemp')">
+                        <div class="guideline-icon temp">
+                            <i class="fas fa-temperature-high"></i>
+                        </div>
+                        <div class="guideline-title">
+                            <span>High Temperature Alert</span>
+                            <small>Heat emergency response</small>
+                        </div>
+                        <div class="guideline-chevron">
+                            <i class="fas fa-chevron-down" id="highTempChevron"></i>
+                        </div>
+                    </div>
+                    <div class="guideline-content" id="highTempContent">
+                        <ul class="safety-steps">
+                            <li data-step="1">
+                                <div class="step-icon"><i class="fas fa-fan"></i></div>
+                                <div class="step-content">
+                                    <strong>Increase Airflow</strong>
+                                    <span>Turn on fans and ventilation</span>
+                                </div>
+                            </li>
+                            <li data-step="2">
+                                <div class="step-icon"><i class="fas fa-plug"></i></div>
+                                <div class="step-content">
+                                    <strong>Check Appliances</strong>
+                                    <span>Disconnect overheating devices</span>
+                                </div>
+                            </li>
+                            <li data-step="3">
+                                <div class="step-icon"><i class="fas fa-thermometer-half"></i></div>
+                                <div class="step-content">
+                                    <strong>Monitor Readings</strong>
+                                    <span>Watch temperature continuously</span>
+                                </div>
+                            </li>
+                            <li data-step="4">
+                                <div class="step-icon"><i class="fas fa-fire-extinguisher"></i></div>
+                                <div class="step-content">
+                                    <strong>Prepare Safety Gear</strong>
+                                    <span>Keep extinguisher accessible</span>
+                                </div>
+                            </li>
+                            <li data-step="5">
+                                <div class="step-icon"><i class="fas fa-users"></i></div>
+                                <div class="step-content">
+                                    <strong>Alert Others</strong>
+                                    <span>Inform all occupants</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Fire Hazard Guidelines -->
+                <div class="guideline-card" data-guideline="fireHazard">
+                    <div class="guideline-header" onclick="toggleGuideline('fireHazard')">
+                        <div class="guideline-icon fire">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="guideline-title">
+                            <span>Fire Emergency</span>
+                            <small>Fire safety protocol</small>
+                        </div>
+                        <div class="guideline-chevron">
+                            <i class="fas fa-chevron-down" id="fireHazardChevron"></i>
+                        </div>
+                    </div>
+                    <div class="guideline-content" id="fireHazardContent">
+                        <ul class="safety-steps">
+                            <li data-step="1">
+                                <div class="step-icon"><i class="fas fa-bell"></i></div>
+                                <div class="step-content">
+                                    <strong>Sound the Alarm</strong>
+                                    <span>Activate fire alarm immediately</span>
+                                </div>
+                            </li>
+                            <li data-step="2">
+                                <div class="step-icon"><i class="fas fa-route"></i></div>
+                                <div class="step-content">
+                                    <strong>Find Exit Route</strong>
+                                    <span>Use nearest safe exit</span>
+                                </div>
+                            </li>
+                            <li data-step="3">
+                                <div class="step-icon"><i class="fas fa-level-down-alt"></i></div>
+                                <div class="step-content">
+                                    <strong>Stay Low</strong>
+                                    <span>Avoid smoke inhalation</span>
+                                </div>
+                            </li>
+                            <li data-step="4">
+                                <div class="step-icon"><i class="fas fa-hand-paper"></i></div>
+                                <div class="step-content">
+                                    <strong>Check Doors</strong>
+                                    <span>Feel with back of hand first</span>
+                                </div>
+                            </li>
+                            <li data-step="5">
+                                <div class="step-icon"><i class="fas fa-phone-alt"></i></div>
+                                <div class="step-content">
+                                    <strong>Call 911</strong>
+                                    <span>Once safely outside</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Daily Safety Tips -->
+            <div class="sidebar-section">
+                <h3 class="section-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Daily Safety Tips
+                </h3>
+                <div class="safety-tip-card">
+                    <div class="tip-carousel">
+                        <div class="tip-slide active" data-tip="0">
+                            <div class="tip-icon"><i class="fas fa-wind"></i></div>
+                            <p>Ventilate your space daily by opening windows for at least 15 minutes.</p>
+                        </div>
+                        <div class="tip-slide" data-tip="1">
+                            <div class="tip-icon"><i class="fas fa-search"></i></div>
+                            <p>Check gas hoses and connections regularly for cracks or damage.</p>
+                        </div>
+                        <div class="tip-slide" data-tip="2">
+                            <div class="tip-icon"><i class="fas fa-tint-slash"></i></div>
+                            <p>Keep humidity below 60% to prevent mold and maintain air quality.</p>
+                        </div>
+                        <div class="tip-slide" data-tip="3">
+                            <div class="tip-icon"><i class="fas fa-broom"></i></div>
+                            <p>Clean heating filters monthly during heavy use periods.</p>
+                        </div>
+                        <div class="tip-slide" data-tip="4">
+                            <div class="tip-icon"><i class="fas fa-battery-full"></i></div>
+                            <p>Test detectors monthly and replace batteries every 6 months.</p>
+                        </div>
+                    </div>
+                    <div class="tip-navigation">
+                        <button class="tip-nav-btn" onclick="previousTip()" aria-label="Previous tip">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="tip-dots" id="tipDots">
+                            <span class="dot active" data-index="0"></span>
+                            <span class="dot" data-index="1"></span>
+                            <span class="dot" data-index="2"></span>
+                            <span class="dot" data-index="3"></span>
+                            <span class="dot" data-index="4"></span>
+                        </div>
+                        <button class="tip-nav-btn" onclick="nextTip()" aria-label="Next tip">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="tip-progress">
+                        <div class="tip-progress-bar" id="tipProgressBar"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Resources -->
+            <div class="sidebar-section">
+                <h3 class="section-title">
+                    <i class="fas fa-book"></i>
+                    Quick Resources
+                </h3>
+                <div class="resource-links">
+                    <a href="#" class="resource-link" data-resource="manual">
+                        <div class="resource-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="resource-info">
+                            <span class="resource-name">Safety Manual</span>
+                            <span class="resource-meta">PDF • 2.4 MB</span>
+                        </div>
+                        <i class="fas fa-download"></i>
+                    </a>
+                    <a href="#" class="resource-link" data-resource="videos">
+                        <div class="resource-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="resource-info">
+                            <span class="resource-name">Training Videos</span>
+                            <span class="resource-meta">5 videos</span>
+                        </div>
+                        <i class="fas fa-play"></i>
+                    </a>
+                    <a href="#" class="resource-link" data-resource="checklist">
+                        <div class="resource-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="resource-info">
+                            <span class="resource-name">Safety Checklist</span>
+                            <span class="resource-meta">Interactive</span>
+                        </div>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="footer-status">
+                <div class="status-dot online"></div>
+                <span>System Online</span>
+            </div>
+            <p class="footer-text">
+                <i class="fas fa-sync-alt"></i>
+                Last updated: <span id="lastUpdated">Just now</span>
+            </p>
+        </div>
+    </aside>
+
+    <!-- Animated Background -->
+    <div class="animated-bg" id="animatedBg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="gradient-orb orb-4"></div>
+        <div class="particle-container" id="particleContainer"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container" id="dashboardContainer">
+        
+        <!-- Top Header -->
+        <header class="dashboard-header glass-panel" id="dashboardHeader">
+            <div class="header-left">
+                <!-- Hamburger Menu Button -->
+                <button class="hamburger-menu" id="hamburgerMenu" aria-label="Toggle emergency menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <div class="hamburger-bg"></div>
+                </button>
+                
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-wind"></i>
+                        <div class="logo-pulse"></div>
+                    </div>
+                    <div class="logo-text">
+                        <h1>BreathSafe</h1>
+                        <span class="logo-subtitle">
+                            <span class="subtitle-text">User Dashboard</span>
+                            <span class="live-indicator">
+                                <span class="live-dot"></span>
+                                LIVE
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-center" id="headerCenter">
+                <!-- Quick Stats - Desktop Only -->
+                <div class="quick-stats">
+                    <div class="quick-stat" id="quickStatSensors">
+                        <i class="fas fa-microchip"></i>
+                        <span class="stat-value" id="activeSensorsCount">0</span>
+                        <span class="stat-label">Sensors</span>
+                    </div>
+                    <div class="quick-stat-divider"></div>
+                    <div class="quick-stat" id="quickStatStatus">
+                        <i class="fas fa-shield-alt"></i>
+                        <span class="stat-value" id="systemStatusText">--</span>
+                        <span class="stat-label">Status</span>
+                    </div>
+                    <div class="quick-stat-divider"></div>
+                    <div class="quick-stat" id="quickStatAlerts">
+                        <i class="fas fa-bell"></i>
+                        <span class="stat-value" id="alertsCount">0</span>
+                        <span class="stat-label">Alerts</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <!-- Connection Status -->
+                <div class="connection-status" id="connectionStatus" title="Connection Status">
+                    <div class="connection-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <span class="connection-text">Connected</span>
+                </div>
+                
+                <!-- Notifications Button -->
+                <div class="notifications-wrapper">
+                    <button class="icon-btn notifications-btn" id="notificationsBtn" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge hidden" id="notificationBadge">0</span>
+                        <div class="btn-ripple"></div>
+                    </button>
+                    
+                    <!-- Notifications Dropdown -->
+                    <div class="notifications-dropdown" id="notificationsDropdown">
+                        <div class="notifications-header">
+                            <div class="notifications-title">
+                                <i class="fas fa-bell"></i>
+                                <h3>Notifications</h3>
+                                <span class="notifications-count" id="notificationsCount">0</span>
+                            </div>
+                            <div class="notifications-actions">
+                                <button class="mark-read-btn" id="markAllReadBtn" title="Mark all as read">
+                                    <i class="fas fa-check-double"></i>
+                                </button>
+                                <button class="clear-all-btn" id="clearAllNotifications" title="Clear all">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="notifications-filter">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="danger">Danger</button>
+                            <button class="filter-btn" data-filter="warning">Warning</button>
+                            <button class="filter-btn" data-filter="info">Info</button>
+                        </div>
+                        
+                        <div class="notifications-list" id="notificationsList">
+                            <div class="notifications-empty">
+                                <div class="empty-icon">
+                                    <i class="fas fa-bell-slash"></i>
+                                </div>
+                                <p>No notifications yet</p>
+                                <span>You're all caught up!</span>
+                            </div>
+                        </div>
+                        
+                        <div class="notifications-footer">
+                            <button class="view-all-btn" id="viewAllNotifications">
+                                <span>View All Alerts</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <div class="theme-icon-wrapper">
+                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-moon moon-icon"></i>
+                    </div>
+                    <div class="btn-ripple"></div>
+                </button>
+                
+                <!-- User Profile -->
+                <div class="user-profile" id="userProfile">
+                    <div class="user-avatar-wrapper">
+                        <img src="" alt="User" class="user-avatar" id="userAvatar">
+                        <div class="avatar-status online"></div>
+                    </div>
+                    <div class="user-info">
+                        <p class="user-name" id="userName">Loading...</p>
+                        <p class="user-role">
+                            <i class="fas fa-user"></i>
+                            User
+                        </p>
+                    </div>
+                    <button class="icon-btn user-menu-btn" id="userMenuBtn" aria-label="User menu">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    
+                    <!-- User Dropdown Menu -->
+                    <div class="dropdown-menu user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <div class="dropdown-user-info">
+                                <img src="" alt="User" class="dropdown-avatar" id="dropdownAvatar">
+                                <div class="dropdown-user-details">
+                                    <span class="dropdown-user-name" id="dropdownUserName">User</span>
+                                    <span class="dropdown-user-email" id="dropdownUserEmail">user@example.com</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-body">
+                            <a href="user-profile.html" class="dropdown-item" id="profileBtn">
+                                <div class="dropdown-icon">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <span class="dropdown-label">My Profile</span>
+                                    <span class="dropdown-desc">View and edit your profile</span>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <a href="user-settings.html" class="dropdown-item" id="settingsBtn">
+                                <div class="dropdown-icon">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <span class="dropdown-label">Settings</span>
+                                    <span class="dropdown-desc">Preferences & notifications</span>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <a href="#" class="dropdown-item" id="helpBtn">
+                                <div class="dropdown-icon">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <div class="dropdown-content">
+                                    <span class="dropdown-label">Help & Support</span>
+                                    <span class="dropdown-desc">Get help and documentation</span>
+                                </div>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                        <div class="dropdown-footer">
+                            <button class="dropdown-item logout-item" id="logoutBtn">
+                                <div class="dropdown-icon">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </div>
+                                <span class="dropdown-label">Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Header Bottom -->
+            <div class="header-mobile-bottom" id="headerMobileBottom">
+                <div class="mobile-stats">
+                    <div class="mobile-stat">
+                        <span class="mobile-stat-value" id="mobileActiveSensors">0</span>
+                        <span class="mobile-stat-label">Sensors</span>
+                    </div>
+                    <div class="mobile-stat status" id="mobileStatus">
+                        <span class="mobile-stat-value">
+                            <i class="fas fa-shield-alt"></i>
+                        </span>
+                        <span class="mobile-stat-label">Normal</span>
+                    </div>
+                    <div class="mobile-stat">
+                        <span class="mobile-stat-value" id="mobileAlerts">0</span>
+                        <span class="mobile-stat-label">Alerts</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main" id="dashboardMain">
+            
+            <!-- System Status Card -->
+            <section class="status-section" id="statusSection">
+                <div class="status-card glass-panel" id="statusCard">
+                    <div class="status-background">
+                        <div class="status-wave wave-1"></div>
+                        <div class="status-wave wave-2"></div>
+                        <div class="status-wave wave-3"></div>
+                    </div>
+                    <div class="status-content-wrapper">
+                        <div class="status-icon-container">
+                            <div class="status-icon" id="statusIcon">
+                                <div class="pulse-ring ring-1"></div>
+                                <div class="pulse-ring ring-2"></div>
+                                <div class="pulse-ring ring-3"></div>
+                                <div class="status-icon-inner">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="status-content">
+                            <div class="status-header">
+                                <h2 class="status-title">System Status</h2>
+                                <div class="status-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span id="statusTime">--:--:--</span>
+                                </div>
+                            </div>
+                            <p class="status-message" id="statusMessage">Initializing system...</p>
+                            <div class="status-details" id="statusDetails">
+                            <!-- Dynamic status details -->
+                            </div>
+                        </div>
+                        <div class="status-actions">
+                            <button class="status-action-btn" id="refreshStatusBtn" title="Refresh">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sensors Grid Section -->
+            <section class="sensors-section" id="sensorsSection">
+                <div class="section-header">
+                    <div class="section-title-group">
+                        <h2 class="section-title">
+                            <i class="fas fa-microchip"></i>
+                            Sensor Readings
+                        </h2>
+                        <span class="section-badge" id="sensorsBadge">Real-time</span>
+                    </div>
+
+                </div>
+                
+                <div class="sensors-grid" id="sensorsGrid">
+                    <!-- Loading state -->
+                    <div class="sensors-loading" id="sensorsLoading">
+                        <div class="loading-animation">
+                            <div class="loading-circle"></div>
+                            <div class="loading-circle"></div>
+                            <div class="loading-circle"></div>
+                        </div>
+                        <p class="loading-text">Loading your sensors...</p>
+                        <div class="loading-progress">
+                            <div class="loading-progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section" id="chartsSection">
+                <div class="section-header">
+                    <div class="section-title-group">
+                        <h2 class="section-title">
+                            <i class="fas fa-chart-line"></i>
+                            Trend Analysis
+                        </h2>
+                        <span class="section-badge">Live Data</span>
+                    </div>
+                    <div class="section-actions">
+                        <div class="chart-time-filter">
+                            <button class="time-filter-btn active" data-range="1h">1H</button>
+                            <button class="time-filter-btn" data-range="6h">6H</button>
+                            <button class="time-filter-btn" data-range="24h">24H</button>
+                            <button class="time-filter-btn" data-range="7d">7D</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-grid" id="chartsGrid">
+                <!-- Charts will be dynamically inserted -->
+                </div>
+            </section>
+
+            <!-- Additional Cards Section -->
+            <section class="additional-section" id="additionalSection">
+            <!-- Additional cards will be rendered here -->
+            </section>
+
+            <!-- No Sensors Section -->
+            <section class="no-sensors-section" id="noSensorsSection" style="display: none;">
+                <div class="no-sensors-card glass-panel">
+                    <div class="no-sensors-animation">
+                        <div class="satellite-container">
+                            <div class="satellite">
+                                <i class="fas fa-satellite-dish"></i>
+                            </div>
+                            <div class="signal-waves">
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                                <div class="wave"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="no-sensors-content">
+                        <h2>Waiting for Sensors</h2>
+                        <p class="main-text">No sensors have been assigned to your account yet.</p>
+                        <p class="sub-text">Your administrator will assign sensors to your account soon.</p>
+                    </div>
+                    <div class="no-sensors-status">
+                        <div class="status-item active">
+                            <div class="status-icon-small">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span>Account Active</span>
+                        </div>
+                        <div class="status-divider">
+                            <div class="divider-line"></div>
+                            <div class="divider-dot"></div>
+                            <div class="divider-line"></div>
+                        </div>
+                        <div class="status-item pending">
+                            <div class="status-icon-small">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <span>Sensors Pending</span>
+                        </div>
+                    </div>
+                    <div class="no-sensors-actions">
+                        <button class="refresh-btn primary" onclick="location.reload()">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Check Again</span>
+                        </button>
+                        <button class="refresh-btn secondary" id="contactAdminBtn">
+                            <i class="fas fa-envelope"></i>
+                            <span>Contact Admin</span>
+                        </button>
+                    </div>
+                    <div class="auto-refresh-note">
+                        <div class="auto-refresh-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <span>Page will automatically update when sensors are assigned</span>
+                        <div class="countdown-timer" id="autoRefreshCountdown">60s</div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <!-- Floating Action Button - Mobile -->
+        <div class="fab-container" id="fabContainer">
+            <button class="fab-main" id="fabMain" aria-label="Quick actions">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="fab-menu" id="fabMenu">
+                <button class="fab-item" data-action="emergency" title="Emergency">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>Emergency</span>
+                </button>
+                <button class="fab-item" data-action="refresh" title="Refresh">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Refresh</span>
+                </button>
+                <button class="fab-item" data-action="mute" title="Mute">
+                    <i class="fas fa-volume-mute"></i>
+                    <span>Mute</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Scroll to Top Button -->
+        <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    </div>
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-container glass-panel">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <div class="modal-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div>
+                        <h2 class="modal-title">Profile Information</h2>
+                        <p class="modal-subtitle">Your account details</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="closeProfileModal" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="profile-header-section">
+                    <div class="profile-avatar-large">
+                        <img src="" alt="Profile" id="modalProfileAvatar">
+                        <div class="avatar-edit-btn">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                    <div class="profile-name-section">
+                        <h3 id="modalFullName">User Name</h3>
+                        <span class="profile-status-badge active">
+                            <i class="fas fa-check-circle"></i>
+                            Active
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="profile-info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="info-content">
+                            <label>First Name</label>
+                            <p id="modalFirstName">-</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="info-content">
+                            <label>Last Name</label>
+                            <p id="modalLastName">-</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-at"></i>
+                        </div>
+                        <div class="info-content">
+                            <label>Username</label>
+                            <p id="modalUsername">-</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <label>Email Address</label>
+                            <p id="modalEmail">-</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="info-content">
+                            <label>Phone Number</label>
+                            <p id="modalPhoneNumber">-</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <label>Account Status</label>
+                            <p id="modalStatus">-</p>
+                        </div>
+                    </div>
+                    <div class="info-item full-width">
+                        <div class="info-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <label>Member Since</label>
+                            <p id="modalCreatedAt">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="closeProfileBtn">
+                    <i class="fas fa-times"></i>
+                    Close
+                </button>
+                <a href="user-profile.html" class="modal-btn primary" id="editProfileLink">
+                    <i class="fas fa-edit"></i>
+                    Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Quick Panel -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-container glass-panel settings-modal">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <div class="modal-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div>
+                        <h2 class="modal-title">Quick Settings</h2>
+                        <p class="modal-subtitle">Adjust your preferences</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="closeSettingsModal" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3 class="settings-section-title">
+                        <i class="fas fa-bell"></i>
+                        Notifications
+                    </h3>
+                    <div class="settings-options">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Sound Alerts</span>
+                                <span class="setting-desc">Play sound for danger alerts</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="settingSoundAlerts" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Browser Notifications</span>
+                                <span class="setting-desc">Show desktop notifications</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="settingBrowserNotif" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Email Alerts</span>
+                                <span class="setting-desc">Send email for critical alerts</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="settingEmailAlerts" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-section-title">
+                        <i class="fas fa-ruler"></i>
+                        Units
+                    </h3>
+                    <div class="settings-options">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Temperature</span>
+                            </div>
+                            <div class="setting-select">
+                                <button class="select-btn active" data-unit="celsius">°C</button>
+                                <button class="select-btn" data-unit="fahrenheit">°F</button>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Gas Concentration</span>
+                            </div>
+                            <div class="setting-select">
+                                <button class="select-btn active" data-unit="ppm">PPM</button>
+                                <button class="select-btn" data-unit="mg">mg/m³</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-section-title">
+                        <i class="fas fa-palette"></i>
+                        Appearance
+                    </h3>
+                    <div class="settings-options">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Theme</span>
+                            </div>
+                            <div class="theme-selector">
+                                <button class="theme-option active" data-theme="light" title="Light">
+                                    <i class="fas fa-sun"></i>
+                                </button>
+                                <button class="theme-option" data-theme="dark" title="Dark">
+                                    <i class="fas fa-moon"></i>
+                                </button>
+                                <button class="theme-option" data-theme="auto" title="Auto">
+                                    <i class="fas fa-adjust"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-label">Animations</span>
+                                <span class="setting-desc">Enable UI animations</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="settingAnimations" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="resetSettingsBtn">
+                    <i class="fas fa-undo"></i>
+                    Reset
+                </button>
+                <a href="user-settings.html" class="modal-btn primary">
+                    <i class="fas fa-cog"></i>
+                    All Settings
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Danger Alert Overlay -->
+    <div class="danger-alert-overlay" id="dangerAlertOverlay">
+        <div class="danger-alert-background">
+            <div class="danger-particles" id="dangerParticles"></div>
+            <div class="danger-pulse-bg"></div>
+        </div>
+        
+        <div class="danger-alert-container">
+            <div class="danger-alert-header">
+                <div class="danger-header-bg">
+                    <div class="danger-stripes"></div>
+                </div>
+                <div class="danger-alert-icon">
+                    <div class="danger-icon-pulse"></div>
+                    <div class="danger-icon-pulse delay-1"></div>
+                    <div class="danger-icon-pulse delay-2"></div>
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="danger-alert-title" id="dangerAlertTitle">
+                    <span class="danger-text-flash">⚠️ DANGER DETECTED</span>
+                </h2>
+                <p class="danger-alert-subtitle" id="dangerAlertSubtitle">Immediate action required</p>
+                <div class="danger-severity" id="dangerSeverity">
+                    <span class="severity-label">Severity:</span>
+                    <div class="severity-meter">
+                        <div class="severity-fill" id="severityFill"></div>
+                    </div>
+                    <span class="severity-text" id="severityText">Critical</span>
+                </div>
+            </div>
+            
+            <div class="danger-alert-body">
+                <div class="danger-readings" id="dangerReadings">
+                <!-- Dynamic danger readings -->
+                </div>
+                
+                <div class="danger-instructions" id="dangerInstructions">
+                    <div class="instructions-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Safety Instructions</h4>
+                    </div>
+                    <ul class="instruction-list" id="instructionList">
+                    <!-- Dynamic instructions -->
+                    </ul>
+                </div>
+                
+                <div class="danger-countdown" id="dangerCountdown">
+                    <div class="countdown-ring">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="countdown-bg" cx="50" cy="50" r="45"/>
+                            <circle class="countdown-progress" cx="50" cy="50" r="45" id="countdownProgress"/>
+                        </svg>
+                        <div class="countdown-text">
+                            <span class="countdown-value" id="countdownValue">--</span>
+                            <span class="countdown-label">seconds</span>
+                        </div>
+                    </div>
+                    <p class="countdown-message">Auto-dismiss when safe</p>
+                </div>
+            </div>
+            
+            <div class="danger-alert-footer">
+                <button class="danger-btn mute-btn" id="muteAlarmBtn">
+                    <div class="btn-icon">
+                        <i class="fas fa-volume-mute"></i>
+                    </div>
+                    <span>Mute Alarm</span>
+                </button>
+                <button class="danger-btn acknowledge-btn" id="acknowledgeAlertBtn">
+                    <div class="btn-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <span>Acknowledge</span>
+                </button>
+                <button class="danger-btn emergency-btn" id="callEmergencyBtn" onclick="window.handleEmergencyCall()">
+                    <div class="btn-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <span>Call 911</span>
+                    <div class="btn-pulse"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound Indicator -->
+    <div class="sound-indicator" id="soundIndicator">
+        <div class="sound-wave-container">
+            <div class="sound-wave">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <span class="sound-text">Alarm Active</span>
+        <button class="sound-mute-btn" id="muteSoundBtn" aria-label="Mute sound">
+            <i class="fas fa-volume-mute"></i>
+        </button>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Tooltip Container -->
+    <div class="tooltip-container" id="tooltipContainer"></div>
+
+    <!-- Keyboard Shortcuts Modal -->
+    <div class="modal-overlay shortcuts-modal" id="shortcutsModal">
+        <div class="modal-container glass-panel shortcuts-container">
+            <div class="modal-header">
+                <div class="modal-title-group">
+                    <div class="modal-icon">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div>
+                        <h2 class="modal-title">Keyboard Shortcuts</h2>
+                        <p class="modal-subtitle">Quick navigation</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="closeShortcutsModal" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="shortcuts-grid">
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>?</kbd>
+                        </div>
+                        <span class="shortcut-desc">Show shortcuts</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>Esc</kbd>
+                        </div>
+                        <span class="shortcut-desc">Close modal/menu</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>R</kbd>
+                        </div>
+                        <span class="shortcut-desc">Refresh data</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>T</kbd>
+                        </div>
+                        <span class="shortcut-desc">Toggle theme</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>M</kbd>
+                        </div>
+                        <span class="shortcut-desc">Mute sounds</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>N</kbd>
+                        </div>
+                        <span class="shortcut-desc">Notifications</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>S</kbd>
+                        </div>
+                        <span class="shortcut-desc">Settings</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>E</kbd>
+                        </div>
+                        <span class="shortcut-desc">Emergency sidebar</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <div class="shortcut-keys">
+                            <kbd>P</kbd>
+                        </div>
+                        <span class="shortcut-desc">Go to Profile</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connection Lost Overlay -->
+    <div class="connection-overlay" id="connectionOverlay">
+        <div class="connection-modal glass-panel">
+            <div class="connection-icon">
+                <i class="fas fa-wifi-slash"></i>
+                <div class="connection-pulse"></div>
+            </div>
+            <h3>Connection Lost</h3>
+            <p>Attempting to reconnect...</p>
+            <div class="reconnect-progress">
+                <div class="reconnect-bar"></div>
+            </div>
+            <button class="reconnect-btn" onclick="location.reload()">
+                <i class="fas fa-redo"></i>
+                Retry Now
+            </button>
+        </div>
+    </div>
+
+    <!-- Session Expired Modal -->
+    <div class="modal-overlay session-modal" id="sessionModal">
+        <div class="modal-container glass-panel session-container">
+            <div class="session-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <h3>Session Expired</h3>
+            <p>Your session has expired. Please log in again to continue.</p>
+            <button class="session-btn" onclick="window.dashboardLogout()">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In Again
+            </button>
+        </div>
+    </div>
+
+    <!-- Help Tour Overlay -->
+    <div class="tour-overlay" id="tourOverlay">
+        <div class="tour-spotlight" id="tourSpotlight"></div>
+        <div class="tour-tooltip" id="tourTooltip">
+            <div class="tour-content">
+                <h4 id="tourTitle">Welcome to BreathSafe!</h4>
+                <p id="tourDescription">Let's take a quick tour of your dashboard.</p>
+            </div>
+            <div class="tour-footer">
+                <div class="tour-progress">
+                    <span id="tourStep">1</span> / <span id="tourTotal">5</span>
+                </div>
+                <div class="tour-buttons">
+                    <button class="tour-btn skip" id="tourSkip">Skip</button>
+                    <button class="tour-btn next" id="tourNext">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Hammer.js for Touch Gestures -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    
+    <!-- Authentication Check & Initial Setup -->
+    <script>
+        // Immediate auth check before loading anything
+        (function() {
+            const userSession = sessionStorage.getItem('breathsafeUser');
+            if (!userSession) {
+                window.location.href = '../index.html';
+                return;
+            }
+            
+            // Show loading progress
+            let progress = 0;
+            const loaderFill = document.getElementById('loaderFill');
+            const loaderText = document.getElementById('loaderText');
+            
+            const messages = [
+                'Initializing...',
+                'Connecting to sensors...',
+                'Loading dashboard...',
+                'Almost ready...'
+            ];
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                }
+                if (loaderFill) loaderFill.style.width = progress + '%';
+                if (loaderText) {
+                    const msgIndex = Math.min(Math.floor(progress / 25), messages.length - 1);
+                    loaderText.textContent = messages[msgIndex];
+                }
+            }, 200);
+            
+            // Generate user avatar
+            try {
+                const user = JSON.parse(userSession);
+                const initial = (user.firstName?.[0] || user.username?.[0] || 'U').toUpperCase();
+                const avatarSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%2310b981'/%3E%3Cstop offset='100%25' style='stop-color:%23059669'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='40' cy='40' r='40' fill='url(%23grad)'/%3E%3Ctext x='40' y='52' font-family='Inter,sans-serif' font-size='32' font-weight='700' fill='white' text-anchor='middle'%3E${initial}%3C/text%3E%3C/svg%3E`;
+                
+                document.querySelectorAll('.user-avatar, #userAvatar, #dropdownAvatar, #modalProfileAvatar').forEach(el => {
+                    if (el) el.src = avatarSvg;
+                });
+            } catch(e) {
+                console.warn('Avatar generation failed:', e);
+            }
+        })();
+    </script>
+    
+    <!-- Main Dashboard Script -->
+    <script type="module" src="dashboard.js"></script>
+    
+    <!-- Interaction Sounds Handler -->
+    <script>
+        // Sound effects handler
+        window.playSound = function(type) {
+            const sounds = {
+                click: document.getElementById('clickSound'),
+                success: document.getElementById('successSound'),
+                warning: document.getElementById('warningSound'),
+                notification: document.getElementById('notificationSound'),
+                alarm: document.getElementById('alarmSound')
+            };
+            
+            const sound = sounds[type];
+            if (sound && window.soundEnabled !== false) {
+                sound.currentTime = 0;
+                sound.volume = type === 'click' ? 0.3 : 0.7;
+                sound.play().catch(() => {});
+            }
+        };
+        
+        // Emergency call handler
+        window.handleEmergencyCall = function() {
+            window.playSound('click');
+            if (confirm('Call emergency services (911)?')) {
+                window.location.href = 'tel:911';
+            }
+        };
+        
+        // Toggle guideline expansion
+        window.toggleGuideline = function(type) {
+            const card = document.querySelector(`[data-guideline="${type}"]`);
+            if (card) {
+                card.classList.toggle('active');
+                const content = document.getElementById(`${type}Content`);
+                if (content) {
+                    content.classList.toggle('active');
+                }
+            }
+            window.playSound('click');
+        };
+        
+        // Tip carousel navigation
+        window.nextTip = function() {
+            if (typeof window.dashboardNextTip === 'function') {
+                window.dashboardNextTip();
+            }
+        };
+        
+        window.previousTip = function() {
+            if (typeof window.dashboardPreviousTip === 'function') {
+                window.dashboardPreviousTip();
+            }
+        };
+        
+        // Add click sounds to buttons
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('button, .btn, .dropdown-item, .icon-btn').forEach(btn => {
+                btn.addEventListener('click', () => window.playSound('click'));
+            });
+        });
+        
+        // Handle profile link clicks for smooth navigation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Profile link handler
+            const profileLinks = document.querySelectorAll('a[href="user-profile.html"], #profileBtn, #editProfileLink');
+            profileLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (typeof window.navigateToProfile === 'function') {
+                        window.navigateToProfile();
+                    } else {
+                        window.location.href = 'user-profile.html';
+                    }
+                });
+            });
+            
+            // Settings link handler
+            const settingsLinks = document.querySelectorAll('a[href="user-settings.html"], #settingsBtn');
+            settingsLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (typeof window.navigateToSettings === 'function') {
+                        window.navigateToSettings();
+                    } else {
+                        window.location.href = 'user-settings.html';
+                    }
+                });
+            });
+        });
+    </script>
+    
+
+</body>
+</html>

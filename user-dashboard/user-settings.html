@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#10b981">
+    <meta name="description" content="BreathSafe Settings - Configure Your Preferences">
+    <title>BreathSafe - Settings</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2310b981'/%3E%3Ctext x='16' y='21' font-family='sans-serif' font-size='18' font-weight='bold' fill='white' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="user-settings.css">
+</head>
+<body class="light">
+    
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <i class="fas fa-cog"></i>
+            </div>
+            <p class="loading-text">Loading Settings...</p>
+        </div>
+    </div>
+
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
+
+    <!-- App Container -->
+    <div class="app-container">
+        
+        <!-- Top Header -->
+        <header class="top-header" id="topHeader">
+            <div class="header-start">
+                <button class="back-btn" id="backBtn" aria-label="Back to Dashboard">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Dashboard</span>
+                </button>
+                
+                <div class="page-info">
+                    <div class="page-icon-wrapper">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <div class="page-text">
+                        <h1>Settings</h1>
+                        <span>Manage your preferences</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-end">
+                <div class="connection-badge" id="connectionBadge">
+                    <div class="connection-dot"></div>
+                    <span>Online</span>
+                </div>
+                
+                <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <button class="save-btn-header" id="saveHeaderBtn">
+                    <i class="fas fa-save"></i>
+                    <span>Save</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <main class="main-layout">
+            
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+        
+        <div class="nav-section">
+            <span class="nav-label">General</span>
+            
+            <button class="nav-btn active" data-tab="connection">
+                <div class="nav-icon"><i class="fas fa-wifi"></i></div>
+                <div class="nav-info">
+                    <span class="nav-title">Connection</span>
+                    <span class="nav-desc">Network status</span>
+                </div>
+                <i class="fas fa-chevron-right nav-arrow"></i>
+            </button>
+            
+            <button class="nav-btn" data-tab="alerts">
+                <div class="nav-icon"><i class="fas fa-bell"></i></div>
+                <div class="nav-info">
+                    <span class="nav-title">Alerts</span>
+                    <span class="nav-desc">Notifications</span>
+                </div>
+                <i class="fas fa-chevron-right nav-arrow"></i>
+            </button>
+            
+            <button class="nav-btn" data-tab="display">
+                <div class="nav-icon"><i class="fas fa-palette"></i></div>
+                <div class="nav-info">
+                    <span class="nav-title">Display</span>
+                    <span class="nav-desc">Theme & look</span>
+                </div>
+                <i class="fas fa-chevron-right nav-arrow"></i>
+            </button>
+            
+            <!-- NEW: Units Tab -->
+            <button class="nav-btn" data-tab="units">
+                <div class="nav-icon"><i class="fas fa-ruler"></i></div>
+                <div class="nav-info">
+                    <span class="nav-title">Units</span>
+                    <span class="nav-desc">Measurements</span>
+                </div>
+                <i class="fas fa-chevron-right nav-arrow"></i>
+            </button>
+        </div>
+        
+        <div class="nav-section">
+            <span class="nav-label">System</span>
+            
+            <button class="nav-btn" data-tab="storage">
+                <div class="nav-icon"><i class="fas fa-database"></i></div>
+                <div class="nav-info">
+                    <span class="nav-title">Storage</span>
+                    <span class="nav-desc">Data & cache</span>
+                </div>
+                <i class="fas fa-chevron-right nav-arrow"></i>
+            </button>
+            
+            <button class="nav-btn" data-tab="about">
+                <div class="nav-icon"><i class="fas fa-info-circle"></i></div>
+                <div class="nav-info">
+                    <span class="nav-title">About</span>
+                    <span class="nav-desc">App info</span>
+                </div>
+                <i class="fas fa-chevron-right nav-arrow"></i>
+            </button>
+        </div>
+        
+    </nav>
+    
+    <div class="sidebar-bottom">
+        <button class="reset-all-btn" id="resetAllBtn">
+            <i class="fas fa-undo"></i>
+            <span>Reset All</span>
+        </button>
+    </div>
+</aside>
+
+            <!-- Content Panels -->
+            <div class="content-area" id="contentArea">
+                
+                <!-- Connection Tab -->
+                <section class="tab-panel active" id="tab-connection">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <div class="panel-icon"><i class="fas fa-wifi"></i></div>
+                            <div>
+                                <h2>Connection</h2>
+                                <p>Monitor network and sensor connectivity</p>
+                            </div>
+                        </div>
+                        <button class="refresh-btn" id="refreshConnBtn">
+                            <i class="fas fa-sync-alt"></i>
+                            Refresh
+                        </button>
+                    </div>
+                    
+                    <!-- Status Card -->
+                    <div class="card status-card">
+                        <div class="status-display">
+                            <div class="status-visual">
+                                <div class="status-ring">
+                                    <div class="ring-wave"></div>
+                                    <div class="ring-wave delay-1"></div>
+                                    <div class="ring-center">
+                                        <i class="fas fa-wifi"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="status-info">
+                                <h3 id="connStatusText">Connected</h3>
+                                <p id="connLastSync">Last sync: Just now</p>
+                            </div>
+                        </div>
+                        
+                        <div class="metrics-row">
+                            <div class="metric-box">
+                                <div class="metric-icon signal"><i class="fas fa-signal"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-label">Signal</span>
+                                    <div class="signal-bars" id="signalBars">
+                                        <span class="bar active"></span>
+                                        <span class="bar active"></span>
+                                        <span class="bar active"></span>
+                                        <span class="bar active"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-box">
+                                <div class="metric-icon latency"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-label">Latency</span>
+                                    <span class="metric-value" id="latencyVal">24ms</span>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-box">
+                                <div class="metric-icon packets"><i class="fas fa-exchange-alt"></i></div>
+                                <div class="metric-data">
+                                    <span class="metric-label">Packet Loss</span>
+                                    <span class="metric-value" id="packetVal">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Network Info -->
+                    <div class="card-grid">
+                        <div class="card">
+                            <div class="card-head">
+                                <div class="card-icon blue"><i class="fas fa-network-wired"></i></div>
+                                <div>
+                                    <h4>Network Details</h4>
+                                    <span>Connection information</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="info-list">
+                                    <div class="info-row">
+                                        <span>Type</span>
+                                        <span id="netType">Wi-Fi</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span>Protocol</span>
+                                        <span>WebSocket</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span>Server</span>
+                                        <span>Firebase RTDB</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-head">
+                                <div class="card-icon purple"><i class="fas fa-tools"></i></div>
+                                <div>
+                                    <h4>Diagnostics</h4>
+                                    <span>Troubleshooting tools</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="action-list">
+                                    <button class="action-row" id="testConnBtn">
+                                        <i class="fas fa-stethoscope"></i>
+                                        <span>Test Connection</span>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <button class="action-row" id="forceReconnBtn">
+                                        <i class="fas fa-plug"></i>
+                                        <span>Force Reconnect</span>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Alerts Tab -->
+                <section class="tab-panel" id="tab-alerts">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <div class="panel-icon"><i class="fas fa-bell"></i></div>
+                            <div>
+                                <h2>Alerts</h2>
+                                <p>Configure notification preferences</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Master Toggle -->
+                    <div class="card master-card">
+                        <div class="master-toggle">
+                            <div class="master-info">
+                                <div class="master-icon"><i class="fas fa-bell"></i></div>
+                                <div class="master-text">
+                                    <h3>Enable Notifications</h3>
+                                    <p>Master switch for all alerts</p>
+                                </div>
+                            </div>
+                            <label class="switch large">
+                                <input type="checkbox" id="masterAlertToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Alert Channels -->
+                    <div class="card" id="alertChannelsCard">
+                        <div class="card-head">
+                            <div class="card-icon pink"><i class="fas fa-broadcast-tower"></i></div>
+                            <div>
+                                <h4>Alert Channels</h4>
+                                <span>How you receive alerts</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="toggle-list">
+                                <div class="toggle-row">
+                                    <div class="toggle-info">
+                                        <div class="toggle-icon blue"><i class="fas fa-volume-up"></i></div>
+                                        <div>
+                                            <span class="toggle-title">Sound Alerts</span>
+                                            <span class="toggle-desc">Play alarm sounds</span>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="soundToggle" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="toggle-row">
+                                    <div class="toggle-info">
+                                        <div class="toggle-icon purple"><i class="fas fa-desktop"></i></div>
+                                        <div>
+                                            <span class="toggle-title">Browser Popups</span>
+                                            <span class="toggle-desc">Desktop notifications</span>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="popupToggle" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="toggle-row">
+                                    <div class="toggle-info">
+                                        <div class="toggle-icon green"><i class="fas fa-envelope"></i></div>
+                                        <div>
+                                            <span class="toggle-title">Email Alerts</span>
+                                            <span class="toggle-desc" id="userEmailText">Send to your email</span>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="emailToggle" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Severity Levels -->
+                    <div class="card" id="severityCard">
+                        <div class="card-head">
+                            <div class="card-icon orange"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div>
+                                <h4>Alert Levels</h4>
+                                <span>Which events trigger alerts</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="checkbox-list">
+                                <label class="checkbox-row critical">
+                                    <div class="checkbox-left">
+                                        <input type="checkbox" checked disabled>
+                                        <span class="checkmark"><i class="fas fa-check"></i></span>
+                                    </div>
+                                    <div class="checkbox-info">
+                                        <span class="checkbox-title">
+                                            <i class="fas fa-skull-crossbones"></i>
+                                            Critical Danger
+                                        </span>
+                                        <span class="checkbox-desc">Gas leaks, extreme temperatures</span>
+                                    </div>
+                                    <span class="badge red">Required</span>
+                                </label>
+                                
+                                <label class="checkbox-row warning">
+                                    <div class="checkbox-left">
+                                        <input type="checkbox" id="warningCheck" checked>
+                                        <span class="checkmark"><i class="fas fa-check"></i></span>
+                                    </div>
+                                    <div class="checkbox-info">
+                                        <span class="checkbox-title">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            Warnings
+                                        </span>
+                                        <span class="checkbox-desc">Approaching dangerous levels</span>
+                                    </div>
+                                </label>
+                                
+                                <label class="checkbox-row info">
+                                    <div class="checkbox-left">
+                                        <input type="checkbox" id="infoCheck">
+                                        <span class="checkmark"><i class="fas fa-check"></i></span>
+                                    </div>
+                                    <div class="checkbox-info">
+                                        <span class="checkbox-title">
+                                            <i class="fas fa-info-circle"></i>
+                                            System Info
+                                        </span>
+                                        <span class="checkbox-desc">Updates, connection status</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Display Tab -->
+                <section class="tab-panel" id="tab-display">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <div class="panel-icon"><i class="fas fa-palette"></i></div>
+                            <div>
+                                <h2>Display</h2>
+                                <p>Customize appearance</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Theme Selection -->
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-icon teal"><i class="fas fa-adjust"></i></div>
+                            <div>
+                                <h4>Theme</h4>
+                                <span>Choose color mode</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="theme-grid">
+                                <button class="theme-card active" data-theme="light">
+                                    <div class="theme-preview light-preview">
+                                        <div class="preview-bar"></div>
+                                        <div class="preview-body">
+                                            <div class="preview-side"></div>
+                                            <div class="preview-main"></div>
+                                        </div>
+                                    </div>
+                                    <div class="theme-name">
+                                        <i class="fas fa-sun"></i>
+                                        Light
+                                    </div>
+                                </button>
+                                
+                                <button class="theme-card" data-theme="dark">
+                                    <div class="theme-preview dark-preview">
+                                        <div class="preview-bar"></div>
+                                        <div class="preview-body">
+                                            <div class="preview-side"></div>
+                                            <div class="preview-main"></div>
+                                        </div>
+                                    </div>
+                                    <div class="theme-name">
+                                        <i class="fas fa-moon"></i>
+                                        Dark
+                                    </div>
+                                </button>
+                                
+                                <button class="theme-card" data-theme="auto">
+                                    <div class="theme-preview auto-preview">
+                                        <div class="preview-bar"></div>
+                                        <div class="preview-body">
+                                            <div class="preview-side"></div>
+                                            <div class="preview-main"></div>
+                                        </div>
+                                    </div>
+                                    <div class="theme-name">
+                                        <i class="fas fa-magic"></i>
+                                        Auto
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Display Options -->
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-icon indigo"><i class="fas fa-tv"></i></div>
+                            <div>
+                                <h4>Options</h4>
+                                <span>Visual preferences</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="toggle-list">
+                                <div class="toggle-row">
+                                    <div class="toggle-info">
+                                        <div class="toggle-icon pink"><i class="fas fa-sparkles"></i></div>
+                                        <div>
+                                            <span class="toggle-title">Animations</span>
+                                            <span class="toggle-desc">Enable motion effects</span>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="animationsToggle" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="toggle-row">
+                                    <div class="toggle-info">
+                                        <div class="toggle-icon cyan"><i class="fas fa-compress-alt"></i></div>
+                                        <div>
+                                            <span class="toggle-title">Compact Mode</span>
+                                            <span class="toggle-desc">Reduce spacing</span>
+                                        </div>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="compactToggle">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+<!-- Units Tab -->
+<section class="tab-panel" id="tab-units">
+    <div class="panel-header">
+        <div class="panel-title-group">
+            <div class="panel-icon"><i class="fas fa-ruler"></i></div>
+            <div>
+                <h2>Units of Measurement</h2>
+                <p>Choose your preferred units</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Temperature Units -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon orange"><i class="fas fa-thermometer-half"></i></div>
+            <div>
+                <h4>Temperature</h4>
+                <span>Select temperature scale</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="unit-selector">
+                <button class="unit-btn active" id="tempCelsius" data-unit="celsius">
+                    <div class="unit-icon">
+                        <i class="fas fa-thermometer-half"></i>
+                    </div>
+                    <div class="unit-info">
+                        <span class="unit-name">Celsius</span>
+                        <span class="unit-symbol">°C</span>
+                    </div>
+                    <div class="unit-check">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </button>
+                
+                <button class="unit-btn" id="tempFahrenheit" data-unit="fahrenheit">
+                    <div class="unit-icon">
+                        <i class="fas fa-thermometer-full"></i>
+                    </div>
+                    <div class="unit-info">
+                        <span class="unit-name">Fahrenheit</span>
+                        <span class="unit-symbol">°F</span>
+                    </div>
+                    <div class="unit-check">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="unit-example">
+                <i class="fas fa-info-circle"></i>
+                <span>Dashboard will show temperatures in your selected scale</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gas Concentration Units -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon pink"><i class="fas fa-wind"></i></div>
+            <div>
+                <h4>Gas Concentration</h4>
+                <span>Choose measurement unit</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="unit-selector">
+                <button class="unit-btn active" id="gasPpm" data-unit="ppm">
+                    <div class="unit-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="unit-info">
+                        <span class="unit-name">Parts Per Million</span>
+                        <span class="unit-symbol">PPM</span>
+                    </div>
+                    <div class="unit-check">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </button>
+                
+                <button class="unit-btn" id="gasMg" data-unit="mg">
+                    <div class="unit-icon">
+                        <i class="fas fa-vial"></i>
+                    </div>
+                    <div class="unit-info">
+                        <span class="unit-name">Milligrams per Cubic Meter</span>
+                        <span class="unit-symbol">mg/m³</span>
+                    </div>
+                    <div class="unit-check">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="unit-example">
+                <i class="fas fa-info-circle"></i>
+                <span>Gas sensor readings (MQ6, MQ7) will use this unit</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pressure Units -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon cyan"><i class="fas fa-tachometer-alt"></i></div>
+            <div>
+                <h4>Atmospheric Pressure</h4>
+                <span>Select pressure unit</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="unit-selector">
+                <button class="unit-btn active" id="pressureHpa" data-unit="hPa">
+                    <div class="unit-icon">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                    </div>
+                    <div class="unit-info">
+                        <span class="unit-name">Hectopascals</span>
+                        <span class="unit-symbol">hPa</span>
+                    </div>
+                    <div class="unit-check">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </button>
+                
+                <button class="unit-btn" id="pressurePsi" data-unit="psi">
+                    <div class="unit-icon">
+                        <i class="fas fa-gauge"></i>
+                    </div>
+                    <div class="unit-info">
+                        <span class="unit-name">Pounds per Square Inch</span>
+                        <span class="unit-symbol">PSI</span>
+                    </div>
+                    <div class="unit-check">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="unit-example">
+                <i class="fas fa-info-circle"></i>
+                <span>Atmospheric pressure readings will display in this unit</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Conversion Reference -->
+    <div class="card">
+        <div class="card-head">
+            <div class="card-icon indigo"><i class="fas fa-calculator"></i></div>
+            <div>
+                <h4>Quick Reference</h4>
+                <span>Common conversions</span>
+            </div>
+        </div>
+        <div class="card-content">
+            <div class="conversion-table">
+                <div class="conversion-row">
+                    <div class="conversion-label">
+                        <i class="fas fa-thermometer-half"></i>
+                        <span>Temperature</span>
+                    </div>
+                    <div class="conversion-value">
+                        <span>0°C = 32°F</span>
+                        <span>100°C = 212°F</span>
+                    </div>
+                </div>
+                
+                <div class="conversion-row">
+                    <div class="conversion-label">
+                        <i class="fas fa-wind"></i>
+                        <span>Gas (Approx.)</span>
+                    </div>
+                    <div class="conversion-value">
+                        <span>1000 PPM ≈ 1.8 mg/m³ (LPG)</span>
+                        <span>1000 PPM ≈ 1.15 mg/m³ (CO)</span>
+                    </div>
+                </div>
+                
+                <div class="conversion-row">
+                    <div class="conversion-label">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Pressure</span>
+                    </div>
+                    <div class="conversion-value">
+                        <span>1013 hPa = 14.7 PSI</span>
+                        <span>1 hPa = 0.0145 PSI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+                <!-- Storage Tab -->
+                <section class="tab-panel" id="tab-storage">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <div class="panel-icon"><i class="fas fa-database"></i></div>
+                            <div>
+                                <h2>Storage</h2>
+                                <p>Manage local data</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-head">
+                            <div class="card-icon teal"><i class="fas fa-hdd"></i></div>
+                            <div>
+                                <h4>Storage Usage</h4>
+                                <span>Local data on device</span>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="storage-visual">
+                                <div class="storage-bar">
+                                    <div class="storage-fill" id="storageFill" style="width: 12%"></div>
+                                </div>
+                                <div class="storage-info">
+                                    <span>Used: <strong id="storageUsed">1.2 MB</strong> of 10 MB</span>
+                                    <span id="storagePercent">12%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="action-list spaced">
+                                <button class="action-row" id="clearCacheBtn">
+                                    <i class="fas fa-broom"></i>
+                                    <div class="action-text">
+                                        <span>Clear Cache</span>
+                                        <small>Free up storage</small>
+                                    </div>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                
+                                <button class="action-row" id="exportBtn">
+                                    <i class="fas fa-download"></i>
+                                    <div class="action-text">
+                                        <span>Export Data</span>
+                                        <small>Download as JSON</small>
+                                    </div>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- About Tab -->
+                <section class="tab-panel" id="tab-about">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <div class="panel-icon"><i class="fas fa-info-circle"></i></div>
+                            <div>
+                                <h2>About</h2>
+                                <p>App information</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card about-card">
+                        <div class="about-header">
+                            <div class="about-logo">
+                                <i class="fas fa-wind"></i>
+                            </div>
+                            <h3>BreathSafe</h3>
+                            <span class="version-badge">v2.0.0</span>
+                            <p>Real-time Air Quality Monitoring</p>
+                        </div>
+                        
+                        <div class="about-links">
+                            <a href="#" class="about-link">
+                                <i class="fas fa-book"></i>
+                                <span>Documentation</span>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            <a href="#" class="about-link">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Help & Support</span>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            <a href="#" class="about-link">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Privacy Policy</span>
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="about-footer">
+                            <p>© 2024 BreathSafe. All rights reserved.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Bottom Footer -->
+        <footer class="bottom-footer">
+            <div class="footer-left">
+                <i class="fas fa-wind"></i>
+                <span>BreathSafe</span>
+                <span class="footer-version">v2.0.0</span>
+            </div>
+            <div class="footer-right">
+                <span class="footer-status">
+                    <span class="status-dot online"></span>
+                    System Online
+                </span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Floating Save Button -->
+    <div class="floating-save" id="floatingSave">
+        <button class="discard-btn" id="discardBtn">
+            <i class="fas fa-undo"></i>
+            Discard
+        </button>
+        <button class="save-btn" id="saveBtn">
+            <i class="fas fa-save"></i>
+            <span>Save Changes</span>
+        </button>
+    </div>
+
+    <!-- Test Connection Modal -->
+    <div class="modal-backdrop" id="testModal">
+        <div class="modal-box">
+            <div class="modal-top">
+                <div class="modal-icon"><i class="fas fa-stethoscope"></i></div>
+                <div>
+                    <h3>Connection Test</h3>
+                    <p>Testing network stability</p>
+                </div>
+                <button class="modal-close" id="closeTestModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-content">
+                <div class="test-visual">
+                    <div class="test-node"><i class="fas fa-server"></i><span>Server</span></div>
+                    <div class="test-line"><div class="test-packet" id="testPacket"></div></div>
+                    <div class="test-node"><i class="fas fa-laptop"></i><span>You</span></div>
+                </div>
+                
+                <div class="test-steps" id="testSteps">
+                    <div class="step" data-step="1">
+                        <div class="step-icon"><i class="fas fa-circle"></i></div>
+                        <span>Checking network...</span>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-icon"><i class="fas fa-circle"></i></div>
+                        <span>Measuring latency...</span>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-icon"><i class="fas fa-circle"></i></div>
+                        <span>Testing data stream...</span>
+                    </div>
+                </div>
+                
+                <div class="test-result success" id="testSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Connection Stable!</span>
+                </div>
+                
+                <div class="test-result error" id="testError">
+                    <i class="fas fa-times-circle"></i>
+                    <span>Issues Detected</span>
+                </div>
+            </div>
+            
+            <div class="modal-bottom">
+                <button class="btn secondary" id="closeTestBtn">Close</button>
+                <button class="btn primary" id="retryTestBtn">
+                    <i class="fas fa-redo"></i> Retry
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-stack" id="toastStack"></div>
+
+    <!-- Script -->
+    <script type="module" src="user-settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#10b981">
+    <meta name="description" content="BreathSafe - Gas Leak Detection System Setup">
+    <title>BreathSafe - Welcome Setup</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Animate.css for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="user-welcome.css">
+    
+    <style>
+        /* Critical CSS - Prevent FOUC */
+         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; overflow: hidden; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        body.loaded { opacity: 1; }
+    </style>
+</head>
+<body class="light">
+    
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <div class="loading-icon">
+                    <i class="fas fa-wind"></i>
+                </div>
+                <div class="loading-spinner"></div>
+            </div>
+            <div class="loading-text">
+                <span>B</span><span>r</span><span>e</span><span>a</span><span>t</span><span>h</span><span>S</span><span>a</span><span>f</span><span>e</span>
+            </div>
+            <div class="loading-bar">
+                <div class="loading-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Welcome Layout -->
+    <div class="welcome-layout" id="welcomeLayout">
+        
+        <!-- ==================== LEFT PANEL (Visual/Branding) ==================== -->
+        <aside class="visual-panel" id="visualPanel">
+            
+            <!-- Animated Background -->
+            <div class="visual-bg">
+                <div class="gradient-layer"></div>
+                <div class="mesh-gradient"></div>
+                <div class="floating-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                    <div class="shape shape-4"></div>
+                    <div class="shape shape-5"></div>
+                </div>
+                <div class="particle-field" id="particleField"></div>
+                <div class="grid-overlay"></div>
+            </div>
+            
+            <!-- Logo -->
+            <header class="visual-header">
+                <div class="logo-container">
+                    <div class="logo-icon-wrap">
+                        <div class="logo-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="logo-glow"></div>
+                        <svg class="logo-ring" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" />
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1 class="logo-title">BreathSafe</h1>
+                        <p class="logo-tagline">Gas Leak Detection System</p>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Dynamic Illustration Area -->
+            <div class="illustration-stage" id="illustrationStage">
+                
+                <!-- Step 1 Illustration: Welcome -->
+                <div class="stage-scene active" data-step="1" id="scene1">
+                    <div class="welcome-scene">
+                        <div class="hero-circle">
+                            <div class="hero-icon">
+                                <i class="fas fa-hand-sparkles"></i>
+                            </div>
+                            <div class="orbit orbit-1">
+                                <div class="orbit-dot"></div>
+                            </div>
+                            <div class="orbit orbit-2">
+                                <div class="orbit-dot"></div>
+                            </div>
+                            <div class="orbit orbit-3">
+                                <div class="orbit-dot"></div>
+                            </div>
+                        </div>
+                        <div class="floating-icons">
+                            <div class="float-icon fi-1"><i class="fas fa-shield-alt"></i></div>
+                            <div class="float-icon fi-2"><i class="fas fa-bell"></i></div>
+                            <div class="float-icon fi-3"><i class="fas fa-chart-line"></i></div>
+                            <div class="float-icon fi-4"><i class="fas fa-mobile-alt"></i></div>
+                            <div class="float-icon fi-5"><i class="fas fa-cloud"></i></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2 Illustration: Location -->
+                <div class="stage-scene" data-step="2" id="scene2">
+                    <div class="location-scene">
+                        <div class="globe-container">
+                            <div class="globe">
+                                <div class="globe-inner"></div>
+                                <div class="globe-shine"></div>
+                            </div>
+                            <div class="location-pin">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="pin-pulse"></div>
+                                <div class="pin-pulse delay-1"></div>
+                                <div class="pin-pulse delay-2"></div>
+                            </div>
+                            <div class="radar-sweep"></div>
+                        </div>
+                        <div class="connection-lines">
+                            <svg viewBox="0 0 400 300" preserveAspectRatio="none">
+                                <path class="conn-line cl-1" d="M50,150 Q200,50 350,150" />
+                                <path class="conn-line cl-2" d="M50,150 Q200,250 350,150" />
+                                <path class="conn-line cl-3" d="M100,50 Q200,150 300,50" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3 Illustration: Sensors -->
+                <div class="stage-scene" data-step="3" id="scene3">
+                    <div class="sensors-scene">
+                        <div class="sensor-hub">
+                            <div class="hub-core">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                            <div class="hub-ring ring-1"></div>
+                            <div class="hub-ring ring-2"></div>
+                            <div class="hub-ring ring-3"></div>
+                        </div>
+                        <div class="sensor-nodes">
+                            <div class="sensor-node node-1" data-sensor="MQ6">
+                                <div class="node-icon"><i class="fas fa-fire"></i></div>
+                                <div class="node-pulse"></div>
+                                <svg class="node-connection"><line x1="0" y1="50%" x2="100%" y2="50%"/></svg>
+                            </div>
+                            <div class="sensor-node node-2" data-sensor="MQ7">
+                                <div class="node-icon"><i class="fas fa-smog"></i></div>
+                                <div class="node-pulse"></div>
+                                <svg class="node-connection"><line x1="0" y1="50%" x2="100%" y2="50%"/></svg>
+                            </div>
+                            <div class="sensor-node node-3" data-sensor="DHT22">
+                                <div class="node-icon"><i class="fas fa-thermometer-half"></i></div>
+                                <div class="node-pulse"></div>
+                                <svg class="node-connection"><line x1="0" y1="50%" x2="100%" y2="50%"/></svg>
+                            </div>
+                        </div>
+                        <div class="data-streams">
+                            <div class="stream stream-1"></div>
+                            <div class="stream stream-2"></div>
+                            <div class="stream stream-3"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 4 Illustration: Complete -->
+                <div class="stage-scene" data-step="4" id="scene4">
+                    <div class="success-scene">
+                        <div class="success-badge">
+                            <svg class="success-check" viewBox="0 0 100 100">
+                                <circle class="check-circle" cx="50" cy="50" r="45"/>
+                                <path class="check-mark" d="M30,50 L45,65 L70,35"/>
+                            </svg>
+                            <div class="badge-glow"></div>
+                        </div>
+                        <div class="celebration-particles" id="celebrationParticles"></div>
+                        <div class="success-rings">
+                            <div class="s-ring r1"></div>
+                            <div class="s-ring r2"></div>
+                            <div class="s-ring r3"></div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Progress Indicator (Desktop - Vertical) -->
+            <nav class="vertical-progress" id="verticalProgress" aria-label="Setup progress">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFillVertical"></div>
+                </div>
+                <div class="progress-steps">
+                    <button class="progress-step active" data-step="1" aria-current="step">
+                        <span class="step-indicator">
+                            <span class="step-num">1</span>
+                            <i class="fas fa-check step-check"></i>
+                        </span>
+                        <span class="step-label">Welcome</span>
+                    </button>
+                    <button class="progress-step" data-step="2">
+                        <span class="step-indicator">
+                            <span class="step-num">2</span>
+                            <i class="fas fa-check step-check"></i>
+                        </span>
+                        <span class="step-label">Location</span>
+                    </button>
+                    <button class="progress-step" data-step="3">
+                        <span class="step-indicator">
+                            <span class="step-num">3</span>
+                            <i class="fas fa-check step-check"></i>
+                        </span>
+                        <span class="step-label">Sensors</span>
+                    </button>
+                    <button class="progress-step" data-step="4">
+                        <span class="step-indicator">
+                            <span class="step-num">4</span>
+                            <i class="fas fa-check step-check"></i>
+                        </span>
+                        <span class="step-label">Complete</span>
+                    </button>
+                </div>
+            </nav>
+            
+            <!-- Visual Panel Footer -->
+            <footer class="visual-footer">
+                <div class="security-badge">
+                    <i class="fas fa-lock"></i>
+                    <span>Secure Setup</span>
+                </div>
+                <div class="version-info">v2.0</div>
+            </footer>
+            
+        </aside>
+        
+        <!-- ==================== RIGHT PANEL (Content/Forms) ==================== -->
+        <main class="content-panel" id="contentPanel">
+            
+            <!-- Mobile Header (visible only on mobile) -->
+            <header class="mobile-header" id="mobileHeader">
+                <div class="mobile-logo">
+                    <div class="mobile-logo-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <span class="mobile-logo-text">BreathSafe</span>
+                </div>
+                <!-- Mobile Progress -->
+                <div class="mobile-progress">
+                    <div class="mobile-progress-bar">
+                        <div class="mobile-progress-fill" id="mobileProgressFill"></div>
+                    </div>
+                    <span class="mobile-progress-text" id="mobileProgressText">Step 1 of 4</span>
+                </div>
+            </header>
+            
+            <!-- Content Wrapper -->
+            <div class="content-wrapper" id="contentWrapper">
+                
+                <!-- ==================== STEP 1: Welcome ==================== -->
+                <section class="content-step active" id="contentStep1" data-step="1" aria-labelledby="step1Title">
+                    <div class="step-inner">
+                        
+                        <!-- Mobile Illustration (visible only on mobile) -->
+                        <div class="mobile-illustration">
+                            <div class="mobile-hero-circle">
+                                <i class="fas fa-hand-sparkles"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="step-header">
+                            <span class="step-badge">
+                                <i class="fas fa-sparkles"></i>
+                                Getting Started
+                            </span>
+                            <h2 class="step-title" id="step1Title">
+                                Welcome to BreathSafe!
+                                <span class="title-wave">👋</span>
+                            </h2>
+                            <p class="step-subtitle">
+                                Hello <strong class="user-name-display" id="userName">User</strong>! 
+                                We're excited to have you join our safety network.
+                            </p>
+                        </div>
+                        
+                        <div class="step-body">
+                            <p class="step-description">
+                                Let's set up your gas detection system in just a few quick steps. 
+                                This will help us provide you with the best protection possible.
+                            </p>
+                            
+                            <!-- Feature Cards -->
+                            <div class="feature-cards">
+                                <div class="feature-card" data-aos="fade-up" data-aos-delay="0">
+                                    <div class="card-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <div class="icon-bg"></div>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>24/7 Protection</h4>
+                                        <p>Continuous real-time monitoring</p>
+                                    </div>
+                                    <div class="card-hover-effect"></div>
+                                </div>
+                                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                                    <div class="card-icon warning-icon">
+                                        <i class="fas fa-bell"></i>
+                                        <div class="icon-bg"></div>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Instant Alerts</h4>
+                                        <p>Immediate push notifications</p>
+                                    </div>
+                                    <div class="card-hover-effect"></div>
+                                </div>
+                                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                                    <div class="card-icon accent-icon">
+                                        <i class="fas fa-chart-line"></i>
+                                        <div class="icon-bg"></div>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4>Smart Analytics</h4>
+                                        <p>Detailed insights & trends</p>
+                                    </div>
+                                    <div class="card-hover-effect"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Setup Info -->
+                            <div class="setup-info">
+                                <div class="info-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="info-content">
+                                    <span class="info-title">Quick Setup</span>
+                                    <span class="info-text">Takes less than 2 minutes to complete</span>
+                                </div>
+                                <div class="info-decoration"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-footer">
+                            <button type="button" class="btn btn-primary btn-lg btn-glow" id="btnStart" data-sound="click">
+                                <span class="btn-content">
+                                    <span class="btn-text">Get Started</span>
+                                    <i class="fas fa-arrow-right btn-icon"></i>
+                                </span>
+                                <div class="btn-ripple"></div>
+                                <div class="btn-shine"></div>
+                            </button>
+                        </div>
+                        
+                    </div>
+                </section>
+                
+                <!-- ==================== STEP 2: Location ==================== -->
+                <section class="content-step" id="contentStep2" data-step="2" aria-labelledby="step2Title">
+                    <div class="step-inner">
+                        
+                        <!-- Mobile Illustration -->
+                        <div class="mobile-illustration">
+                            <div class="mobile-hero-circle location-theme">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="step-header">
+                            <span class="step-badge location-badge">
+                                <i class="fas fa-location-arrow"></i>
+                                Location Access
+                            </span>
+                            <h2 class="step-title" id="step2Title">Enable Your Location</h2>
+                            <p class="step-subtitle">
+                                Help us provide accurate emergency response and location-based monitoring.
+                            </p>
+                        </div>
+                        
+                        <div class="step-body">
+                            
+                            <!-- Benefits List -->
+                            <ul class="benefits-list">
+                                <li class="benefit-item" data-aos="fade-right" data-aos-delay="0">
+                                    <div class="benefit-icon">
+                                        <i class="fas fa-ambulance"></i>
+                                    </div>
+                                    <div class="benefit-content">
+                                        <strong>Emergency Response</strong>
+                                        <span>Quick coordination with local services</span>
+                                    </div>
+                                </li>
+                                <li class="benefit-item" data-aos="fade-right" data-aos-delay="100">
+                                    <div class="benefit-icon">
+                                        <i class="fas fa-broadcast-tower"></i>
+                                    </div>
+                                    <div class="benefit-content">
+                                        <strong>Regional Alerts</strong>
+                                        <span>Area-specific safety notifications</span>
+                                    </div>
+                                </li>
+                                <li class="benefit-item" data-aos="fade-right" data-aos-delay="200">
+                                    <div class="benefit-icon">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                    </div>
+                                    <div class="benefit-content">
+                                        <strong>Sensor Mapping</strong>
+                                        <span>Accurate device positioning</span>
+                                    </div>
+                                </li>
+                            </ul>
+                            
+                            <!-- Location Status Card -->
+                            <div class="location-card" id="locationCard">
+                                <div class="location-card-inner" id="locationCardInner">
+                                    
+                                    <!-- Default State -->
+                                    <div class="location-state" id="locationDefault">
+                                        <div class="state-icon">
+                                            <i class="fas fa-crosshairs"></i>
+                                            <div class="icon-pulse"></div>
+                                        </div>
+                                        <div class="state-content">
+                                            <h4>Location Access Required</h4>
+                                            <p>Tap the button below to enable location services</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Loading State -->
+                                    <div class="location-state hidden" id="locationLoading">
+                                        <div class="state-icon loading">
+                                            <div class="loading-spinner-sm"></div>
+                                        </div>
+                                        <div class="state-content">
+                                            <h4>Acquiring Location...</h4>
+                                            <p>Please wait while we detect your position</p>
+                                        </div>
+                                    </div>
+                                    
+<!-- Success State () -->
+<div class="location-state hidden" id="locationSuccess">
+    <div class="state-icon success">
+        <i class="fas fa-check-circle"></i>
+    </div>
+    <div class="state-content">
+        <h4>Location Captured!</h4>
+        <div class="coords-display">
+            <div class="coord">
+                <span class="coord-label">LAT</span>
+                <span class="coord-value" id="latValue">--</span>
+            </div>
+            <div class="coord-divider"></div>
+            <div class="coord">
+                <span class="coord-label">LNG</span>
+                <span class="coord-value" id="lngValue">--</span>
+            </div>
+            <div class="coord-divider"></div>
+            <div class="coord">
+                <span class="coord-label">ACC</span>
+                <span class="coord-value" id="accValue">--</span>
+            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Error State -->
+                                    <div class="location-state hidden" id="locationError">
+                                        <div class="state-icon error">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="state-content">
+                                            <h4 id="locationErrorTitle">Location Unavailable</h4>
+                                            <p id="locationErrorMsg">You can skip this step and continue</p>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                            <!-- Privacy Note -->
+                            <div class="privacy-note">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Your location data is encrypted and never shared with third parties.</span>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="step-footer">
+                            <button type="button" class="btn btn-secondary" id="btnBack2" data-sound="click">
+                                <i class="fas fa-arrow-left"></i>
+                                <span>Back</span>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-glow" id="btnLocation" data-sound="click">
+                                <span class="btn-content">
+                                    <i class="fas fa-location-arrow btn-icon-left"></i>
+                                    <span class="btn-text">Enable Location</span>
+                                </span>
+                                <div class="btn-ripple"></div>
+                                <div class="btn-shine"></div>
+                            </button>
+                        </div>
+                        
+                    </div>
+                </section>
+                
+                <!-- ==================== STEP 3: Sensors ==================== -->
+                <section class="content-step" id="contentStep3" data-step="3" aria-labelledby="step3Title">
+                    <div class="step-inner">
+                        
+                        <!-- Mobile Illustration -->
+                        <div class="mobile-illustration">
+                            <div class="mobile-hero-circle sensor-theme">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="step-header">
+                            <span class="step-badge sensor-badge">
+                                <i class="fas fa-microchip"></i>
+                                Sensor Configuration
+                            </span>
+                            <h2 class="step-title" id="step3Title">Your Assigned Sensors</h2>
+                            <p class="step-subtitle">
+                                Configure your sensors and specify their installation location.
+                            </p>
+                        </div>
+                        
+                        <div class="step-body">
+                            
+                            <!-- Sensor Cards Grid -->
+                            <div class="sensor-grid" id="sensorGrid" role="list">
+                            <!-- Populated by JavaScript -->
+                            </div>
+                            
+                            <!-- Feature Announcement -->
+                            <div class="feature-announcement" id="featureAnnouncement" style="display: none;">
+                            <!-- Populated by JavaScript -->
+                            </div>
+                            
+                            <!-- Room Selection -->
+                            <div class="room-selection-section">
+                                <label class="section-label">
+                                    <i class="fas fa-home"></i>
+                                    <span>Where are your sensors installed?</span>
+                                </label>
+                                
+                                <div class="room-grid" id="roomGrid" role="radiogroup">
+                                    <button type="button" class="room-btn" data-room="living-room" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-couch"></i>
+                                        </div>
+                                        <span class="room-name">Living Room</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="kitchen" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-utensils"></i>
+                                        </div>
+                                        <span class="room-name">Kitchen</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="bedroom" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-bed"></i>
+                                        </div>
+                                        <span class="room-name">Bedroom</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="bathroom" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-bath"></i>
+                                        </div>
+                                        <span class="room-name">Bathroom</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="garage" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-warehouse"></i>
+                                        </div>
+                                        <span class="room-name">Garage</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="basement" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-archway"></i>
+                                        </div>
+                                        <span class="room-name">Basement</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="office" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-briefcase"></i>
+                                        </div>
+                                        <span class="room-name">Office</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="hallway" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-door-open"></i>
+                                        </div>
+                                        <span class="room-name">Hallway</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                    <button type="button" class="room-btn" data-room="other" role="radio" aria-checked="false">
+                                        <div class="room-icon-wrap">
+                                            <i class="fas fa-plus"></i>
+                                        </div>
+                                        <span class="room-name">Other</span>
+                                        <div class="room-check"><i class="fas fa-check"></i></div>
+                                    </button>
+                                </div>
+                                
+                                <!-- Custom Location Input -->
+                                <div class="custom-input-wrap" id="customInputWrap" style="display: none;">
+                                    <div class="custom-input-field">
+                                        <i class="fas fa-edit field-icon"></i>
+                                        <input 
+                                            type="text" 
+                                            id="customLocationInput" 
+                                            placeholder="Enter custom location name..."
+                                            maxlength="50"
+                                            autocomplete="off"
+                                        />
+                                        <span class="char-count"><span id="charCount">0</span>/50</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Selected Display -->
+                                <div class="selected-location" id="selectedLocation" style="display: none;">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Installing in: <strong id="selectedLocationName">-</strong></span>
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="step-footer">
+                            <button type="button" class="btn btn-secondary" id="btnBack3" data-sound="click">
+                                <i class="fas fa-arrow-left"></i>
+                                <span>Back</span>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-glow" id="btnContinue3" disabled data-sound="click">
+                                <span class="btn-content">
+                                    <span class="btn-text">Continue</span>
+                                    <i class="fas fa-arrow-right btn-icon"></i>
+                                </span>
+                                <div class="btn-ripple"></div>
+                                <div class="btn-shine"></div>
+                            </button>
+                        </div>
+                        
+                    </div>
+                </section>
+                
+                <!-- ==================== STEP 4: Complete ==================== -->
+                <section class="content-step" id="contentStep4" data-step="4" aria-labelledby="step4Title">
+                    <div class="step-inner">
+                        
+                        <!-- Mobile Illustration -->
+                        <div class="mobile-illustration">
+                            <div class="mobile-hero-circle success-theme">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="step-header success-header">
+                            <div class="confetti-burst" id="confettiBurst"></div>
+                            <span class="step-badge success-badge">
+                                <i class="fas fa-trophy"></i>
+                                Setup Complete
+                            </span>
+                            <h2 class="step-title success-gradient" id="step4Title">
+                                You're All Set! 
+                                <span class="celebration-emoji">🎉</span>
+                            </h2>
+                            <p class="step-subtitle">
+                                Your BreathSafe system is configured and ready to protect you.
+                            </p>
+                        </div>
+                        
+                        <div class="step-body">
+                            
+                            <!-- Summary Card -->
+                            <div class="summary-card">
+                                <div class="summary-header">
+                                    <i class="fas fa-clipboard-check"></i>
+                                    <span>Configuration Summary</span>
+                                </div>
+                                <div class="summary-body">
+                                    <div class="summary-row">
+                                        <div class="summary-icon location">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </div>
+                                        <div class="summary-info">
+                                            <span class="summary-label">Location Access</span>
+                                            <span class="summary-value" id="summaryLocation">-</span>
+                                        </div>
+                                        <div class="summary-status">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="summary-row">
+                                        <div class="summary-icon room">
+                                            <i class="fas fa-home"></i>
+                                        </div>
+                                        <div class="summary-info">
+                                            <span class="summary-label">Installation Location</span>
+                                            <span class="summary-value" id="summaryRoom">-</span>
+                                        </div>
+                                        <div class="summary-status">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="summary-row">
+                                        <div class="summary-icon sensors">
+                                            <i class="fas fa-microchip"></i>
+                                        </div>
+                                        <div class="summary-info">
+                                            <span class="summary-label">Active Sensors</span>
+                                            <span class="summary-value" id="summarySensors">-</span>
+                                        </div>
+                                        <div class="summary-status">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- What's Next -->
+                            <div class="whats-next-section">
+                                <h4 class="section-title">
+                                    <i class="fas fa-rocket"></i>
+                                    What's Next?
+                                </h4>
+                                <div class="next-steps">
+                                    <div class="next-step" data-aos="fade-up" data-aos-delay="0">
+                                        <span class="step-number">1</span>
+                                        <span class="step-text">View real-time sensor data on your dashboard</span>
+                                    </div>
+                                    <div class="next-step" data-aos="fade-up" data-aos-delay="100">
+                                        <span class="step-number">2</span>
+                                        <span class="step-text">Receive instant alerts for gas detection</span>
+                                    </div>
+                                    <div class="next-step" data-aos="fade-up" data-aos-delay="200">
+                                        <span class="step-number">3</span>
+                                        <span class="step-text">Access historical data and analytics</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="step-footer center">
+                            <button type="button" class="btn btn-success btn-xl btn-glow" id="btnLaunch" data-sound="success">
+                                <span class="btn-content">
+                                    <i class="fas fa-rocket btn-icon-left"></i>
+                                    <span class="btn-text">Launch Dashboard</span>
+                                </span>
+                                <div class="btn-ripple"></div>
+                                <div class="btn-shine"></div>
+                                <div class="btn-particles"></div>
+                            </button>
+                        </div>
+                        
+                    </div>
+                </section>
+                
+            </div>
+            
+            <!-- Content Panel Footer -->
+            <footer class="content-footer">
+                <div class="footer-left">
+                    <span class="safety-text">
+                        <i class="fas fa-shield-alt"></i>
+                        Your safety is our priority
+                    </span>
+                </div>
+                <div class="footer-right">
+                    <button type="button" class="help-btn" id="helpBtn" aria-label="Get help">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help</span>
+                    </button>
+                </div>
+            </footer>
+            
+        </main>
+        
+    </div>
+    
+    <!-- ==================== WAITING FOR SENSORS OVERLAY ==================== -->
+    <div class="waiting-overlay" id="waitingOverlay" style="display: none;">
+        <div class="waiting-content">
+            <div class="waiting-visual">
+                <div class="waiting-icon">
+                    <i class="fas fa-satellite-dish"></i>
+                </div>
+                <div class="waiting-waves">
+                    <div class="w-wave"></div>
+                    <div class="w-wave"></div>
+                    <div class="w-wave"></div>
+                </div>
+            </div>
+            <h2 class="waiting-title">Waiting for Sensor Assignment</h2>
+            <p class="waiting-message">
+                Welcome, <strong id="waitingUserName">User</strong>! Your account is active and ready.
+            </p>
+            <div class="waiting-status-badges">
+                <span class="status-badge active">
+                    <i class="fas fa-check-circle"></i>
+                    Account Active
+                </span>
+                <span class="status-badge pending">
+                    <i class="fas fa-clock"></i>
+                    Sensors Pending
+                </span>
+            </div>
+            <div class="waiting-info-box">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>What's happening?</strong>
+                    <p>Your administrator needs to assign sensors to your account. This usually happens within a few minutes.</p>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" id="btnCheckSensors">
+                <i class="fas fa-sync-alt"></i>
+                <span>Check for Sensors</span>
+            </button>
+            <div class="auto-check-notice">
+                <div class="mini-spinner"></div>
+                <span>Auto-checking every 10 seconds...</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ==================== TOAST CONTAINER ==================== -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+    
+    <!-- ==================== AUDIO ELEMENTS ==================== -->
+    <audio id="soundClick" preload="auto">
+        <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYNIyF5AAAAAAAAAAAAAAAAAAAAAP/7UMQAA8AAAaQAAAAgAAA0gAAABExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+1DEHwPAAAGkAAAAIAAANIAAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+    </audio>
+    <audio id="soundSuccess" preload="auto">
+        <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAADAAABqwCenp6enp6enp6enp6enp6enp6enp6enp6enp6enp7V1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1f//////////////////////////////////////////////////////////AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAatcm/CWAAAAAAAAAAAAAAAAAAAAAP/7UMQAAAPgAaQAAAAgAAA0gAAABExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+1LEHIPAAAGQAAAAIAAANIAAAATVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ==" type="audio/mpeg">
+    </audio>
+    <audio id="soundError" preload="auto">
+        <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgDMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYaLRg8+AAAAAAAAAAAAAAAAAAAAAP/7UMQAA8AAAaQAAAAgAAA0gAAABExBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+1DEHwPAAAGkAAAAIAAANIAAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
+    </audio>
+    
+    <!-- ==================== SCRIPTS ==================== -->
+    <script type="module" src="user-welcome.js"></script>
+    
+</body>
+</html>

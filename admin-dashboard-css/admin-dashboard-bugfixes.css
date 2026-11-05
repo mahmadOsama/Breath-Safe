@@ -1,0 +1,604 @@
+/* ==========================================
+   BREATHSAFE ADMIN DASHBOARD
+   BUG FIXES & CRITICAL CORRECTIONS
+   ========================================== */
+
+/* ========== FIX 1: ADD ADMIN BUTTON VISIBILITY ========== */
+/* The button was likely hidden due to card overflow or z-index issues */
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 10px;
+  position: relative; /* Ensure proper stacking */
+  z-index: 1; /* Prevent overlap issues */
+  overflow: visible !important; /* Fix overflow hiding */
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  visibility: visible !important; /* Force visibility */
+  opacity: 1 !important; /* Ensure opacity */
+  position: relative; /* Proper positioning */
+  z-index: 2; /* Above other elements */
+}
+
+#addAdminBtn {
+  display: inline-flex !important; /* Force display */
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-width: max-content; /* Prevent text wrapping */
+  white-space: nowrap;
+}
+
+/* Ensure the button isn't hidden on larger screens */
+@media (min-width: 769px) {
+  #addAdminBtn {
+    display: inline-flex !important;
+  }
+  
+  .card-actions {
+    display: flex !important;
+  }
+}
+
+/* ========== FIX 2: USER MANAGEMENT CARD OVERFLOW ========== */
+/* Prevent content from being cut off */
+
+.card {
+  overflow: visible;
+  position: relative;
+}
+
+.card-body {
+  overflow: visible;
+  position: relative;
+}
+
+/* Only apply overflow to table wrapper */
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 650px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* ========== FIX 3: Z-INDEX HIERARCHY ========== */
+/* Fix overlapping elements */
+
+.header {
+  z-index: 100;
+}
+
+.user-dropdown {
+  z-index: 101;
+}
+
+.modal-backdrop {
+  z-index: 1000;
+}
+
+.modal {
+  z-index: 1001;
+}
+
+.toast {
+  z-index: 9999;
+}
+
+.theme-toggle {
+  z-index: 99;
+}
+
+/* ========== FIX 4: STICKY HEADER ISSUES ========== */
+/* Fix header sticking problems on scroll */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 3px var(--shadow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); /* Safari support */
+}
+
+/* Prevent content from going under header */
+.main-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== FIX 5: TABLE HEADER STICKY ISSUE ========== */
+/* Fix table header not sticking properly */
+
+.users-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--accent-bg);
+}
+
+.users-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--accent-bg);
+  z-index: 11;
+}
+
+/* ========== FIX 6: MODAL BACKDROP CLICK ISSUE ========== */
+/* Ensure backdrop is clickable */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  cursor: pointer; /* Add cursor */
+  z-index: 1000;
+}
+
+.modal-dialog {
+  position: relative;
+  z-index: 1001;
+  pointer-events: auto; /* Ensure dialog is interactive */
+}
+
+/* ========== FIX 7: DROPDOWN MENU CUT-OFF ========== */
+/* Fix dropdown being cut off by parent overflow */
+
+.user-menu {
+  position: relative;
+  z-index: 102; /* Above other header elements */
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 103; /* High z-index */
+  min-width: 280px; /* Prevent too narrow */
+}
+
+/* Ensure header doesn't cut off dropdown */
+.header {
+  overflow: visible !important;
+}
+
+.header-container {
+  overflow: visible !important;
+}
+
+.header-right {
+  overflow: visible !important;
+}
+
+/* ========== FIX 8: CHECKBOX ALIGNMENT ========== */
+/* Fix checkbox vertical alignment in table */
+
+.users-table input[type="checkbox"] {
+  vertical-align: middle;
+  margin: 0;
+  transform: translateY(-1px); /* Fine-tune alignment */
+}
+
+.users-table td:first-child {
+  text-align: center;
+}
+
+/* ========== FIX 9: STATUS BADGE CLICK AREA ========== */
+/* Make status badge click area larger */
+
+.status-badge {
+  cursor: pointer;
+  user-select: none;
+  padding: 6px 12px; /* Increase padding */
+  min-width: 80px; /* Minimum width */
+  text-align: center;
+}
+
+.status-badge:not([onclick=""]) {
+  cursor: pointer;
+}
+
+.status-badge[onclick=""] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ========== FIX 10: RESPONSIVE BUTTON TEXT ========== */
+/* Prevent button text from disappearing */
+
+.btn-primary span,
+.btn-outline span {
+  display: inline !important;
+  visibility: visible !important;
+}
+
+/* Hide only icon on very small screens if needed */
+@media (max-width: 360px) {
+  .btn-primary i,
+  .btn-outline i {
+    display: none;
+  }
+}
+
+/* ========== FIX 11: CHART CONTAINER OVERFLOW ========== */
+/* Fix chart overflowing container */
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.chart-wrapper canvas {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* ========== FIX 12: THEME TOGGLE VISIBILITY ========== */
+/* Ensure theme toggle is always visible */
+
+.theme-toggle {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ========== FIX 13: MODAL SCROLLING ON MOBILE ========== */
+/* Fix modal not scrolling on mobile */
+
+@media (max-width: 768px) {
+  .modal {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .modal-dialog {
+    margin: 20px auto;
+    min-height: auto;
+    max-height: calc(100vh - 40px);
+  }
+  
+  .modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ========== FIX 14: INPUT FOCUS ZOOM PREVENTION ========== */
+/* Prevent zoom on input focus on iOS */
+
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents iOS zoom */
+  }
+}
+
+/* ========== FIX 15: TABLE RESPONSIVE SCROLL INDICATOR ========== */
+/* Add visual indicator for horizontal scroll */
+
+.table-wrapper {
+  position: relative;
+}
+
+.table-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(to right, transparent, var(--panel));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.table-wrapper:hover::after {
+  opacity: 1;
+}
+
+/* Show scroll indicator on mobile */
+@media (max-width: 768px) {
+  .table-wrapper::after {
+    opacity: 1;
+  }
+}
+
+/* ========== FIX 16: STAT CARD NUMBER OVERFLOW ========== */
+/* Prevent large numbers from breaking layout */
+
+.big-num {
+  word-break: break-all;
+  max-width: 100%;
+  line-height: 1.2;
+}
+
+.stat-body {
+  min-width: 0; /* Allow flex shrinking */
+  overflow: hidden;
+}
+
+/* ========== FIX 17: SENSOR VALUE OVERFLOW ========== */
+/* Prevent sensor values from overflowing */
+
+.sensor-value {
+  max-width: 100%;
+  word-break: break-all;
+}
+
+.sensor-value-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex-wrap: wrap; /* Allow wrapping */
+}
+
+/* ========== FIX 18: ENVIRONMENT VALUE OVERFLOW ========== */
+
+.env-value-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap; /* Allow wrapping */
+}
+
+.env-value {
+  word-break: break-all;
+  max-width: 100%;
+}
+
+/* ========== FIX 19: USER CELL TEXT OVERFLOW ========== */
+/* Fix long usernames breaking layout */
+
+.user-name-table {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .user-name-table {
+    max-width: 120px;
+  }
+}
+
+/* ========== FIX 20: MODAL CLOSE BUTTON ACCESSIBILITY ========== */
+/* Make close buttons more accessible */
+
+.icon-btn[id*="close"],
+.icon-btn[id*="Close"] {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== FIX 21: SEARCH BOX ICON ALIGNMENT ========== */
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-box i {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-box input {
+  padding-left: 38px; /* Space for icon */
+  width: 100%;
+}
+
+/* ========== FIX 22: DROPDOWN ARROW ROTATION ========== */
+/* Fix dropdown arrow not rotating */
+
+.dropdown-arrow {
+  transition: transform var(--transition-fast);
+  display: inline-block; /* Needed for transform */
+}
+
+.user-menu.active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+/* ========== FIX 23: COPY BUTTON IN MODAL ========== */
+/* Fix copy button positioning */
+
+.copy-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  min-width: max-content;
+}
+
+.detail-item label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ========== FIX 24: PAGE ACTIONS BUTTON WRAPPING ========== */
+
+.page-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.page-actions button {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .page-actions {
+    width: 100%;
+  }
+  
+  .page-actions button {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+/* ========== FIX 25: AIR ORB CENTERING ========== */
+
+.orb-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 240px;
+}
+
+.air-orb {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* ========== FIX 26: TOAST MESSAGE TRUNCATION ========== */
+
+.toast {
+  max-width: 90%;
+  word-wrap: break-word;
+  text-align: center;
+  min-width: 200px;
+}
+
+/* ========== FIX 27: FILTER SELECT WIDTH ========== */
+
+.filter-select {
+  min-width: 120px;
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .filter-select {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* ========== FIX 28: PREVENT DOUBLE TAP ZOOM ON iOS ========== */
+
+* {
+  touch-action: manipulation;
+}
+
+/* ========== FIX 29: FIX CARD TITLE ICON ALIGNMENT ========== */
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.card-title i {
+  flex-shrink: 0;
+}
+
+/* ========== FIX 30: ENSURE BUTTONS DON'T OVERLAP ========== */
+
+.table-controls {
+  min-height: 60px; /* Prevent collapse */
+}
+
+.table-actions {
+  margin-left: auto; /* Push to right */
+}
+
+/* ========== CRITICAL VISIBILITY FIXES ========== */
+
+/* Force visibility for critical elements */
+#addAdminBtn,
+#refreshBtn,
+#exportCsvBtn,
+#deleteSelectedBtn,
+#themeToggle,
+#logoutBtn {
+  visibility: visible !important;
+  display: inline-flex !important;
+  opacity: 1 !important;
+}
+
+/* Ensure no parent element hides children */
+.card,
+.card-header,
+.card-body,
+.card-actions,
+.page-actions,
+.table-actions {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ========== CRITICAL Z-INDEX RATIONALIZATION ========== */
+:root {
+  --z-base: 1;
+  --z-dropdown: 101;
+  --z-modal-backdrop: 1000;
+  --z-modal: 1001;
+  --z-toast: 9999;
+  --z-floating-btn: 99;
+}
+
+.header {
+  z-index: 100;
+}
+
+.user-dropdown {
+  z-index: 101;
+}
+
+.modal-backdrop,
+.deleteConfirmModal,
+.addAdminModal,
+.userDetailsModal {
+  z-index: var(--z-modal-backdrop);
+}
+
+.modal-dialog,
+.deleteConfirmModal > *,
+.addAdminModal > *,
+.userDetailsModal > * {
+  z-index: var(--z-modal);
+}
+
+.toast,
+.activity-toast {
+  z-index: var(--z-toast);
+}
+
+.theme-toggle {
+  z-index: var(--z-floating-btn);
+}

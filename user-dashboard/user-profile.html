@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#10b981">
+    <meta name="description" content="BreathSafe User Profile - Manage Your Account">
+    <title>BreathSafe - User Profile</title>
+<!-- EmailJS Library -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2310b981'/%3E%3Ctext x='16' y='21' font-family='sans-serif' font-size='18' font-weight='bold' fill='white' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="user-profile.css">
+    <link rel="stylesheet" href="user-avatar-picker.css">
+</head>
+<body class="light" data-page="profile">
+    
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="loader-icon">
+                <i class="fas fa-user-circle"></i>
+                <div class="loader-ring"></div>
+            </div>
+            <div class="loader-text">Loading Profile...</div>
+            <div class="loader-bar">
+                <div class="loader-progress" id="loaderProgress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg" id="animatedBg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="gradient-orb orb-4"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="profile-container" id="profileContainer">
+        
+        <!-- Header -->
+        <header class="profile-header glass-panel" id="profileHeader">
+            <div class="header-left">
+                <button class="back-button" id="backButton" aria-label="Back to Dashboard">
+                    <div class="back-icon">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <span class="back-text">Dashboard</span>
+                </button>
+                
+                <div class="page-title-section">
+                    <div class="page-icon">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <div class="page-title-text">
+                        <h1>Profile Settings</h1>
+                        <span class="page-subtitle">Manage your account</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <!-- Save Status Indicator -->
+                <div class="save-status" id="saveStatus">
+                    <div class="status-dot"></div>
+                    <span class="status-text">All changes saved</span>
+                </div>
+                
+                <!-- Theme Toggle -->
+                <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <div class="theme-icon-wrapper">
+                        <i class="fas fa-sun sun-icon"></i>
+                        <i class="fas fa-moon moon-icon"></i>
+                    </div>
+                </button>
+                
+                <!-- Help Button -->
+                <button class="icon-btn help-btn" id="helpBtn" aria-label="Help">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+                
+                <!-- Quick Actions Menu -->
+                <div class="quick-actions-wrapper">
+                    <button class="icon-btn" id="quickActionsBtn" aria-label="Quick actions">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <div class="quick-actions-menu" id="quickActionsMenu">
+                        <button class="quick-action-item" data-action="export">
+                            <i class="fas fa-download"></i>
+                            <span>Export Data</span>
+                        </button>
+                        <button class="quick-action-item" data-action="refresh">
+                            <i class="fas fa-sync-alt"></i>
+                            <span>Refresh</span>
+                        </button>
+                        <div class="quick-action-divider"></div>
+                        <button class="quick-action-item" data-action="help">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Help</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="profile-main" id="profileMain">
+            
+            <!-- Profile Hero Section -->
+            <section class="profile-hero" id="profileHero">
+                <div class="hero-card glass-panel">
+                    <!-- Hero Background -->
+                    <div class="hero-background">
+                        <div class="hero-pattern"></div>
+                        <div class="hero-gradient"></div>
+                    </div>
+                    
+                    <!-- Avatar Section -->
+                    <div class="hero-avatar-section">
+                        <div class="avatar-wrapper profile-avatar" id="avatarWrapper">
+                            <div class="avatar-container">
+                                <div class="avatar-circle avatar--large" id="profileAvatar">
+                                    <span class="avatar-initials" id="avatarInitials">U</span>
+                                </div>
+                                <div class="avatar-ring"></div>
+                                <div class="avatar-ring ring-2"></div>
+                            </div>
+                            <div class="avatar-status" id="avatarStatus">
+                                <div class="status-indicator online"></div>
+                            </div>
+                            <!-- Avatar Edit Button - Added by avatar picker -->
+                        </div>
+                        
+                        <div class="hero-info">
+                            <h2 class="hero-name" id="heroName">Loading...</h2>
+                            <p class="hero-username" id="heroUsername">@username</p>
+                            <div class="hero-badges" id="heroBadges">
+                                <span class="hero-badge verified">
+                                    <i class="fas fa-check-circle"></i>
+                                    Verified
+                                </span>
+                                <span class="hero-badge active">
+                                    <i class="fas fa-shield-alt"></i>
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Section -->
+                    <div class="hero-stats">
+                        <div class="stat-card" data-stat="sensors">
+                            <div class="stat-icon">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value" id="statSensors">0</span>
+                                <span class="stat-label">Sensors</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card" data-stat="days">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value" id="statDays">0</span>
+                                <span class="stat-label">Days Active</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card" data-stat="alerts">
+                            <div class="stat-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value" id="statAlerts">0</span>
+                                <span class="stat-label">Alerts</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card" data-stat="uptime">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-value" id="statUptime">99%</span>
+                                <span class="stat-label">Uptime</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Content Grid -->
+            <section class="profile-content-grid">
+                
+                <!-- Left Column -->
+                <div class="profile-column left-column">
+                    
+                    <!-- Personal Information Card -->
+                    <div class="profile-card glass-panel" id="personalInfoCard">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">Personal Information</h3>
+                                    <p class="card-subtitle">Update your personal details</p>
+                                </div>
+                            </div>
+                            <button class="card-action-btn" id="editPersonalBtn">
+                                <i class="fas fa-edit"></i>
+                                <span>Edit</span>
+                            </button>
+                        </div>
+                        
+                        <div class="card-body">
+                            <form class="profile-form" id="personalForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="firstName">
+                                            <i class="fas fa-user"></i>
+                                            First Name
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="text" 
+                                                   id="firstName" 
+                                                   class="form-input" 
+                                                   placeholder="Enter first name"
+                                                   disabled
+                                                   autocomplete="given-name">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="lastName">
+                                            <i class="fas fa-user"></i>
+                                            Last Name
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="text" 
+                                                   id="lastName" 
+                                                   class="form-input" 
+                                                   placeholder="Enter last name"
+                                                   disabled
+                                                   autocomplete="family-name">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="username">
+                                            <i class="fas fa-at"></i>
+                                            Username
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <span class="input-prefix">@</span>
+                                            <input type="text" 
+                                                   id="username" 
+                                                   class="form-input has-prefix" 
+                                                   disabled
+                                                   readonly
+                                                   autocomplete="username">
+                                            <span class="input-lock">
+                                                <i class="fas fa-lock"></i>
+                                            </span>
+                                        </div>
+                                        <span class="form-hint">Username cannot be changed</span>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="phoneNumber">
+                                            <i class="fas fa-phone"></i>
+                                            Phone Number
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <input type="tel" 
+                                                   id="phoneNumber" 
+                                                   class="form-input" 
+                                                   disabled
+                                                   readonly
+                                                   autocomplete="tel">
+                                            <span class="input-lock">
+                                                <i class="fas fa-lock"></i>
+                                            </span>
+                                        </div>
+                                        <span class="form-hint">Contact admin to change</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions" id="personalFormActions">
+                                    <button type="button" class="btn btn-secondary" id="cancelPersonalBtn">
+                                        <i class="fas fa-times"></i>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" id="savePersonalBtn">
+                                        <i class="fas fa-save"></i>
+                                        Save Changes
+                                        <div class="btn-loader"></div>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Right Column -->
+                <div class="profile-column right-column">
+                    
+                    <!-- Account Information Card -->
+                    <div class="profile-card glass-panel" id="accountInfoCard">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon account">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">Account Information</h3>
+                                    <p class="card-subtitle">Your account details</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="info-list">
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <span class="info-label">Email Address</span>
+                                        <span class="info-value" id="emailDisplay">Loading...</span>
+                                    </div>
+                                    <div class="info-badge verified">
+                                        <i class="fas fa-check-circle"></i>
+                                        Verified
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="fas fa-calendar-plus"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <span class="info-label">Member Since</span>
+                                        <span class="info-value" id="memberSince">-</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <span class="info-label">Last Login</span>
+                                        <span class="info-value" id="lastLogin">Today</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="fas fa-user-tag"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <span class="info-label">Account Type</span>
+                                        <span class="info-value">
+                                            <span class="role-badge user">
+                                                <i class="fas fa-user"></i>
+                                                User
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="fas fa-fingerprint"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <span class="info-label">Account ID</span>
+                                        <span class="info-value monospace" id="accountId">-</span>
+                                    </div>
+                                    <button class="copy-btn" id="copyAccountId" title="Copy ID">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- API Token Card -->
+                    <div class="profile-card glass-panel" id="apiTokenCard">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon api">
+                                    <i class="fas fa-key"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">API Token</h3>
+                                    <p class="card-subtitle">Your authentication token</p>
+                                </div>
+                            </div>
+                            <div class="token-status" id="tokenStatus">
+                                <span class="status-dot active"></span>
+                                <span>Active</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="token-display">
+                                <div class="token-field">
+                                    <div class="token-value" id="apiToken">••••••••••••••••••••</div>
+                                    <div class="token-actions">
+                                        <button class="token-btn" id="toggleTokenBtn" title="Show/Hide Token">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="token-btn" id="copyTokenBtn" title="Copy Token">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="token-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Keep this token secure. It grants access to your account.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Assigned Sensors Card -->
+                    <div class="profile-card glass-panel" id="sensorsCard">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <div class="card-icon sensors">
+                                    <i class="fas fa-microchip"></i>
+                                </div>
+                                <div>
+                                    <h3 class="card-title">Assigned Sensors</h3>
+                                    <p class="card-subtitle">Your connected devices</p>
+                                </div>
+                            </div>
+                            <span class="sensor-count" id="sensorCountBadge">0</span>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="sensors-list" id="sensorsList">
+                                <div class="sensors-empty" id="sensorsEmpty">
+                                    <div class="empty-icon">
+                                        <i class="fas fa-satellite-dish"></i>
+                                    </div>
+                                    <p>No sensors assigned yet</p>
+                                    <span>Contact your administrator</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+
+            <!-- Danger Zone Section -->
+            <section class="danger-zone-section" id="dangerZone">
+                <div class="section-header">
+                    <div class="section-icon danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="section-title-group">
+                        <h3 class="section-title">Danger Zone</h3>
+                        <p class="section-subtitle">Irreversible actions</p>
+                    </div>
+                </div>
+                
+                <div class="danger-cards">
+                    <div class="danger-card glass-panel" id="deleteAccountCard">
+                        <div class="danger-card-content">
+                            <div class="danger-icon">
+                                <i class="fas fa-user-times"></i>
+                            </div>
+                            <div class="danger-info">
+                                <h4>Delete Account</h4>
+                                <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                            </div>
+                        </div>
+                        <button class="danger-btn" id="deleteAccountBtn">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Delete Account</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <!-- Footer -->
+        <footer class="profile-footer glass-panel">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span class="footer-brand">
+                        <i class="fas fa-wind"></i>
+                        BreathSafe
+                    </span>
+                    <span class="footer-version">v2.0.0</span>
+                </div>
+                <div class="footer-right">
+                    <span class="footer-status">
+                        <span class="status-dot online"></span>
+                        System Online
+                    </span>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- Scroll to Top -->
+        <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+        
+    </div>
+
+    <!-- Delete Account Modal - 3-Step Flow -->
+    <div class="modal-overlay" id="deleteAccountModal">
+        <div class="modal-container glass-panel delete-modal">
+            <!-- Modal Header -->
+            <div class="modal-header danger">
+                <div class="modal-header-bg"></div>
+                <div class="modal-icon danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="modal-title">Delete Account</h2>
+                <p class="modal-subtitle">This action is permanent and cannot be undone</p>
+                <button class="modal-close-btn" id="closeDeleteModal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Step 1: Warning -->
+                <div class="modal-step active" id="deleteStep1">
+                    <div class="step-content">
+                        <div class="warning-illustration">
+                            <div class="illustration-icon">
+                                <i class="fas fa-user-times"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="step-title">Are you absolutely sure?</h3>
+                        <p class="step-description">
+                            This will permanently delete your account and remove all your data from our servers.
+                        </p>
+                        
+                        <div class="warning-checklist">
+                            <div class="checklist-item">
+                                <div class="checklist-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div class="checklist-text">
+                                    <strong>All personal data will be erased</strong>
+                                    <span>Including profile, settings, and preferences</span>
+                                </div>
+                            </div>
+                            <div class="checklist-item">
+                                <div class="checklist-icon">
+                                    <i class="fas fa-unlink"></i>
+                                </div>
+                                <div class="checklist-text">
+                                    <strong>Sensor assignments will be removed</strong>
+                                    <span>You will lose access to all connected sensors</span>
+                                </div>
+                            </div>
+                            <div class="checklist-item">
+                                <div class="checklist-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <div class="checklist-text">
+                                    <strong>Activity history will be deleted</strong>
+                                    <span>All logs and records will be permanently removed</span>
+                                </div>
+                            </div>
+                            <div class="checklist-item">
+                                <div class="checklist-icon">
+                                    <i class="fas fa-ban"></i>
+                                </div>
+                                <div class="checklist-text">
+                                    <strong>This action cannot be undone</strong>
+                                    <span>You will NOT be able to recover your account</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button type="button" class="btn btn-secondary btn-lg" id="cancelDelete1">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Cancel</span>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-lg" id="continueToStep2">
+                            <span>I Understand, Continue</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Math Verification -->
+                <div class="modal-step" id="deleteStep2">
+                    <div class="step-content">
+                        <div class="verification-illustration">
+                            <div class="illustration-icon math">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                        </div>
+                        
+                        <h3 class="step-title">Verification Required</h3>
+                        <p class="step-description">
+                            To confirm you're making this decision consciously, please solve this simple math problem.
+                        </p>
+                        
+                        <!-- Math Problem Display -->
+                        <div class="math-problem" id="mathProblem">
+                            <div class="math-question">
+                                <span class="math-num" id="mathNum1">0</span>
+                                <span class="math-operator" id="mathOperator">+</span>
+                                <span class="math-num" id="mathNum2">0</span>
+                                <span class="math-equals">=</span>
+                                <span class="math-result">?</span>
+                            </div>
+                        </div>
+                        
+                        <form id="mathVerificationForm" class="math-form">
+                            <div class="form-group">
+                                <label class="form-label" for="mathAnswer">
+                                    <i class="fas fa-keyboard"></i>
+                                    Enter your answer
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="number" 
+                                           id="mathAnswer" 
+                                           class="form-input math-input" 
+                                           placeholder="Type the answer"
+                                           required
+                                           autocomplete="off"
+                                           inputmode="numeric">
+                                </div>
+                                <div class="math-feedback" id="mathFeedback"></div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button type="button" class="btn btn-secondary btn-lg" id="backToStep1">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back</span>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-lg" id="verifyMathBtn" disabled>
+                            <i class="fas fa-check"></i>
+                            <span>Verify & Continue</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Final Confirmation (Type "Done" + Checkbox) -->
+                <div class="modal-step" id="deleteStep3">
+                    <div class="step-content">
+                        <div class="final-warning-illustration">
+                            <div class="illustration-icon final-warning">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <div class="warning-rings">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="step-title">⚠️ Final Confirmation ⚠️</h3>
+                        <p class="step-description final-warning-text">
+                            This is your last chance. Type <strong>"Done"</strong> below and check the confirmation box to permanently delete your account.
+                        </p>
+                        
+                        <form id="finalConfirmForm" class="final-confirm-form">
+                            <div class="form-group">
+                                <label class="form-label" for="confirmText">
+                                    <i class="fas fa-keyboard"></i>
+                                    Type "Done" to confirm
+                                </label>
+                                <div class="input-wrapper">
+                                    <input type="text" 
+                                           id="confirmText" 
+                                           class="form-input confirm-input" 
+                                           placeholder='Type "Done" here'
+                                           required
+                                           autocomplete="off"
+                                           spellcheck="false">
+                                </div>
+                                <div class="confirm-feedback" id="confirmFeedback"></div>
+                            </div>
+                            
+                            <div class="final-confirmation">
+                                <div class="confirmation-checkbox">
+                                    <input type="checkbox" id="finalConfirmCheck" required>
+                                    <label for="finalConfirmCheck">
+                                        I understand this action is <strong>permanent</strong> and I will <strong>lose all my data</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button type="button" class="btn btn-secondary btn-lg" id="backToStep2">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back</span>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-lg" id="finalDeleteBtn" disabled>
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Delete My Account</span>
+                            <div class="btn-loader"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Step 4: Success/Redirect -->
+                <div class="modal-step" id="deleteStep4">
+                    <div class="step-content center">
+                        <div class="success-illustration">
+                            <div class="illustration-icon success">
+                                <i class="fas fa-check"></i>
+                                <div class="success-rings">
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 class="step-title">Account Deleted</h3>
+                        <p class="step-description">
+                            Your account has been permanently deleted. We're sorry to see you go.
+                        </p>
+                        
+                        <div class="redirect-notice">
+                            <div class="redirect-spinner"></div>
+                            <span>Redirecting to login in <strong id="redirectTimer">5</strong> seconds...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Indicator -->
+            <div class="modal-progress" id="modalProgress">
+                <div class="progress-step active" data-step="1">
+                    <span class="step-dot"></span>
+                    <span class="step-label">Warning</span>
+                </div>
+                <div class="progress-line">
+                    <div class="progress-fill" id="progressFill1"></div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <span class="step-dot"></span>
+                    <span class="step-label">Verify</span>
+                </div>
+                <div class="progress-line">
+                    <div class="progress-fill" id="progressFill2"></div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <span class="step-dot"></span>
+                    <span class="step-label">Confirm</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal-container glass-panel help-modal">
+            <div class="modal-header">
+                <div class="modal-icon help">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <h2 class="modal-title">Help & Support</h2>
+                <p class="modal-subtitle">Get help with your profile</p>
+                <button class="modal-close-btn" id="closeHelpModal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="help-sections">
+                    <!-- Profile Help -->
+                    <div class="help-section">
+                        <div class="help-section-header">
+                            <i class="fas fa-user-circle"></i>
+                            <h3>Profile Management</h3>
+                        </div>
+                        <div class="help-items">
+                            <div class="help-item">
+                                <div class="help-item-icon">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="help-item-content">
+                                    <h4>Editing Your Profile</h4>
+                                    <p>Click the "Edit" button on the Personal Information card to update your first and last name. Some fields like username and phone number are locked and require admin assistance to change.</p>
+                                </div>
+                            </div>
+                            <div class="help-item">
+                                <div class="help-item-icon">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <div class="help-item-content">
+                                    <h4>Customizing Your Avatar</h4>
+                                    <p>Click the edit button on your avatar to customize it. You can choose from various icons and colors to personalize your profile picture.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- API Token Help -->
+                    <div class="help-section">
+                        <div class="help-section-header">
+                            <i class="fas fa-key"></i>
+                            <h3>API Token</h3>
+                        </div>
+                        <div class="help-items">
+                            <div class="help-item">
+                                <div class="help-item-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="help-item-content">
+                                    <h4>Keeping Your Token Safe</h4>
+                                    <p>Your API token is used for authentication. Never share it with anyone. If you suspect it's been compromised, regenerate it immediately using the refresh button.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sensors Help -->
+                    <div class="help-section">
+                        <div class="help-section-header">
+                            <i class="fas fa-microchip"></i>
+                            <h3>Sensors</h3>
+                        </div>
+                        <div class="help-items">
+                            <div class="help-item">
+                                <div class="help-item-icon">
+                                    <i class="fas fa-plug"></i>
+                                </div>
+                                <div class="help-item-content">
+                                    <h4>Assigned Sensors</h4>
+                                    <p>Sensors are assigned by your administrator. If you need additional sensors or have issues with existing ones, please contact your system administrator.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Support -->
+                    <div class="help-section contact-section">
+                        <div class="help-section-header">
+                            <i class="fas fa-headset"></i>
+                            <h3>Need More Help?</h3>
+                        </div>
+                        <div class="contact-options">
+                            <a href="mailto:support@breathsafe.com" class="contact-option">
+                                <i class="fas fa-envelope"></i>
+                                <span>Email Support</span>
+                            </a>
+                            <a href="#" class="contact-option" id="viewDocsBtn">
+                                <i class="fas fa-book"></i>
+                                <span>Documentation</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeHelpBtn">
+                    <i class="fas fa-check"></i>
+                    Got It
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Avatar Picker (load before profile.js) -->
+    <script src="user-avatar-picker.js"></script>
+    
+    <!-- Main Profile Script -->
+    <script type="module" src="user-profile.js"></script>
+</body>
+</html>

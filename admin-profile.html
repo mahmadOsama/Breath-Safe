@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>My Profile - BreathSafe Admin</title>
+    
+    <!-- ========== AVATAR PRE-LOADER (Must be first!) ========== -->
+    <script>
+    (function(){
+        try {
+            var s = JSON.parse(sessionStorage.getItem('breathsafeAdmin') || '{}');
+            if (!s.id) return;
+            
+            var icon = s.avatarIcon || null;
+            var color = s.avatarBgColor || '#10b981';
+            var grad = s.avatarBgGradient !== undefined ? s.avatarBgGradient : true;
+            
+            var first = (s.firstName || '')[0] || '';
+            var last = (s.lastName || '')[0] || '';
+            var initials = (first + last).toUpperCase() || (s.username || 'AD').substring(0, 2).toUpperCase();
+            
+            var g = {
+                '#10b981': '#059669', '#3b82f6': '#2563eb', '#8b5cf6': '#7c3aed',
+                '#ef4444': '#dc2626', '#f59e0b': '#d97706', '#ec4899': '#db2777',
+                '#06b6d4': '#0891b2', '#eab308': '#ca8a04', '#374151': '#1f2937',
+                '#64748b': '#475569'
+            };
+            
+            var bg = grad && g[color] ? 'linear-gradient(135deg,' + color + ',' + g[color] + ')' : color;
+            
+            window.__PRE_AVATAR__ = { 
+                icon: icon, 
+                initials: initials, 
+                bg: bg, 
+                color: color, 
+                grad: grad,
+                username: s.username || 'Admin',
+                fullName: ((s.firstName || '') + ' ' + (s.lastName || '')).trim() || s.username || 'Admin User',
+                email: s.email || 'admin@example.com'
+            };
+        } catch(e) {}
+    })();
+    </script>
+    
+<!-- Stylesheets -->
+<link rel="stylesheet" href="admin-dashboard-css/admin-profile-base.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-profile-components.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-responsive-fixes.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-dashboard-bugfixes.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-profile-security.css">
+<link rel="stylesheet" href="admin-dashboard-css/admin-profile-avatar.css">
+
+    
+    <!-- Icons -->
+    <link 
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    >
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" 
+        rel="stylesheet"
+        referrerpolicy="no-referrer"
+    >
+</head>
+<body class="light">
+    
+    <!-- ==================== HEADER ==================== -->
+    <header class="app-header">
+        <div class="container">
+            
+            <!-- Logo -->
+            <div class="brand">
+                <div class="brand__icon">
+                    <i class="fas fa-wind"></i>
+                </div>
+                <div class="brand__text">
+                    <h1 class="brand__title">BreathSafe</h1>
+                    <p class="brand__subtitle">Admin Panel</p>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                
+                <!-- Back Button -->
+                <button class="btn btn--outline" onclick="window.location.href='admin-dashboard.html'">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Dashboard</span>
+                </button>
+                
+                <!-- User Menu -->
+                <div class="user-menu" id="userMenu">
+                    <button class="user-menu__trigger">
+                        <div class="user-menu__avatar">
+                            <div class="avatar" id="headerAvatar">
+                                <script>
+                                    (function(){
+                                        var p = window.__PRE_AVATAR__;
+                                        var el = document.currentScript.parentElement;
+                                        if (p && /^(?:#[0-9a-f]{6}|linear-gradient\(135deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\))$/i.test(p.bg || '')) el.style.background = p.bg;
+                                        if (p && /^fa-[a-z0-9-]+$/i.test(p.icon || '')) {
+                                            var icon = document.createElement('i');
+                                            icon.className = 'fas ' + p.icon;
+                                            el.replaceChildren(icon);
+                                            el.classList.add('avatar--has-icon');
+                                        } else {
+                                            var initials = document.createElement('span');
+                                            initials.id = 'headerAvatarText';
+                                            initials.textContent = p && typeof p.initials === 'string' ? p.initials.slice(0, 4) : 'AD';
+                                            el.replaceChildren(initials);
+                                        }
+                                    })();
+                                </script>
+                            </div>
+                            <span class="badge badge--admin">
+                                <i class="fas fa-shield-alt"></i>
+                            </span>
+                        </div>
+                        <div class="user-menu__info">
+                            <span class="user-menu__name" id="headerUsername">
+                                <script>
+                                    (function(){
+                                        var p = window.__PRE_AVATAR__;
+                                        document.currentScript.parentElement.textContent = p && typeof p.username === 'string' ? p.username : 'Loading...';
+                                    })();
+                                </script>
+                            </span>
+                            <span class="user-menu__role">
+                                <i class="fas fa-shield-alt"></i>
+                                Administrator
+                            </span>
+                        </div>
+                        <i class="fas fa-chevron-down user-menu__arrow"></i>
+                    </button>
+
+                    <!-- Dropdown -->
+                    <div class="user-menu__dropdown" id="userDropdown">
+                        <div class="dropdown__header">
+                            <div class="user-menu__avatar">
+                                <div class="avatar" id="dropdownAvatar">
+                                    <script>
+                                        (function(){
+                                            var p = window.__PRE_AVATAR__;
+                                            var el = document.currentScript.parentElement;
+                                            if (p && /^(?:#[0-9a-f]{6}|linear-gradient\(135deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\))$/i.test(p.bg || '')) el.style.background = p.bg;
+                                            if (p && /^fa-[a-z0-9-]+$/i.test(p.icon || '')) {
+                                                var icon = document.createElement('i');
+                                                icon.className = 'fas ' + p.icon;
+                                                el.replaceChildren(icon);
+                                                el.classList.add('avatar--has-icon');
+                                            } else {
+                                                var initials = document.createElement('span');
+                                                initials.id = 'dropdownAvatarText';
+                                                initials.textContent = p && typeof p.initials === 'string' ? p.initials.slice(0, 4) : 'AD';
+                                                el.replaceChildren(initials);
+                                            }
+                                        })();
+                                    </script>
+                                </div>
+                                <span class="badge badge--admin">
+                                    <i class="fas fa-shield-alt"></i>
+                                </span>
+                            </div>
+                            <div class="dropdown__info">
+                                <strong id="dropdownUsername">
+                                    <script>
+                                        (function(){
+                                            var p = window.__PRE_AVATAR__;
+                                            document.currentScript.parentElement.textContent = p && typeof p.fullName === 'string' ? p.fullName : 'Loading...';
+                                        })();
+                                    </script>
+                                </strong>
+                                <small id="dropdownEmail">
+                                    <script>
+                                        (function(){
+                                            var p = window.__PRE_AVATAR__;
+                                            document.currentScript.parentElement.textContent = p && typeof p.email === 'string' ? p.email : 'Loading...';
+                                        })();
+                                    </script>
+                                </small>
+                                <span class="dropdown__role">
+                                    <i class="fas fa-shield-alt"></i> Administrator
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dropdown__divider"></div>
+                        <a href="admin-profile.html" class="dropdown__item">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="admin-dashboard.html" class="dropdown__item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        
+                        <div class="dropdown__divider"></div>
+                        <a href="#" class="dropdown__item dropdown__item--danger" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="app-main">
+        <div class="container">
+            
+            <!-- Page Title -->
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">My Profile</h1>
+                    <p class="page-subtitle">Manage your account settings and information</p>
+                </div>
+            </div>
+
+            <!-- Profile Layout -->
+            <div class="profile-layout">
+                
+                <!-- ========== SIDEBAR ========== -->
+                <aside class="profile-sidebar">
+                    <div class="card">
+                        
+                        <!-- Avatar Section -->
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <div class="avatar avatar--large" id="profileAvatar">
+                                    <script>
+                                        (function(){
+                                            var p = window.__PRE_AVATAR__;
+                                            var el = document.currentScript.parentElement;
+                                            if (p && /^(?:#[0-9a-f]{6}|linear-gradient\(135deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\))$/i.test(p.bg || '')) el.style.background = p.bg;
+                                            if (p && /^fa-[a-z0-9-]+$/i.test(p.icon || '')) {
+                                                var icon = document.createElement('i');
+                                                icon.className = 'fas ' + p.icon;
+                                                el.replaceChildren(icon);
+                                                el.classList.add('avatar--has-icon');
+                                            } else {
+                                                var initials = document.createElement('span');
+                                                initials.id = 'profileInitials';
+                                                initials.textContent = p && typeof p.initials === 'string' ? p.initials.slice(0, 4) : 'AD';
+                                                el.replaceChildren(initials);
+                                            }
+                                        })();
+                                    </script>
+                                </div>
+                                <span class="badge badge--admin badge--large">
+                                    <i class="fas fa-shield-alt"></i>
+                                </span>
+                            </div>
+                            <h2 class="profile-name" id="profileName">
+                                <script>
+                                    (function(){
+                                        var p = window.__PRE_AVATAR__;
+                                        document.currentScript.parentElement.textContent = p && typeof p.fullName === 'string' ? p.fullName : 'Loading...';
+                                    })();
+                                </script>
+                            </h2>
+                            <p class="profile-email" id="profileEmail">
+                                <script>
+                                    (function(){
+                                        var p = window.__PRE_AVATAR__;
+                                        document.currentScript.parentElement.textContent = p && typeof p.email === 'string' ? p.email : 'loading@example.com';
+                                    })();
+                                </script>
+                            </p>
+                            <div class="badge-pill badge-pill--admin">
+                                <i class="fas fa-shield-alt"></i>
+                                Administrator
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <!-- Quick Info -->
+                        <div class="info-list">
+                            <div class="info-item">
+                                <i class="fas fa-calendar"></i>
+                                <div class="info-item__content">
+                                    <span class="info-item__label">Member Since</span>
+                                    <span class="info-item__value" id="memberSince">Loading...</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-key"></i>
+                                <div class="info-item__content">
+                                    <span class="info-item__label">API Token</span>
+                                    <span class="info-item__value info-item__value--mono" id="apiTokenPreview">***-***-***</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn--outline btn--block" id="viewTokenBtn">
+                            <i class="fas fa-eye"></i>
+                            View Full Token
+                        </button>
+
+                    </div>
+                </aside>
+
+                <!-- ========== MAIN CONTENT ========== -->
+                <div class="profile-content">
+                    
+                    <!-- Personal Information -->
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">
+                                <i class="fas fa-user-edit"></i>
+                                Personal Information
+                            </h3>
+                            <div class="edit-indicator" id="editIndicator" style="display: none;">
+                                <i class="fas fa-pen"></i>
+                                Edit Mode
+                            </div>
+                        </div>
+                        
+                        <form id="profileForm" class="form">
+                            
+                            <!-- Name Fields -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-id-card"></i>
+                                        First Name
+                                    </label>
+                                    <input type="text" class="form-input" id="firstName" placeholder="Enter first name" disabled required>
+                                    <span class="form-error" id="firstNameError"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-input" id="lastName" placeholder="Enter last name" disabled required>
+                                    <span class="form-error" id="lastNameError"></span>
+                                </div>
+                            </div>
+
+                            <!-- Username -->
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i>
+                                    Username
+                                </label>
+                                <input type="text" class="form-input" id="username" placeholder="Enter username" disabled required>
+                                <span class="form-error" id="usernameError"></span>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope"></i>
+                                    Email Address
+                                </label>
+                                <input type="email" class="form-input" id="email" placeholder="Enter email" disabled required>
+                                <span class="form-error" id="emailError"></span>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-phone"></i>
+                                    Phone Number
+                                </label>
+                                <input type="tel" class="form-input" id="phoneNumber" placeholder="+1234567890" disabled>
+                                <span class="form-error" id="phoneError"></span>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="form-actions">
+                                <button type="button" class="btn btn--primary" id="editBtn">
+                                    <i class="fas fa-edit"></i>
+                                    Edit Profile
+                                </button>
+                                <button type="submit" class="btn btn--success" id="saveBtn" style="display: none;">
+                                    <i class="fas fa-save"></i>
+                                    Save Changes
+                                </button>
+                                <button type="button" class="btn btn--outline" id="cancelBtn" style="display: none;">
+                                    <i class="fas fa-times"></i>
+                                    Cancel
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">
+                                <i class="fas fa-lock"></i>
+                                Security
+                            </h3>
+                        </div>
+                        
+                        <div class="security-item" id="passwordSecurityItem">
+                            <div class="security-item__icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <div class="security-item__content">
+                                <h4>Password</h4>
+                                <p id="passwordLastChanged">Last changed: Never</p>
+                            </div>
+                            <button class="btn btn--outline" id="changePasswordBtn">
+                                <i class="fas fa-pen"></i>
+                                Change
+                            </button>
+                        </div>
+
+                        <!-- Username restriction notice for regular admins -->
+                        <div class="security-notice" id="usernameNotice" style="display: none;">
+                            <div class="security-notice__icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="security-notice__content">
+                                <p><strong>Username Locked:</strong> Only Executive Administrators can modify usernames. Contact your system administrator for changes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ==================== THEME TOGGLE ==================== -->
+    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- ==================== API TOKEN MODAL ==================== -->
+    <div class="modal" id="apiTokenModal">
+        <div class="modal__backdrop" id="apiTokenBackdrop"></div>
+        <div class="modal__dialog">
+            <div class="modal__header">
+                <h3 class="modal__title">
+                    <i class="fas fa-key"></i>
+                    Your API Token
+                </h3>
+                <button class="btn-icon" id="closeApiTokenModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal__body">
+                <div class="alert alert--info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Keep this token secure. It provides access to your admin account.</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-key"></i>
+                        API Token
+                        <button class="btn-copy" id="copyTokenBtn" type="button">
+                            <i class="fas fa-copy"></i>
+                            Copy
+                        </button>
+                    </label>
+                    <code class="code-block" id="fullApiToken">Loading...</code>
+                </div>
+            </div>
+            <div class="modal__footer">
+                <button class="btn btn--outline" id="closeApiTokenBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CHANGE PASSWORD MODAL ==================== -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal__backdrop" id="changePasswordBackdrop"></div>
+        <div class="modal__dialog modal-md">
+            <div class="modal__header">
+                <h3 class="modal__title">
+                    <i class="fas fa-key"></i>
+                    Change Password
+                </h3>
+                <button class="btn-icon" id="closePasswordModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="changePasswordForm" autocomplete="off">
+                <div class="modal__body">
+                    <!-- Security Notice -->
+                    <div class="alert alert--warning" id="passwordSecurityAlert">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>For security, please verify your current password before making changes.</span>
+                    </div>
+
+                    <!-- Current Password -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Current Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input 
+                                type="password" 
+                                class="form-input" 
+                                id="currentPassword" 
+                                placeholder="Enter your current password"
+                                autocomplete="current-password"
+                                required
+                            >
+                            <button type="button" class="password-toggle" data-target="currentPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="form-error" id="currentPasswordError"></span>
+                    </div>
+
+                    <div class="form-divider">
+                        <span>New Password</span>
+                    </div>
+
+                    <!-- New Password -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-key"></i>
+                            New Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input 
+                                type="password" 
+                                class="form-input" 
+                                id="newPassword" 
+                                placeholder="Enter new password"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <button type="button" class="password-toggle" data-target="newPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="form-error" id="newPasswordError"></span>
+                        
+                        <!-- Password Strength Meter -->
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="password-strength__bar">
+                                <div class="password-strength__fill" id="strengthFill"></div>
+                            </div>
+                            <div class="password-strength__info">
+                                <span class="password-strength__label" id="strengthLabel">Password Strength</span>
+                                <span class="password-strength__score" id="strengthScore">--</span>
+                            </div>
+                        </div>
+
+                        <!-- Password Requirements - Collapsible -->
+                        <div class="password-requirements" id="passwordRequirements">
+                            <button type="button" class="requirements-toggle" id="requirementsToggle">
+                                <span class="toggle-status">
+                                    <i class="fas fa-list-check"></i>
+                                    Password Requirements
+                                </span>
+                                <span class="status-count" id="requirementsCount">0/5</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="requirements-list" id="requirementsList">
+                                <div class="requirements-grid">
+                                    <div class="requirement" data-requirement="length">
+                                        <i class="fas fa-circle"></i>
+                                        <span>8+ characters</span>
+                                    </div>
+                                    <div class="requirement" data-requirement="uppercase">
+                                        <i class="fas fa-circle"></i>
+                                        <span>Uppercase (A-Z)</span>
+                                    </div>
+                                    <div class="requirement" data-requirement="lowercase">
+                                        <i class="fas fa-circle"></i>
+                                        <span>Lowercase (a-z)</span>
+                                    </div>
+                                    <div class="requirement" data-requirement="number">
+                                        <i class="fas fa-circle"></i>
+                                        <span>Number (0-9)</span>
+                                    </div>
+                                    <div class="requirement" data-requirement="special">
+                                        <i class="fas fa-circle"></i>
+                                        <span>Special (!@#$%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Password Suggestions -->
+                        <div class="password-suggestions" id="passwordSuggestions" style="display: none;">
+                            <div class="suggestions-header">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Suggestions to strengthen your password:</span>
+                            </div>
+                            <ul class="suggestions-list" id="suggestionsList"></ul>
+                        </div>
+                    </div>
+
+                    <!-- Confirm New Password -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-check-double"></i>
+                            Confirm New Password
+                        </label>
+                        <div class="password-input-wrapper">
+                            <input 
+                                type="password" 
+                                class="form-input" 
+                                id="confirmPassword" 
+                                placeholder="Re-enter new password"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <button type="button" class="password-toggle" data-target="confirmPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="form-error" id="confirmPasswordError"></span>
+                        
+                        <!-- Password Match Indicator -->
+                        <div class="password-match" id="passwordMatch" style="display: none;">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Passwords match</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal__footer">
+                    <button type="button" class="btn btn--outline" id="cancelPasswordChange">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn--primary" id="savePasswordBtn" disabled>
+                        <i class="fas fa-save"></i>
+                        Update Password
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST ==================== -->
+    <div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<!-- Central Activity Logger -->
+<script src="admin-dashboard-js/breathsafe-activity-logger.js"></script>
+
+<script src="admin-dashboard-js/admin-profile.js"></script>
+<script src="admin-dashboard-js/admin-profile-security.js"></script>
+<script src="admin-dashboard-js/admin-profile-avatar.js"></script>
+<script>
+// logout functionality with activity logging
+(function() {
+    'use strict';
+    
+    let isLoggingOut = false; // Prevent multiple executions
+    
+    async function handleLogout(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        // Prevent multiple simultaneous logouts
+        if (isLoggingOut) {
+            return;
+        }
+        
+        if (!confirm('Are you sure you want to logout?')) {
+            return;
+        }
+        
+        isLoggingOut = true;
+        
+        // Try to log the logout activity
+        try {
+            // Check if we have Firebase available
+            if (typeof firebase !== 'undefined') {
+                let db;
+                try {
+                    // Try to get the profile app instance
+                    const app = firebase.app("profileApp");
+                    db = firebase.firestore(app);
+                } catch (err) {
+                    // Fallback to default app
+                    try {
+                        db = firebase.firestore();
+                    } catch (err2) {
+                        console.log('Could not get Firestore instance');
+                    }
+                }
+                
+                if (db) {
+                    // Get admin info from session
+                    const adminSession = sessionStorage.getItem('breathsafeAdmin');
+                    if (adminSession) {
+                        const admin = JSON.parse(adminSession);
+                        const adminFullName = ((admin.firstName || '') + ' ' + (admin.lastName || '')).trim() || admin.username || 'Administrator';
+                        
+                        // Log the logout activity
+                        await db.collection('activity_logs').add({
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            type: 'session',
+                            action: 'logout',
+                            details: { type: 'session' },
+                            targetUser: null,
+                            adminId: admin.id || admin.username,
+                            adminUsername: admin.username,
+                            adminFullName: adminFullName
+                        });
+                        
+                        console.log('✅ Logout activity logged');
+                    }
+                }
+            }
+        } catch (err) {
+            console.log('Could not log logout activity:', err);
+            // Continue with logout even if logging fails
+        }
+        
+        // Clear all session data
+        sessionStorage.removeItem('breathsafeAdmin');
+        sessionStorage.removeItem('breathsafeAdminToken');
+        
+        // Clear avatar data
+        try {
+            localStorage.removeItem('breathsafe_avatar_v4');
+        } catch(err) {}
+        
+        // Redirect immediately
+        window.location.href = './Login-codes/breathsafe-admin-login.html';
+    }
+    
+    // Wait for DOM to be ready
+    function attachLogoutHandler() {
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            // Clone the button to remove ALL existing event listeners
+            const newLogoutBtn = logoutBtn.cloneNode(true);
+            logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+            
+            // Add single new listener
+            newLogoutBtn.addEventListener('click', handleLogout, { once: true });
+            console.log('✅ Enhanced logout handler attached');
+        }
+    }
+    
+    // Attach when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', attachLogoutHandler, { once: true });
+    } else {
+        // Small delay to ensure other scripts have loaded
+        setTimeout(attachLogoutHandler, 100);
+    }
+    
+    // Also expose globally if needed
+    window.handleLogout = handleLogout;
+})();
+</script>
+</body>
+</html>

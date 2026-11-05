@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="t d">
+  <title id="t">BreathSafe airflow mark</title><desc id="d">Three emerald airflow strokes inside a rounded white square.</desc>
+  <defs><linearGradient id="g" x2="0" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#f3fffb"/></linearGradient><filter id="s" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="7" stdDeviation="9" flood-color="#087f5b" flood-opacity=".14"/></filter></defs>
+  <rect x="12" y="12" width="136" height="136" rx="34" fill="url(#g)" filter="url(#s)"/>
+  <g fill="none" stroke="#10b981" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M47 55h48c9 0 14 5 14 12s-5 12-14 12H82"/><path d="M45 78h60c10 0 16 5 16 13s-6 13-16 13H63"/><path d="M50 101h31c9 0 14 5 14 12s-5 12-14 12H68"/>
+  </g>
+</svg>

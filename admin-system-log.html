@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>System Log - BreathSafe Admin</title>
+    
+    <!-- ========== EXECUTIVE ACCESS CHECK (Critical - Must be first!) ========== -->
+    <script>
+    (function() {
+        try {
+            var s = sessionStorage.getItem('breathsafeAdmin');
+            if (!s) {
+                window.location.href = './Login-codes/breathsafe-admin-login.html';
+                return;
+            }
+            var admin = JSON.parse(s);
+            if (admin.role !== 'executive') {
+                window.location.href = 'admin-dashboard.html';
+                return;
+            }
+            
+            // Pre-load avatar data
+            var icon = admin.avatarIcon || null;
+            var color = admin.avatarBgColor || '#10b981';
+            var grad = admin.avatarBgGradient !== undefined ? admin.avatarBgGradient : true;
+            var first = (admin.firstName || '')[0] || '';
+            var last = (admin.lastName || '')[0] || '';
+            var initials = (first + last).toUpperCase() || (admin.username || 'AD').substring(0, 2).toUpperCase();
+            
+            var g = {
+                '#10b981': '#059669', '#3b82f6': '#2563eb', '#8b5cf6': '#7c3aed',
+                '#ef4444': '#dc2626', '#f59e0b': '#d97706', '#ec4899': '#db2777',
+                '#06b6d4': '#0891b2', '#eab308': '#ca8a04', '#374151': '#1f2937',
+                '#64748b': '#475569', '#6366f1': '#4f46e5', '#14b8a6': '#0d9488'
+            };
+            
+            var bg = grad && g[color] ? 'linear-gradient(135deg,' + color + ',' + g[color] + ')' : color;
+            
+            window.__ADMIN_DATA__ = {
+                id: admin.id,
+                username: admin.username,
+                fullName: ((admin.firstName || '') + ' ' + (admin.lastName || '')).trim() || admin.username,
+                email: admin.email,
+                role: admin.role,
+                avatar: { icon: icon, initials: initials, bg: bg, color: color, grad: grad }
+            };
+        } catch(e) {
+            window.location.href = './Login-codes/breathsafe-admin-login.html';
+        }
+    })();
+    </script>
+
+    <!-- ========== CRITICAL CSS (Inline for fast load) ========== -->
+    <style>
+        /* ========== CSS VARIABLES ========== */
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #34d399;
+            --primary-alpha: rgba(16, 185, 129, 0.1);
+            
+            --danger: #ef4444;
+            --danger-dark: #dc2626;
+            --warning: #f59e0b;
+            --warning-dark: #d97706;
+            --info: #3b82f6;
+            --info-dark: #2563eb;
+            --success: #10b981;
+            
+            --bg: #f8fafc;
+            --bg-alt: #f1f5f9;
+            --panel: #ffffff;
+            --panel-hover: #f8fafc;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --muted: #64748b;
+            --muted-light: #94a3b8;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            --radius-sm: 6px;
+            --radius: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --transition-fast: 0.15s ease;
+            --transition: 0.25s ease;
+            --transition-slow: 0.4s ease;
+            
+            --header-height: 70px;
+            --sidebar-width: 280px;
+        }
+
+        /* Dark Mode */
+        body.dark {
+            --bg: #0f172a;
+            --bg-alt: #1e293b;
+            --panel: #1e293b;
+            --panel-hover: #334155;
+            --border: #334155;
+            --border-light: #475569;
+            
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --muted: #94a3b8;
+            --muted-light: #64748b;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+            /* ========== BASE RESET ========== */
+             *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-alt);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--muted-light);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--muted);
+        }
+
+        /* ========== SKELETON LOADING ========== */
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                var(--border-light) 25%,
+                var(--bg-alt) 50%,
+                var(--border-light) 75%
+            );
+            background-size: 200% 100%;
+            animation: skeleton-shimmer 1.5s infinite;
+            border-radius: var(--radius-sm);
+        }
+
+        @keyframes skeleton-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ========== VISIBILITY UTILITIES ========== */
+        .hidden { display: none !important; }
+        .invisible { visibility: hidden; }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* ========== INITIAL LOADING STATE ========== */
+        .app-loading {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            z-index: 9999;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .app-loading.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="admin-dashboard-css/admin-system-log.css">
+    
+    <!-- Font Awesome -->
+    <link 
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    >
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" 
+        rel="stylesheet"
+    >
+</head>
+<body class="light">
+    
+    <!-- ========== INITIAL LOADING ========== -->
+    <div class="app-loading" id="appLoading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- ========== HEADER ========== -->
+    <header class="app-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <a href="admin-dashboard.html" class="header-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-wind"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">BreathSafe</span>
+                    <span class="brand-subtitle">System Log</span>
+                </div>
+            </a>
+
+            <!-- Breadcrumb -->
+            <nav class="header-breadcrumb" aria-label="Breadcrumb">
+                <a href="admin-dashboard.html" class="breadcrumb-item">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <i class="fas fa-chevron-right breadcrumb-sep"></i>
+                <span class="breadcrumb-item active">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>System Log</span>
+                </span>
+            </nav>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <!-- Live Indicator -->
+                <div class="live-indicator" id="liveIndicator">
+                    <span class="live-dot"></span>
+                    <span class="live-text">Live</span>
+                </div>
+
+                <!-- User Menu -->
+                <div class="user-menu" id="userMenu">
+                    <button class="user-menu-trigger" type="button" aria-expanded="false">
+                        <div class="user-avatar" id="headerAvatar">
+                            <script>
+                                (function(){
+                                    var d = window.__ADMIN_DATA__;
+                                    if (d && d.avatar) {
+                                        var el = document.currentScript.parentElement;
+                                        if (/^(?:#[0-9a-f]{6}|linear-gradient\(135deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\))$/i.test(d.avatar.bg || '')) el.style.background = d.avatar.bg;
+                                        if (typeof d.avatar.icon === 'string' && /^fa-[a-z0-9-]+$/i.test(d.avatar.icon)) {
+                                            var icon = document.createElement('i');
+                                            icon.className = 'fas ' + d.avatar.icon;
+                                            el.replaceChildren(icon);
+                                            el.classList.add('has-icon');
+                                        } else {
+                                            var initials = document.createElement('span');
+                                            initials.textContent = typeof d.avatar.initials === 'string' ? d.avatar.initials.slice(0, 4) : 'AD';
+                                            el.replaceChildren(initials);
+                                        }
+                                    }
+                                })();
+                            </script>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name" id="headerUsername">
+                                <script>var d = window.__ADMIN_DATA__; document.currentScript.parentElement.textContent = d && typeof d.username === 'string' ? d.username : 'Admin';</script>
+                            </span>
+                            <span class="user-role">
+                                <i class="fas fa-crown"></i>
+                                Executive
+                            </span>
+                        </div>
+                        <i class="fas fa-chevron-down menu-arrow"></i>
+                    </button>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-header">
+                            <div class="user-avatar large" id="dropdownAvatar">
+                                <script>
+                                    (function(){
+                                        var d = window.__ADMIN_DATA__;
+                                        if (d && d.avatar) {
+                                            var el = document.currentScript.parentElement;
+                                            if (/^(?:#[0-9a-f]{6}|linear-gradient\(135deg,\s*#[0-9a-f]{6},\s*#[0-9a-f]{6}\))$/i.test(d.avatar.bg || '')) el.style.background = d.avatar.bg;
+                                            if (typeof d.avatar.icon === 'string' && /^fa-[a-z0-9-]+$/i.test(d.avatar.icon)) {
+                                                var icon = document.createElement('i');
+                                                icon.className = 'fas ' + d.avatar.icon;
+                                                el.replaceChildren(icon);
+                                                el.classList.add('has-icon');
+                                            } else {
+                                                var initials = document.createElement('span');
+                                                initials.textContent = typeof d.avatar.initials === 'string' ? d.avatar.initials.slice(0, 4) : 'AD';
+                                                el.replaceChildren(initials);
+                                            }
+                                        }
+                                    })();
+                                </script>
+                            </div>
+                            <div class="dropdown-user-info">
+                                <span class="dropdown-name" id="dropdownName">
+                                    <script>var d = window.__ADMIN_DATA__; document.currentScript.parentElement.textContent = d && typeof d.fullName === 'string' ? d.fullName : 'Admin User';</script>
+                                </span>
+                                <span class="dropdown-email" id="dropdownEmail">
+                                    <script>var d = window.__ADMIN_DATA__; document.currentScript.parentElement.textContent = d && typeof d.email === 'string' ? d.email : 'admin@breathsafe.com';</script>
+                                </span>
+                                <span class="dropdown-role">
+                                    <i class="fas fa-crown"></i>
+                                    Executive Administrator
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="admin-profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="admin-dashboard.html" class="dropdown-item">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item danger" id="logoutBtn" type="button">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="app-main">
+        <div class="main-container">
+            
+            <!-- ========== PAGE HEADER ========== -->
+            <div class="page-header">
+                <div class="page-header-content">
+                    <div class="page-title-section">
+                        <h1 class="page-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            System Activity Log
+                        </h1>
+                        <p class="page-subtitle">
+                            Monitor all administrator sessions and activities in real-time
+                        </p>
+                    </div>
+              <div class="page-actions">
+    <button class="btn btn-outline" id="refreshBtn" type="button">
+        <i class="fas fa-sync-alt"></i>
+        <span>Refresh</span>
+    </button>
+    <button class="btn btn-outline btn-danger" id="clearLogsBtn" type="button">
+        <i class="fas fa-trash-alt"></i>
+        <span>Clear Logs</span>
+    </button>
+    <button class="btn btn-outline" id="exportBtn" type="button">
+        <i class="fas fa-download"></i>
+        <span>Export</span>
+    </button>
+</div>
+                </div>
+
+                <!-- Stats Bar -->
+                <div class="stats-bar" id="statsBar">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="statTotalAdmins">-</span>
+                            <span class="stat-label">Total Admins</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="statOnlineNow">-</span>
+                            <span class="stat-label">Online Now</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon info">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="statTotalSessions">-</span>
+                            <span class="stat-label">Total Sessions</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="statTotalActions">-</span>
+                            <span class="stat-label">Total Actions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== FILTERS SECTION ========== -->
+            <div class="filters-section" id="filtersSection">
+                <div class="filters-row">
+                    <!-- Search -->
+                    <div class="filter-group search-group">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input 
+                                type="text" 
+                                class="search-input" 
+                                id="searchInput" 
+                                placeholder="Search by admin, action, or details..."
+                                autocomplete="off"
+                            >
+                            <button class="search-clear hidden" id="searchClear" type="button">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Admin Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-user-shield"></i>
+                            Admin
+                        </label>
+                        <select class="filter-select" id="filterAdmin">
+                            <option value="all">All Admins</option>
+                        </select>
+                    </div>
+
+                    <!-- Role Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-crown"></i>
+                            Role
+                        </label>
+                        <select class="filter-select" id="filterRole">
+                            <option value="all">All Roles</option>
+                            <option value="executive">Executive</option>
+                            <option value="regular">Regular</option>
+                        </select>
+                    </div>
+
+                    <!-- Action Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-bolt"></i>
+                            Action
+                        </label>
+                        <select class="filter-select" id="filterAction">
+                            <option value="all">All Actions</option>
+                            <optgroup label="Authentication">
+                                <option value="login">Login</option>
+                                <option value="logout">Logout</option>
+                            </optgroup>
+                            <optgroup label="User Management">
+                                <option value="create">Create User</option>
+                                <option value="delete">Delete User</option>
+                                <option value="user_approved">Approve User</option>
+                                <option value="user_reactivated">Reactivate User</option>
+                                <option value="status_change">Status Change</option>
+                            </optgroup>
+                            <optgroup label="Sensors">
+                                <option value="sensor_assign">Assign Sensors</option>
+                                <option value="sensor_modify">Modify Sensors</option>
+                            </optgroup>
+                            <optgroup label="Session">
+                                <option value="session_end">End Session</option>
+                            </optgroup>
+                            <optgroup label="Profile">
+                                <option value="profile_update">Profile Update</option>
+                                <option value="password_change">Password Change</option>
+                                <option value="avatar_change">Avatar Change</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Date Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i class="fas fa-calendar"></i>
+                            Date Range
+                        </label>
+                        <select class="filter-select" id="filterDate">
+                            <option value="today">Today</option>
+                            <option value="week" selected>Last 7 Days</option>
+                            <option value="month">Last 30 Days</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+
+                    <!-- Reset Filters -->
+                    <button class="btn btn-ghost filter-reset hidden" id="resetFilters" type="button">
+                        <i class="fas fa-times"></i>
+                        Reset
+                    </button>
+                </div>
+
+                <!-- Active Filters Tags -->
+                <div class="active-filters hidden" id="activeFilters">
+                    <span class="active-filters-label">Active filters:</span>
+                    <div class="filter-tags" id="filterTags"></div>
+                </div>
+            </div>
+
+            <!-- ========== SESSIONS TIMELINE ========== -->
+            <div class="sessions-container" id="sessionsContainer">
+                
+                <!-- Loading State -->
+                <div class="sessions-loading" id="sessionsLoading">
+                    <div class="loading-skeleton">
+                        <div class="skeleton-session">
+                            <div class="skeleton skeleton-avatar"></div>
+                            <div class="skeleton-content">
+                                <div class="skeleton skeleton-title"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text short"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-session">
+                            <div class="skeleton skeleton-avatar"></div>
+                            <div class="skeleton-content">
+                                <div class="skeleton skeleton-title"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text short"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-session">
+                            <div class="skeleton skeleton-avatar"></div>
+                            <div class="skeleton-content">
+                                <div class="skeleton skeleton-title"></div>
+                                <div class="skeleton skeleton-text"></div>
+                                <div class="skeleton skeleton-text short"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="sessions-empty hidden" id="sessionsEmpty">
+                    <div class="empty-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3 class="empty-title">No Sessions Found</h3>
+                    <p class="empty-description">
+                        No admin sessions match your current filters.
+                    </p>
+                    <button class="btn btn-primary" id="emptyResetBtn" type="button">
+                        <i class="fas fa-redo"></i>
+                        Reset Filters
+                    </button>
+                </div>
+
+                <!-- Sessions Timeline -->
+                <div class="sessions-timeline hidden" id="sessionsTimeline">
+                <!-- Sessions will be rendered here -->
+                </div>
+
+                <!-- Load More -->
+                <div class="load-more-container hidden" id="loadMoreContainer">
+                    <button class="btn btn-outline load-more-btn" id="loadMoreBtn" type="button">
+                        <i class="fas fa-chevron-down"></i>
+                        <span>Load More Sessions</span>
+                        <span class="load-more-count" id="loadMoreCount"></span>
+                    </button>
+                </div>
+
+                <!-- Virtual Scroll Sentinel -->
+                <div class="scroll-sentinel" id="scrollSentinel"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ========== SESSION DETAIL MODAL ========== -->
+    <div class="modal-overlay hidden" id="sessionModal">
+        <div class="modal-backdrop" id="sessionModalBackdrop"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+                <div class="modal-title-section">
+                    <h3 class="modal-title">
+                        <i class="fas fa-history"></i>
+                        Session Details
+                    </h3>
+                    <span class="modal-session-id" id="modalSessionId"></span>
+                </div>
+                <button class="modal-close" id="closeSessionModal" type="button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="sessionModalBody">
+            <!-- Session details will be rendered here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="exportSessionBtn" type="button">
+                    <i class="fas fa-download"></i>
+                    Export Session
+                </button>
+                <button class="btn btn-primary" id="closeSessionModalBtn" type="button">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== EXPORT MODAL ========== -->
+    <div class="modal-overlay hidden" id="exportModal">
+        <div class="modal-backdrop" id="exportModalBackdrop"></div>
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-download"></i>
+                    Export System Log
+                </h3>
+                <button class="modal-close" id="closeExportModal" type="button">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="export-options">
+                    <div class="export-format-group">
+                        <label class="export-label">Export Format</label>
+                        <div class="export-formats">
+                            <label class="export-format-option">
+                                <input type="radio" name="exportFormat" value="csv" checked>
+                                <div class="format-card">
+                                    <i class="fas fa-file-csv"></i>
+                                    <span>CSV</span>
+                                </div>
+                            </label>
+                            <label class="export-format-option">
+                                <input type="radio" name="exportFormat" value="json">
+                                <div class="format-card">
+                                    <i class="fas fa-file-code"></i>
+                                    <span>JSON</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="export-range-group">
+                        <label class="export-label">Data Range</label>
+                        <select class="filter-select" id="exportRange">
+                            <option value="filtered">Current Filtered Results</option>
+                            <option value="today">Today Only</option>
+                            <option value="week">Last 7 Days</option>
+                            <option value="month">Last 30 Days</option>
+                            <option value="all">All Data</option>
+                        </select>
+                    </div>
+                    <div class="export-include-group">
+                        <label class="export-label">Include</label>
+                        <div class="export-checkboxes">
+                            <label class="export-checkbox">
+                                <input type="checkbox" id="exportIncludeSessions" checked>
+                                <span>Session Information</span>
+                            </label>
+                            <label class="export-checkbox">
+                                <input type="checkbox" id="exportIncludeActivities" checked>
+                                <span>Activity Details</span>
+                            </label>
+                            <label class="export-checkbox">
+                                <input type="checkbox" id="exportIncludeLocation" checked>
+                                <span>Location Data</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelExportBtn" type="button">
+                    Cancel
+                </button>
+                <button class="btn btn-primary" id="confirmExportBtn" type="button">
+                    <i class="fas fa-download"></i>
+                    Export
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== THEME TOGGLE ========== -->
+    <button class="theme-toggle" id="themeToggle" type="button" title="Toggle Theme">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- ========== TOAST CONTAINER ========== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ========== SCRIPTS ========== -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<!-- System Log JavaScript -->
+<script src="admin-dashboard-js/admin-system-log.js"></script>
+
+</body>
+</html>

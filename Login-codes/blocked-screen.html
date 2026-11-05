@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Restricted - BreathSafe</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="blocked-screen.css">
+    <link rel="stylesheet" href="admin-dashboard-base.css">
+    <link rel="stylesheet" href="breathsafe-login.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========== BLOCKED SCREEN STYLES ========== */
+        
+        /* Pulsing Warning Animation */
+        @keyframes pulse-warning {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+
+        /* Glowing Effect */
+        @keyframes glow-pulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 20px rgba(239, 68, 68, 0.2),
+                    0 0 40px rgba(239, 68, 68, 0.15),
+                    0 0 60px rgba(239, 68, 68, 0.1);
+            }
+            50% {
+                box-shadow: 
+                    0 0 30px rgba(239, 68, 68, 0.3),
+                    0 0 60px rgba(239, 68, 68, 0.2),
+                    0 0 90px rgba(239, 68, 68, 0.15);
+            }
+        }
+
+        /* Rotating Shield */
+        @keyframes rotate-shield {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Scan Line Effect */
+        @keyframes scan-line {
+            0% {
+                top: 0%;
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.3;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Glass Card */
+        .blocked-glass-card {
+            position: relative;
+            overflow: visible;
+        }
+
+        /* Subtle Danger Border Animation - REDUCED OPACITY */
+        .blocked-glass-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, 
+                rgba(239, 68, 68, 0.3), 
+                rgba(220, 38, 38, 0.25), 
+                rgba(185, 28, 28, 0.2), 
+                rgba(153, 27, 27, 0.15),
+                rgba(239, 68, 68, 0.3));
+            background-size: 400% 400%;
+            border-radius: 26px;
+            z-index: -1;
+            animation: gradient-shift 4s ease infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Scan Line Effect Container - VERY SUBTLE */
+        .scan-line-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 24px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .scan-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(239, 68, 68, 0.3),
+                transparent);
+            animation: scan-line 4s ease-in-out infinite;
+        }
+
+        /* Block Icon Section */
+        .blocked-icon-section {
+            position: relative;
+            margin: 30px 0 40px;
+        }
+
+        .blocked-main-icon {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, 
+                rgba(239, 68, 68, 0.1),
+                rgba(220, 38, 38, 0.05));
+            border-radius: 50%;
+            animation: pulse-warning 2.5s ease-in-out infinite;
+            border: 3px solid rgba(239, 68, 68, 0.25);
+        }
+
+        /* Rotating Rings - SUBTLE */
+        .blocked-main-icon::before {
+            content: '';
+            position: absolute;
+            inset: -15px;
+            border: 2px dashed rgba(239, 68, 68, 0.2);
+            border-radius: 50%;
+            animation: rotate-shield 20s linear infinite;
+        }
+
+        .blocked-main-icon::after {
+            content: '';
+            position: absolute;
+            inset: -25px;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 50%;
+            animation: rotate-shield 15s linear infinite reverse;
+        }
+
+        .blocked-main-icon i {
+            font-size: 70px;
+            color: #ef4444;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 4px 8px rgba(239, 68, 68, 0.2));
+        }
+
+        /* Warning Corners - SUBTLE */
+        .warning-corners {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .warning-corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .warning-corner.top-left {
+            top: 20px;
+            left: 20px;
+            border-right: none;
+            border-bottom: none;
+            border-top-left-radius: 8px;
+        }
+
+        .warning-corner.top-right {
+            top: 20px;
+            right: 20px;
+            border-left: none;
+            border-bottom: none;
+            border-top-right-radius: 8px;
+        }
+
+        .warning-corner.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            border-right: none;
+            border-top: none;
+            border-bottom-left-radius: 8px;
+        }
+
+        .warning-corner.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-left: none;
+            border-top: none;
+            border-bottom-right-radius: 8px;
+        }
+
+        /* Message Section - CLEAR TEXT */
+        .blocked-message-section {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .page-title {
+            font-size: 2.25rem;
+            font-weight: 900;
+            color: #ef4444;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            text-shadow: none;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Device Info - CLEAR & READABLE */
+        .blocked-device-info {
+            background: var(--accent-bg);
+            border: 2px solid var(--border);
+            border-left: 4px solid #ef4444;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 28px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Very subtle shimmer - won't interfere with text */
+        .blocked-device-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(239, 68, 68, 0.03),
+                transparent);
+            animation: shimmer-scan 4s infinite;
+        }
+
+        @keyframes shimmer-scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .blocked-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+
+        .blocked-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .blocked-info-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .blocked-info-label i {
+            color: #ef4444;
+            font-size: 0.9rem;
+        }
+
+        .blocked-info-value {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            background: var(--panel);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        /* Security Status Badge - CLEAR */
+        .security-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 2px solid rgba(239, 68, 68, 0.25);
+            border-radius: 12px;
+            margin: 24px auto;
+            font-weight: 700;
+            color: #ef4444;
+        }
+
+        .security-status-badge i {
+            font-size: 1.25rem;
+        }
+
+        /* Real-time Status Indicator */
+        .realtime-status {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--panel);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px var(--shadow);
+            z-index: 1000;
+            animation: slideInRight 0.4s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            }
+        }
+
+        .status-text {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Action Links */
+        .action-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 32px;
+        }
+
+        .action-link {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .action-link:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .action-link.primary {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .action-link.primary i {
+            color: #ef4444;
+        }
+
+        .action-link.primary:hover {
+            background: rgba(239, 68, 68, 0.12);
+            border-color: #ef4444;
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
+        }
+
+        /* Unblock Monitor - CLEAR */
+        .unblock-monitor {
+            background: rgba(16, 185, 129, 0.06);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .monitor-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #10b981;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .monitor-icon {
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        .monitor-message {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Help Section - CLEAR */
+        .help-section {
+            background: var(--accent-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 28px;
+            border: 1px solid var(--border);
+        }
+
+        .help-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .help-title i {
+            color: #3b82f6;
+        }
+
+        .help-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .help-list li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .help-list li::before {
+            content: '→';
+            color: #10b981;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blocked-main-icon {
+                width: 110px;
+                height: 110px;
+            }
+
+            .blocked-main-icon i {
+                font-size: 55px;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .action-links {
+                grid-template-columns: 1fr;
+            }
+
+            .warning-corners {
+                display: none;
+            }
+
+            .realtime-status {
+                top: 16px;
+                right: 16px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .blocked-main-icon {
+                width: 90px;
+                height: 90px;
+            }
+
+            .blocked-main-icon i {
+                font-size: 45px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .blocked-device-info {
+                padding: 16px;
+            }
+
+            .blocked-info-item {
+                flex-direction: column;
+                align-items: start;
+                gap: 8px;
+            }
+
+            .blocked-info-value {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Dark Mode Adjustments */
+        body.dark .page-title {
+            color: #fca5a5;
+        }
+
+        body.dark .blocked-info-value {
+            background: var(--accent-bg);
+            color: var(--text);
+        }
+
+        body.dark .security-status-badge {
+            background: rgba(239, 68, 68, 0.12);
+            color: #fca5a5;
+        }
+
+        body.dark .action-link.primary {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        body.dark .action-link.primary:hover {
+            background: rgba(239, 68, 68, 0.15);
+        }
+    </style>
+</head>
+<body class="light">
+    
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+    </div>
+
+    <!-- Real-time Status Indicator -->
+    <div class="realtime-status">
+        <div class="status-indicator"></div>
+        <div class="status-text">Monitoring Status</div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="login-container">
+        <div class="login-card glass-card blocked-glass-card">
+            
+            <!-- Scan Line Effect (Very Subtle) -->
+            <div class="scan-line-container">
+                <div class="scan-line"></div>
+            </div>
+
+            <!-- Warning Corners (Subtle) -->
+            <div class="warning-corners">
+                <div class="warning-corner top-left"></div>
+                <div class="warning-corner top-right"></div>
+                <div class="warning-corner bottom-left"></div>
+                <div class="warning-corner bottom-right"></div>
+            </div>
+
+            <!-- Logo Section -->
+            <div class="login-logo">
+                <div class="logo-icon-wrapper">
+                    <div class="logo-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="logo-pulse"></div>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">BreathSafe</span>
+                    <span class="logo-subtitle">Gas Leak Detection</span>
+                </div>
+            </div>
+
+            <!-- Block Icon with Animation -->
+            <div class="blocked-icon-section">
+                <div class="blocked-main-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+            </div>
+
+            <!-- Security Status Badge -->
+            <div class="security-status-badge">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Security Protection Active</span>
+            </div>
+
+            <!-- Message Section -->
+            <div class="blocked-message-section">
+                <h1 class="page-title">Access Temporarily Restricted</h1>
+                <p class="page-subtitle muted">
+                    Your access has been temporarily suspended for security reasons. 
+                    This is an automatic protection measure to keep our system safe.
+                </p>
+            </div>
+
+            <!-- Device Info with Design -->
+            <div class="blocked-device-info">
+                <div class="blocked-info-item">
+                    <span class="blocked-info-label">
+                        <i class="fas fa-fingerprint"></i>
+                        Device ID
+                    </span>
+                    <span class="blocked-info-value" id="deviceIdDisplay">Loading...</span>
+                </div>
+                <div class="blocked-info-item">
+                    <span class="blocked-info-label">
+                        <i class="fas fa-network-wired"></i>
+                        IP Address
+                    </span>
+                    <span class="blocked-info-value" id="ipAddressDisplay">Loading...</span>
+                </div>
+                <div class="blocked-info-item">
+                    <span class="blocked-info-label">
+                        <i class="fas fa-clock"></i>
+                        Blocked At
+                    </span>
+                    <span class="blocked-info-value" id="timeDisplay">Loading...</span>
+                </div>
+            </div>
+
+            <!-- Unblock Monitor -->
+            <div class="unblock-monitor">
+                <div class="monitor-title">
+                    <i class="fas fa-satellite-dish monitor-icon"></i>
+                    <span>Real-time Monitoring Active</span>
+                </div>
+                <p class="monitor-message">
+                    This page is actively monitoring your block status. You will be automatically 
+                    notified and redirected when your access is restored.
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-links">
+                <button class="action-link primary" id="reportErrorBtn">
+                    <i class="fas fa-flag"></i>
+                    <span>Submit Appeal</span>
+                </button>
+                <button class="action-link" id="retryBtn">
+                    <i class="fas fa-redo"></i>
+                    <span>Check Status</span>
+                </button>
+            </div>
+
+            <!-- Help Section -->
+            <div class="help-section">
+                <div class="help-title">
+                    <i class="fas fa-question-circle"></i>
+                    <span>What can I do?</span>
+                </div>
+                <ul class="help-list">
+                    <li>Submit an appeal if you believe this is a mistake</li>
+                    <li>Wait for automatic unblock (usually within 24 hours)</li>
+                    <li>Contact support at security@breathsafe.com</li>
+                    <li>This page will auto-refresh when access is restored</li>
+                </ul>
+            </div>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p class="security-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    Protected by BreathSafe Security
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="modern-theme-toggle">
+        <span class="toggle-icon">
+            <i class="fas fa-sun"></i>
+        </span>
+    </button>
+
+    <!-- Report Error Form Modal -->
+    <div class="report-form-container" id="reportFormContainer">
+        <div class="report-form-card">
+            <div class="report-form-header">
+                <div class="report-form-title">
+                    <i class="fas fa-life-ring"></i>
+                    <span>Submit Appeal</span>
+                </div>
+                <button class="report-form-close" id="closeReportForm">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="reportErrorForm">
+                <div class="report-form-body">
+                    <div class="report-form-intro">
+                        <i class="fas fa-info-circle"></i>
+                        <p>
+                            If your device was blocked by mistake, please fill out this form. 
+                            Our team will review your case within 24 hours.
+                        </p>
+                    </div>
+
+                    <div class="report-form-group">
+                        <label class="report-form-label">
+                            Full Name <span>*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            class="report-form-input" 
+                            id="reportFullName"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="report-form-group">
+                        <label class="report-form-label">
+                            Email Address <span>*</span>
+                        </label>
+                        <input 
+                            type="email" 
+                            class="report-form-input" 
+                            id="reportEmail"
+                            placeholder="Enter your email address"
+                            required
+                        >
+                    </div>
+
+                    <div class="report-form-group">
+                        <label class="report-form-label">
+                            Username (if known)
+                        </label>
+                        <input 
+                            type="text" 
+                            class="report-form-input" 
+                            id="reportUsername"
+                            placeholder="Enter your username"
+                        >
+                    </div>
+
+                    <div class="report-form-group">
+                        <label class="report-form-label">
+                            What happened? <span>*</span>
+                        </label>
+                        <textarea 
+                            class="report-form-textarea" 
+                            id="reportDescription"
+                            placeholder="Please describe what happened..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <input type="hidden" id="reportDeviceId">
+                    <input type="hidden" id="reportDeviceName">
+                    <input type="hidden" id="reportIPAddress">
+                    <input type="hidden" id="reportBlockType">
+                </div>
+
+                <div class="report-form-footer">
+                    <button type="button" class="report-form-btn report-form-btn-cancel" id="cancelReportBtn">
+                        Cancel
+                    </button>
+                    <button type="submit" class="report-form-btn report-form-btn-submit" id="submitReportBtn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Appeal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <!-- Device Fingerprint -->
+    <script src="device-fingerprint.js"></script>
+
+    <!-- Blocked Screen Logic -->
+    <script src="blocked-screen-page.js"></script>
+    
+</body>
+</html>

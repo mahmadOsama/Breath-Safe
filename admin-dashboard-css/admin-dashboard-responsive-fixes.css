@@ -1,0 +1,1131 @@
+/* ==========================================
+   BREATHSAFE ADMIN DASHBOARD
+   RESPONSIVE FIXES & IMPROVEMENTS
+   Mobile, Tablet, Zoom, and Accessibility
+   ========================================== */
+
+/* ========== VIEWPORT META ADJUSTMENTS ========== */
+/* Add to your HTML head:
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+*/
+
+/* ========== ROOT RESPONSIVE VARIABLES ========== */
+@media (max-width: 1920px) {
+  :root {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1366px) {
+  :root {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    font-size: 13px;
+  }
+}
+
+/* ========== ZOOM LEVEL SUPPORT ========== */
+/* Support for browser zoom 67% to 200% */
+@media (min-resolution: 120dpi) {
+  body {
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+  }
+}
+
+/* ========== HEADER RESPONSIVE ========== */
+@media (max-width: 1200px) {
+  .header-container {
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .main-content {
+    margin-top: 70px;
+    padding: 16px;
+  }
+  
+  .header-container {
+    padding: 0.75rem 1rem;
+  }
+  
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
+  }
+  
+  .logo-title {
+    font-size: 1.1rem;
+  }
+  
+  /* Show only logo icon on mobile */
+  .logo-text {
+    display: none;
+  }
+  
+  /* Simplify user menu on mobile */
+  .user-menu-trigger {
+    padding: 4px;
+  }
+  
+  .user-info,
+  .dropdown-arrow {
+    display: none;
+  }
+  
+  .avatar-circle {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+  
+  .admin-badge-header {
+    width: 14px;
+    height: 14px;
+    font-size: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0.5rem;
+  }
+  
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+}
+
+/* ========== STATS GRID RESPONSIVE ========== */
+@media (max-width: 1400px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .stat-card {
+    padding: 16px;
+  }
+  
+  .big-num {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .stat-card {
+    padding: 14px;
+  }
+  
+  .stat-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.1rem;
+  }
+  
+  .big-num {
+    font-size: 1.75rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+  }
+}
+
+/* ========== CONTENT GRID RESPONSIVE ========== */
+@media (max-width: 1600px) {
+  .content-grid {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .left-column,
+  .right-column {
+    max-width: 100%;
+  }
+}
+
+/* ========== AIR QUALITY ORB RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .orb-container {
+    min-height: 200px;
+    padding: 20px 0;
+  }
+  
+  .air-orb {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .orb-core {
+    width: 110px;
+    height: 110px;
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .orb-container {
+    min-height: 180px;
+    padding: 16px 0;
+  }
+  
+  .air-orb {
+    width: 130px;
+    height: 130px;
+  }
+  
+  .orb-core {
+    width: 95px;
+    height: 95px;
+    font-size: 2rem;
+  }
+  
+  .air-status-text {
+    font-size: 1.25rem;
+  }
+  
+  .air-status-desc {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .orb-container {
+    min-height: 160px;
+  }
+  
+  .air-orb {
+    width: 110px;
+    height: 110px;
+  }
+  
+  .orb-core {
+    width: 80px;
+    height: 80px;
+    font-size: 1.75rem;
+  }
+}
+
+/* ========== ENVIRONMENT MONITOR RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .environment-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .env-item {
+    padding: 14px;
+  }
+  
+  .env-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1.2rem;
+  }
+  
+  .env-value {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .env-item {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .env-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .env-value {
+    font-size: 1.5rem;
+  }
+  
+  .env-unit {
+    font-size: 0.9rem;
+  }
+}
+
+/* ========== SENSOR CARDS RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .sensor-item {
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .sensor-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .sensor-value {
+    font-size: 1.8rem;
+  }
+  
+  .sensor-info h4 {
+    font-size: 0.9rem;
+  }
+  
+  .sensor-info p {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sensor-item {
+    padding: 12px;
+  }
+  
+  .sensor-value {
+    font-size: 1.5rem;
+  }
+}
+
+/* ========== CHART RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .chart-wrapper {
+    height: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-wrapper {
+    height: 220px;
+    min-height: 180px;
+  }
+  
+  .card-actions {
+    gap: 6px;
+  }
+  
+  .icon-btn.small {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-wrapper {
+    height: 200px;
+    min-height: 160px;
+  }
+}
+
+/* ========== USER TABLE RESPONSIVE ========== */
+@media (max-width: 1400px) {
+  .table-wrapper {
+    max-height: 600px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .table-wrapper {
+    max-height: 500px;
+  }
+  
+  .users-table {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-controls {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+  
+  .search-box {
+    width: 100%;
+    order: 1;
+  }
+  
+  .filters {
+    width: 100%;
+    order: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  
+  .table-actions {
+    width: 100%;
+    order: 3;
+    justify-content: flex-end;
+  }
+  
+  .table-wrapper {
+    max-height: 400px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .users-table {
+    min-width: 650px;
+    font-size: 0.85rem;
+  }
+  
+  .users-table th,
+  .users-table td {
+    padding: 10px 8px;
+  }
+  
+  .user-initials-table {
+    width: 32px;
+    height: 32px;
+    font-size: 0.7rem;
+  }
+  
+  .admin-badge-table {
+    width: 12px;
+    height: 12px;
+    font-size: 0.4rem;
+  }
+  
+  .role-badge,
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+  
+  .table-action-btn {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-controls {
+    padding: 12px;
+  }
+  
+  .filters {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-select {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 10px 12px;
+  }
+  
+  .table-wrapper {
+    max-height: 350px;
+  }
+  
+  .users-table {
+    min-width: 600px;
+    font-size: 0.8rem;
+  }
+  
+  .users-table th,
+  .users-table td {
+    padding: 8px 6px;
+  }
+  
+  /* Hide less important columns on mobile */
+  .users-table th:nth-child(6),
+  .users-table td:nth-child(6) {
+    display: none;
+  }
+}
+
+/* ========== MODALS RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .modal {
+    padding: 16px;
+  }
+  
+  .modal-dialog {
+    max-width: 90%;
+  }
+  
+  .modal-dialog.modal-lg {
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal {
+    padding: 12px;
+  }
+  
+  .modal-dialog {
+    max-width: 100%;
+    max-height: 95vh;
+    margin: auto;
+  }
+  
+  .modal-header {
+    padding: 18px 20px;
+  }
+  
+  .modal-body {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  .modal-footer {
+    padding: 18px 20px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .modal-footer button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .modal-title {
+    font-size: 1.15rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-group label {
+    font-size: 0.85rem;
+  }
+  
+  .form-group input,
+  .form-group select {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 8px;
+  }
+  
+  .modal-dialog {
+    border-radius: 12px;
+  }
+  
+  .modal-header {
+    padding: 16px;
+  }
+  
+  .modal-body {
+    padding: 16px;
+  }
+  
+  .modal-footer {
+    padding: 16px;
+  }
+  
+  .modal-title {
+    font-size: 1.05rem;
+  }
+  
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* ========== USER DETAILS MODAL RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .user-details-avatar-section {
+    padding: 20px;
+  }
+  
+  .avatar-circle-large {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
+  
+  .user-details-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 0.8rem;
+  }
+  
+  .user-details-name-section h4 {
+    font-size: 1.3rem;
+  }
+  
+  .user-details-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .detail-item span {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+  
+  .api-token {
+    font-size: 0.75rem;
+    padding: 12px;
+    word-break: break-all;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-details-avatar-section {
+    padding: 16px;
+  }
+  
+  .avatar-circle-large {
+    width: 70px;
+    height: 70px;
+    font-size: 1.75rem;
+  }
+  
+  .user-details-name-section h4 {
+    font-size: 1.15rem;
+  }
+  
+  .user-details-name-section p {
+    font-size: 0.85rem;
+  }
+  
+  .detail-item label {
+    font-size: 0.75rem;
+  }
+  
+  .detail-item span {
+    font-size: 0.85rem;
+  }
+}
+
+/* ========== DELETE CONFIRMATION MODAL RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .alert-danger {
+    flex-direction: column;
+    text-align: center;
+    padding: 14px;
+  }
+  
+  .alert-danger i {
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+  
+  .alert-danger strong {
+    font-size: 0.95rem;
+  }
+  
+  .alert-danger p {
+    font-size: 0.85rem;
+  }
+}
+
+/* ========== THEME TOGGLE RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .theme-toggle {
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-toggle {
+    bottom: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
+  }
+}
+
+/* ========== TOAST RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .toast {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 90%;
+    font-size: 0.85rem;
+    padding: 12px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .toast {
+    bottom: 16px;
+    max-width: 94%;
+    font-size: 0.8rem;
+    padding: 10px 14px;
+    border-radius: 8px;
+  }
+}
+
+/* ========== PAGE HEADER RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .page-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .page-actions {
+    width: 100%;
+  }
+  
+  .page-actions .btn-outline {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.25rem;
+  }
+  
+  .page-subtitle {
+    font-size: 0.8rem;
+  }
+}
+
+/* ========== CARDS RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+  }
+  
+  .card-header {
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+  }
+  
+  .card-title i {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 14px;
+    border-radius: 12px;
+  }
+  
+  .card-header {
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .card-title {
+    font-size: 0.95rem;
+  }
+  
+  .card-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* ========== BUTTONS RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .btn-primary,
+  .btn-outline,
+  .btn-danger {
+    font-size: 0.85rem;
+    padding: 9px 14px;
+    border-radius: 8px;
+  }
+  
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-primary,
+  .btn-outline,
+  .btn-danger {
+    font-size: 0.8rem;
+    padding: 8px 12px;
+  }
+  
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ========== SCROLLBAR RESPONSIVE ========== */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+}
+
+/* ========== DROPDOWN MENU RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .user-dropdown {
+    width: 260px;
+    right: -10px;
+  }
+  
+  .dropdown-header {
+    padding: 16px;
+  }
+  
+  .dropdown-item {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .dropdown-item:hover {
+    padding-left: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-dropdown {
+    width: calc(100vw - 24px);
+    max-width: 280px;
+    right: -8px;
+  }
+  
+  .dropdown-header {
+    padding: 14px;
+  }
+  
+  .dropdown-user-name {
+    font-size: 0.9rem;
+  }
+  
+  .dropdown-user-email {
+    font-size: 0.75rem;
+  }
+  
+  .dropdown-user-role {
+    font-size: 0.7rem;
+  }
+}
+
+/* ========== LOADING STATES RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .loading-cell {
+    padding: 2.5rem 1rem !important;
+  }
+  
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border-width: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-cell {
+    padding: 2rem 0.5rem !important;
+    font-size: 0.85rem;
+  }
+  
+  .spinner {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* ========== LANDSCAPE MODE OPTIMIZATIONS ========== */
+@media (max-height: 600px) and (orientation: landscape) {
+  .header {
+    position: relative;
+  }
+  
+  .main-content {
+    margin-top: 0;
+    padding: 16px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  
+  .modal-body {
+    max-height: 50vh;
+  }
+  
+  .page-header {
+    margin-bottom: 16px;
+  }
+}
+
+/* ========== PRINT STYLES ========== */
+@media print {
+  .theme-toggle,
+  .user-menu,
+  .page-actions,
+  .card-actions,
+  .table-actions,
+  .icon-btn,
+  .btn-primary,
+  .btn-outline,
+  .btn-danger {
+    display: none !important;
+  }
+  
+  .header {
+    position: relative;
+    box-shadow: none;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+  
+  .main-content {
+    margin-top: 0;
+  }
+  
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .table-wrapper {
+    max-height: none;
+    overflow: visible;
+  }
+  
+  .users-table {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+/* ========== ACCESSIBILITY IMPROVEMENTS ========== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .card {
+    border: 2px solid var(--border);
+  }
+  
+  .btn-primary,
+  .btn-outline,
+  .btn-danger {
+    border: 2px solid currentColor;
+  }
+  
+  .modal-dialog {
+    border: 2px solid var(--border);
+  }
+}
+
+/* ========== TOUCH DEVICE OPTIMIZATIONS ========== */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets */
+  .btn-primary,
+  .btn-outline,
+  .btn-danger,
+  .icon-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .user-checkbox,
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .dropdown-item {
+    padding: 12px 20px;
+  }
+  
+  .table-action-btn {
+    padding: 8px 12px;
+    min-height: 36px;
+  }
+  
+  /* Remove hover effects on touch devices */
+  .card:hover,
+  .stat-card:hover,
+  .sensor-item:hover,
+  .env-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* ========== ULTRA WIDE SCREENS ========== */
+@media (min-width: 1921px) {
+  .main-content {
+    max-width: 1920px;
+  }
+  
+  .content-grid {
+    grid-template-columns: minmax(0, 0.6fr) minmax(0, 1.4fr);
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ========== SMALL TABLETS (iPad Mini, etc) ========== */
+@media (min-width: 481px) and (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .environment-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .modal-footer {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  
+  .modal-footer button {
+    width: auto;
+  }
+}
+
+/* ========== FIX FOR ZOOM ISSUES ========== */
+/* Prevents layout breaking when zooming */
+* {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+}
+
+.main-content {
+  overflow-x: hidden;
+}
+
+/* Ensure tables are scrollable */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Fix modal backdrop on iOS */
+.modal-backdrop {
+  position: fixed;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+/* ========== FINAL ADJUSTMENTS ========== */
+/* Ensure all text is readable */
+@media (max-width: 480px) {
+  body {
+    min-width: 320px;
+  }
+  
+  /* Minimum font sizes for readability */
+  .stat-label,
+  .card-title,
+  .dropdown-item,
+  .form-group label {
+    font-size: max(0.75rem, 12px);
+  }
+  
+  /* Ensure buttons are tappable */
+  button,
+  .btn-primary,
+  .btn-outline,
+  .btn-danger,
+  .icon-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

@@ -1,0 +1,1530 @@
+/* ========== DARK MODE OVERRIDES (CONTINUED) ========== */
+
+body.dark .appeal-description {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(16, 185, 129, 0.05));
+}
+
+body.dark .appeal-block-reason {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(239, 68, 68, 0.06));
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+body.dark .admin-response-textarea {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(16, 185, 129, 0.05));
+    border-color: rgba(255, 255, 255, 0.12);
+    color: var(--text);
+}
+
+body.dark .admin-response-textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+body.dark .bulk-delete-option {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark .bulk-delete-option:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+body.dark .modal-dialog.modal-appeals-manager {
+    background: rgba(30, 41, 59, 0.98);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+body.dark .appeals-header {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 1), rgba(51, 65, 85, 0.8));
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .appeals-control-bar {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.5), rgba(30, 41, 59, 0.8));
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .appeals-search-input {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .appeals-search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+body.dark .appeals-filter-select {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .appeals-filter-select:focus {
+    border-color: var(--primary);
+}
+
+body.dark .appeals-content-area {
+    background: rgba(15, 23, 42, 0.95);
+}
+
+body.dark .appeal-card {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .appeal-card:hover {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .appeal-details-section {
+    border-top-color: rgba(255, 255, 255, 0.08);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark .appeal-device-info,
+body.dark .appeal-time-info {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.5), rgba(30, 41, 59, 0.5));
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .appeal-device-info:hover,
+body.dark .appeal-time-info:hover {
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+body.dark .appeal-description-compact {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.5), rgba(16, 185, 129, 0.05));
+}
+
+body.dark .btn-appeal-view {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.8), rgba(30, 41, 59, 0.8));
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--text);
+}
+
+body.dark .btn-appeal-view:hover {
+    background: linear-gradient(135deg, rgba(71, 85, 105, 0.8), rgba(51, 65, 85, 0.8));
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+body.dark .stat-mini {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.5), rgba(30, 41, 59, 0.5));
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .stat-mini:hover {
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
+}
+
+body.dark .appeals-close {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.5), rgba(30, 41, 59, 0.5));
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .appeals-close:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+body.dark .appeals-footer {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.5), rgba(30, 41, 59, 0.8));
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .appeals-results-bar {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.5), rgba(30, 41, 59, 0.8));
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark .empty-icon {
+    background: linear-gradient(135deg, rgba(51, 65, 85, 0.5), rgba(71, 85, 105, 0.3));
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+body.dark .appeal-reference-compact {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(139, 92, 246, 0.06));
+    border-color: rgba(139, 92, 246, 0.25);
+}
+
+body.dark .appeal-reference-compact:hover {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(139, 92, 246, 0.1));
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+body.dark .device-value {
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--text);
+}
+
+body.dark .appeal-info-row code {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.08));
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+body.dark .appeal-status-banner.pending {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
+    color: #fbbf24;
+}
+
+body.dark .appeal-status-banner.resolved,
+body.dark .appeal-status-banner.approved {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08));
+    color: #34d399;
+}
+
+body.dark .appeal-status-banner.rejected {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+    color: #f87171;
+}
+
+body.dark .resolved-by-info {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08));
+}
+
+body.dark .bulk-delete-intro {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+body.dark .bulk-delete-warning {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08));
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+body.dark .option-mark {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ========== RESPONSIVE STYLES ========== */
+
+/* Large Screens (1200px+) */
+@media (min-width: 1200px) {
+    .appeal-details-section {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Medium-Large Screens (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .appeals-stats-mini {
+        display: none;
+    }
+    
+    .appeal-details-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablet Screens (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .modal-dialog.modal-appeals-manager {
+        max-width: 720px;
+        height: min(90vh, calc(100vh - 32px));
+        margin: 16px auto;
+    }
+    
+    .appeals-header {
+        padding: 20px 24px;
+        min-height: 80px;
+    }
+    
+    .appeals-stats-mini {
+        display: none;
+    }
+    
+    .appeals-main-title {
+        font-size: 1.25rem;
+    }
+    
+    .appeals-control-bar {
+        padding: 16px 24px;
+    }
+    
+    .appeals-search-wrapper {
+        min-width: 200px;
+        max-width: 100%;
+        flex: 1 1 100%;
+    }
+    
+    .appeal-details-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .appeal-card-body {
+        padding: 16px 20px;
+        padding-left: 24px;
+    }
+    
+    .notification-dropdown {
+        width: 360px;
+    }
+    
+    .appeal-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* FIXED: Device value on tablet */
+    .device-value {
+        font-size: 0.7rem;
+        max-width: 100%;
+    }
+}
+
+/* Small Tablet / Large Mobile (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .modal-dialog.modal-appeals-manager {
+        width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        margin: 0;
+    }
+    
+    .appeals-header {
+        padding: 16px 20px;
+        min-height: 70px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .appeals-icon-wrapper {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .appeals-title-group {
+        display: block;
+    }
+    
+    .appeals-main-title {
+        font-size: 1.1rem;
+    }
+    
+    .appeals-stats-mini {
+        display: none;
+    }
+    
+    .appeals-close {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .appeals-control-bar {
+        padding: 14px 20px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .appeals-search-wrapper {
+        min-width: 100%;
+        max-width: 100%;
+    }
+    
+    .appeals-filters {
+        width: 100%;
+    }
+    
+    .appeals-filter-select {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .appeals-actions {
+        margin-left: 0;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .appeals-content-area {
+        padding: 16px 20px;
+    }
+    
+    .appeal-card-body {
+        padding: 14px 16px;
+        padding-left: 20px;
+        gap: 14px;
+    }
+    
+    .user-avatar-appeal {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        font-size: 1.1rem;
+    }
+    
+    .appeal-details-section {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    /* FIXED: Device info on small tablet */
+    .appeal-device-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .device-details {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .device-value {
+        font-size: 0.7rem;
+        word-break: break-all;
+        max-width: 100%;
+    }
+    
+    .appeal-actions-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .appeal-status-compact {
+        justify-content: center;
+    }
+    
+    .appeal-actions-buttons {
+        flex-direction: column;
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .btn-appeal-view,
+    .btn-appeal-approve,
+    .btn-appeal-reject {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 18px;
+    }
+    
+    .appeals-results-bar {
+        padding: 12px 20px;
+    }
+    
+    .appeals-footer {
+        padding: 14px 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .notification-dropdown {
+        width: calc(100vw - 32px);
+        right: -40px;
+    }
+    
+    .appeal-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .appeal-section {
+        padding: 16px;
+    }
+    
+    /* FIXED: Appeal info row on small screens */
+    .appeal-info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    
+    .appeal-info-row .value {
+        text-align: left;
+        width: 100%;
+    }
+    
+    .appeal-info-row code {
+        max-width: 100%;
+        font-size: 0.7rem;
+    }
+}
+
+/* Mobile Screens (max-width: 575px) */
+@media (max-width: 575px) {
+    .modal-dialog.modal-appeals-manager {
+        width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        margin: 0;
+    }
+    
+    .appeals-header {
+        padding: 14px 16px;
+        min-height: auto;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .appeals-icon-wrapper {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .appeals-icon-wrapper::before {
+        display: none;
+    }
+    
+    .appeals-title-group {
+        display: none;
+    }
+    
+    .appeals-stats-mini {
+        display: none;
+    }
+    
+    .appeals-close {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .appeals-control-bar {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .appeals-search-wrapper {
+        min-width: 100%;
+    }
+    
+    .appeals-search-input {
+        padding: 12px 16px 12px 44px;
+        font-size: 0.9rem;
+    }
+    
+    .appeals-filters {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .appeals-filter-select {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .appeals-actions {
+        width: 100%;
+        flex-direction: column;
+        margin-left: 0;
+    }
+    
+    .btn-sm {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 16px;
+    }
+    
+    .appeals-content-area {
+        padding: 12px 16px;
+    }
+    
+    .appeal-card {
+        border-radius: 12px;
+    }
+    
+    .appeal-card::before {
+        width: 4px;
+    }
+    
+    .appeal-card:hover::before {
+        width: 5px;
+    }
+    
+    .appeal-card-body {
+        padding: 12px 14px;
+        padding-left: 18px;
+        gap: 12px;
+    }
+    
+    .appeal-card-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .appeal-user-section {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .user-avatar-appeal {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        font-size: 1rem;
+        border-radius: 12px;
+    }
+    
+    .user-name-appeal {
+        font-size: 0.9rem;
+    }
+    
+    .appeal-details-section {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 12px 0;
+    }
+    
+    /* FIXED: Device info on mobile - CRITICAL FIX */
+    .appeal-device-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px;
+    }
+    
+    .device-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 0.9rem;
+    }
+    
+    .device-details {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* FIXED: Device value (Device ID) on mobile - CRITICAL */
+    .device-value {
+        font-size: 0.65rem;
+        padding: 6px 8px;
+        word-break: break-all;
+        overflow-wrap: break-word;
+        white-space: normal;
+        max-width: 100%;
+        line-height: 1.5;
+        display: block;
+    }
+    
+    .appeal-reference-compact {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 10px 12px;
+    }
+    
+    .appeal-reference-compact code {
+        font-size: 0.7rem;
+        word-break: break-all;
+        white-space: normal;
+        max-width: 100%;
+    }
+    
+    .appeal-time-info {
+        padding: 10px 12px;
+    }
+    
+    .appeal-description-compact {
+        padding: 12px 14px;
+    }
+    
+    .description-text {
+        font-size: 0.9rem;
+        /* -webkit-line-clamp: 2; */
+    }
+    
+    .appeal-actions-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .appeal-status-compact {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 14px;
+    }
+    
+    .resolved-by-info {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .appeal-actions-buttons {
+        width: 100%;
+        flex-direction: column;
+        margin-left: 0;
+        gap: 8px;
+    }
+    
+    .btn-appeal-view,
+    .btn-appeal-approve,
+    .btn-appeal-reject {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .appeals-results-bar {
+        padding: 10px 16px;
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .results-info {
+        justify-content: center;
+    }
+    
+    .btn-clear-filters {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .appeals-footer {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .appeals-footer-info {
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .footer-separator {
+        display: none;
+    }
+    
+    .appeals-empty-state {
+        padding: 40px 16px;
+    }
+    
+    .empty-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    /* Notification Dropdown Mobile */
+    .notification-dropdown {
+        width: calc(100vw - 24px);
+        right: -12px;
+        max-height: 80vh;
+        border-radius: 16px;
+    }
+    
+    .notification-dropdown-header {
+        padding: 16px 18px;
+    }
+    
+    .notification-dropdown-body {
+        max-height: 350px;
+    }
+    
+    .notification-item {
+        padding: 14px 16px;
+        gap: 12px;
+    }
+    
+    .notification-item-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+    }
+    
+    .notification-dropdown-footer {
+        padding: 12px 18px;
+    }
+    
+    .notification-empty {
+        padding: 40px 16px;
+    }
+    
+    /* FIXED: Appeal Detail Modal Mobile */
+    .appeal-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    
+    .appeal-section {
+        padding: 14px;
+        border-radius: 12px;
+    }
+    
+    .appeal-section h4 {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+    }
+    
+    /* FIXED: Appeal info row on mobile */
+    .appeal-info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 10px 0;
+    }
+    
+    .appeal-info-row .label {
+        font-size: 0.75rem;
+        min-width: auto;
+        max-width: none;
+    }
+    
+    .appeal-info-row .value {
+        text-align: left;
+        font-size: 0.85rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    /* FIXED: Code/Device ID in info row on mobile */
+    .appeal-info-row code {
+        font-size: 0.65rem;
+        padding: 8px 10px;
+        word-break: break-all;
+        overflow-wrap: break-word;
+        white-space: normal;
+        max-width: 100%;
+        display: block;
+        line-height: 1.5;
+    }
+    
+    .appeal-description {
+        padding: 14px;
+        font-size: 0.9rem;
+        max-height: 160px;
+    }
+    
+    .appeal-block-reason {
+        padding: 14px;
+        font-size: 0.9rem;
+    }
+    
+    .admin-response-textarea {
+        padding: 14px;
+        font-size: 0.9rem;
+        min-height: 100px;
+    }
+    
+    .appeal-status-banner {
+        padding: 14px 16px;
+        font-size: 0.9rem;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    
+    /* Bulk Delete Modal Mobile */
+    .bulk-delete-intro {
+        padding: 14px;
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+    
+    .bulk-delete-options {
+        gap: 10px;
+    }
+    
+    .bulk-delete-option {
+        padding: 14px;
+        gap: 12px;
+    }
+    
+    .option-mark {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+    }
+    
+    .bulk-delete-warning {
+        padding: 14px;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Extra Small Mobile (max-width: 375px) */
+@media (max-width: 375px) {
+    .appeals-header {
+        padding: 12px 14px;
+    }
+    
+    .appeals-icon-wrapper {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .appeals-close {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+    
+    .appeals-control-bar {
+        padding: 10px 14px;
+    }
+    
+    .appeals-content-area {
+        padding: 10px 14px;
+    }
+    
+    .appeal-card-body {
+        padding: 10px 12px;
+        padding-left: 16px;
+    }
+    
+    .user-avatar-appeal {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        font-size: 0.9rem;
+    }
+    
+    /* FIXED: Extra small device value */
+    .device-value {
+        font-size: 0.6rem;
+        padding: 5px 6px;
+    }
+    
+    .appeal-info-row code {
+        font-size: 0.6rem;
+        padding: 6px 8px;
+    }
+    
+    .notification-dropdown {
+        width: calc(100vw - 16px);
+        right: -8px;
+    }
+    
+    .notification-bell-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .notification-badge {
+        min-width: 20px;
+        height: 20px;
+        font-size: 0.65rem;
+        top: -6px;
+        right: -6px;
+    }
+}
+
+/* ========== LANDSCAPE ORIENTATION ========== */
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .modal-dialog.modal-appeals-manager {
+        height: 100vh;
+    }
+    
+    .appeals-header {
+        padding: 10px 20px;
+        min-height: 60px;
+    }
+    
+    .appeals-control-bar {
+        padding: 10px 20px;
+    }
+    
+    .appeals-content-area {
+        padding: 10px 20px;
+    }
+    
+    .notification-dropdown-body {
+        max-height: 250px;
+    }
+}
+
+/* ========== PERFORMANCE OPTIMIZATIONS ========== */
+
+.appeal-card,
+.btn-appeal-view,
+.btn-appeal-approve,
+.btn-appeal-reject,
+.notification-item,
+.notification-bell-btn,
+.stat-mini,
+.bulk-delete-option {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Reduce animations for low-power mode */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .notification-badge {
+        animation: none;
+    }
+    
+    .appeals-icon-wrapper::before {
+        animation: none;
+    }
+    
+    .appeal-status-banner::before {
+        animation: none;
+    }
+}
+
+/* ========== HIGH CONTRAST MODE ========== */
+
+@media (prefers-contrast: more) {
+    .appeal-card {
+        border-width: 2.5px;
+    }
+    
+    .notification-dropdown {
+        border-width: 2px;
+    }
+    
+    .appeal-section {
+        border-width: 2px;
+    }
+    
+    .btn-appeal-view,
+    .btn-appeal-approve,
+    .btn-appeal-reject {
+        border-width: 2px;
+    }
+    
+    .notification-item.unread {
+        border-left-width: 5px;
+    }
+    
+    .device-value {
+        border: 1px solid var(--border);
+    }
+}
+
+/* ========== PRINT STYLES ========== */
+
+@media print {
+    .notification-bell-container,
+    .appeals-control-bar,
+    .appeals-footer,
+    .appeal-actions-buttons,
+    .notification-dropdown,
+    .appeals-close,
+    .btn-clear-filters,
+    .appeals-actions {
+        display: none !important;
+    }
+    
+    .modal-dialog.modal-appeals-manager {
+        height: auto;
+        max-height: none;
+        box-shadow: none;
+        border: 1px solid #999;
+    }
+    
+    .appeal-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #999;
+        margin-bottom: 16px;
+    }
+    
+    .appeals-content-area {
+        overflow: visible;
+        height: auto;
+    }
+    
+    .appeal-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .appeal-section {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .device-value {
+        word-break: break-all;
+        white-space: normal;
+    }
+    
+    body.dark .appeal-card,
+    body.dark .appeal-section {
+        background: white;
+        color: black;
+    }
+}
+
+/* ========== FOCUS VISIBLE STYLES (Accessibility) ========== */
+
+.notification-bell-btn:focus-visible,
+.notification-mark-all:focus-visible,
+.notification-action-btn:focus-visible,
+.appeals-close:focus-visible,
+.appeals-search-input:focus-visible,
+.appeals-filter-select:focus-visible,
+.btn-sm:focus-visible,
+.btn-appeal-view:focus-visible,
+.btn-appeal-approve:focus-visible,
+.btn-appeal-reject:focus-visible,
+.btn-clear-filters:focus-visible,
+.bulk-delete-option:focus-visible,
+.admin-response-textarea:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+.notification-item:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), transparent);
+}
+
+.appeal-card:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ========== SELECTION STYLES ========== */
+
+::selection {
+    background: rgba(16, 185, 129, 0.3);
+    color: var(--text);
+}
+
+::-moz-selection {
+    background: rgba(16, 185, 129, 0.3);
+    color: var(--text);
+}
+
+/* ========== UTILITY CLASSES ========== */
+
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.no-scroll {
+    overflow: hidden !important;
+}
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text-break {
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==========================================
+   ENHANCED NOTIFICATION BADGE - CRYSTAL CLEAR
+   ========================================== */
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    min-width: 22px;
+    height: 22px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 900;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    box-shadow: 
+        0 4px 12px rgba(239, 68, 68, 0.6),
+        0 0 0 3px var(--panel),
+        0 0 0 4px rgba(239, 68, 68, 0.3);
+    animation: badgePulse 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    letter-spacing: 0.5px;
+    font-variant-numeric: tabular-nums;
+    z-index: 10;
+    /* Enhanced readability */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Pulsing animation */
+@keyframes badgePulse {
+    0%, 100% { 
+        transform: scale(1) translateY(0); 
+        box-shadow: 
+            0 4px 12px rgba(239, 68, 68, 0.6),
+            0 0 0 3px var(--panel),
+            0 0 0 4px rgba(239, 68, 68, 0.3);
+    }
+    50% { 
+        transform: scale(1.15) translateY(-2px); 
+        box-shadow: 
+            0 6px 18px rgba(239, 68, 68, 0.8),
+            0 0 0 3px var(--panel),
+            0 0 0 5px rgba(239, 68, 68, 0.5);
+    }
+}
+
+/* When badge is empty, hide it */
+.notification-badge:empty {
+    display: none !important;
+}
+
+/* Larger badge for 2-digit numbers */
+.notification-badge.large-count {
+    min-width: 26px;
+    height: 26px;
+    font-size: 0.65rem;
+    padding: 0 7px;
+    top: -10px;
+    right: -10px;
+}
+
+/* Extra large for 3-digit numbers (99+) */
+.notification-badge.extra-large-count {
+    min-width: 30px;
+    height: 26px;
+    font-size: 0.6rem;
+    padding: 0 8px;
+    top: -10px;
+    right: -12px;
+    border-radius: 13px;
+}
+
+/* High urgency (10+ notifications) */
+.notification-badge.urgent {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    animation: badgePulseUrgent 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    box-shadow: 
+        0 4px 16px rgba(239, 68, 68, 0.8),
+        0 0 0 3px var(--panel),
+        0 0 0 4px rgba(239, 68, 68, 0.5),
+        0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+@keyframes badgePulseUrgent {
+    0%, 100% { 
+        transform: scale(1) translateY(0); 
+    }
+    25% { 
+        transform: scale(1.2) translateY(-3px); 
+    }
+    50% { 
+        transform: scale(1.1) translateY(-1px); 
+    }
+    75% { 
+        transform: scale(1.2) translateY(-3px); 
+    }
+}
+
+/* Dark mode adjustments */
+body.dark .notification-badge {
+    box-shadow: 
+        0 4px 12px rgba(239, 68, 68, 0.7),
+        0 0 0 3px var(--panel),
+        0 0 0 4px rgba(239, 68, 68, 0.4),
+        0 0 16px rgba(239, 68, 68, 0.3);
+}
+
+body.dark .notification-badge.urgent {
+    box-shadow: 
+        0 4px 16px rgba(239, 68, 68, 0.9),
+        0 0 0 3px var(--panel),
+        0 0 0 4px rgba(239, 68, 68, 0.6),
+        0 0 24px rgba(239, 68, 68, 0.5);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .notification-badge {
+        min-width: 20px;
+        height: 20px;
+        font-size: 0.65rem;
+        top: -6px;
+        right: -6px;
+    }
+    
+    .notification-badge.large-count {
+        min-width: 24px;
+        height: 24px;
+        font-size: 0.6rem;
+        top: -8px;
+        right: -8px;
+    }
+}
+
+/* Accessibility - High contrast mode */
+@media (prefers-contrast: high) {
+    .notification-badge {
+        border: 2px solid white;
+        font-weight: 900;
+    }
+}
+
+/* New notification arrives - special animation */
+.notification-badge.new-notification {
+    animation: badgeNewNotification 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes badgeNewNotification {
+    0% { 
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    50% { 
+        transform: scale(1.4) rotate(180deg);
+        opacity: 1;
+    }
+    100% { 
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
+    }
+}
+/* Bell shake animation on new notification */
+.notification-bell-btn.has-new {
+    animation: bellShake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes bellShake {
+    0%, 100% { transform: rotate(0deg); }
+    10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+    20%, 40%, 60%, 80% { transform: rotate(10deg); }
+}
+
+/* Bell icon subtle bounce */
+.notification-bell-btn i {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.notification-bell-btn:hover i {
+    transform: scale(1.1) rotate(15deg);
+}
+
+.notification-bell-btn.has-new i {
+    animation: bellIconBounce 0.6s ease;
+}
+
+@keyframes bellIconBounce {
+    0%, 100% { transform: scale(1) translateY(0); }
+    25% { transform: scale(1.1) translateY(-4px); }
+    50% { transform: scale(0.95) translateY(0); }
+    75% { transform: scale(1.05) translateY(-2px); }
+}
+/* ==========================================
+   NOTIFICATION BADGE - GUARANTEED VISIBILITY FIX
+   ========================================== */
+
+.notification-bell-container {
+    position: relative;
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
+    z-index: 100; /* Ensure container is above other elements */
+}
+
+.notification-bell-btn {
+    position: relative; /* CRITICAL - needed for badge positioning */
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all 0.25s ease;
+    overflow: visible; /* CRITICAL - allow badge to overflow */
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
+    z-index: 1; /* Base level */
+}
+
+.notification-badge {
+    /* CRITICAL POSITIONING */
+    position: absolute !important;
+    top: -10px !important;
+    right: -10px !important;
+    
+    /* SIZE & DISPLAY */
+    min-width: 24px !important;
+    height: 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 7px !important;
+    
+    /* APPEARANCE */
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    color: #ffffff !important;
+    font-size: 0.75rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    border-radius: 50% !important;
+    
+    /* CRITICAL Z-INDEX - ALWAYS ON TOP */
+    z-index: 1000 !important;
+    
+    /* SHADOW FOR DEPTH */
+    box-shadow: 
+        0 0 0 3px var(--panel),
+        0 4px 12px rgba(239, 68, 68, 0.7),
+        0 0 0 5px rgba(239, 68, 68, 0.2) !important;
+    
+    /* TEXT CLARITY */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif !important;
+    letter-spacing: 0.3px !important;
+    
+    /* ANIMATION */
+    animation: badgePulseStrong 2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite !important;
+    
+    /* POINTER EVENTS */
+    pointer-events: none !important;
+    user-select: none !important;
+}
+
+/* Stronger pulse animation */
+@keyframes badgePulseStrong {
+    0%, 100% { 
+        transform: scale(1) translateY(0);
+        box-shadow: 
+            0 0 0 3px var(--panel),
+            0 4px 12px rgba(239, 68, 68, 0.7),
+            0 0 0 5px rgba(239, 68, 68, 0.2);
+    }
+    50% { 
+        transform: scale(1.2) translateY(-3px);
+        box-shadow: 
+            0 0 0 3px var(--panel),
+            0 6px 20px rgba(239, 68, 68, 0.9),
+            0 0 0 6px rgba(239, 68, 68, 0.4);
+    }
+}
+
+/* When badge has 2 digits */
+.notification-badge.two-digits {
+    min-width: 28px !important;
+    height: 28px !important;
+    font-size: 0.7rem !important;
+    top: -12px !important;
+    right: -12px !important;
+    padding: 0 8px !important;
+}
+
+/* When badge has 3+ digits (99+) */
+.notification-badge.three-digits {
+    min-width: 32px !important;
+    height: 28px !important;
+    font-size: 0.65rem !important;
+    top: -12px !important;
+    right: -14px !important;
+    padding: 0 9px !important;
+    border-radius: 14px !important;
+}
+
+/* High urgency (10+ notifications) */
+.notification-badge.urgent {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%) !important;
+    animation: badgePulseUrgent 1.2s ease-in-out infinite !important;
+    box-shadow: 
+        0 0 0 3px var(--panel),
+        0 4px 16px rgba(239, 68, 68, 0.9),
+        0 0 0 5px rgba(239, 68, 68, 0.4),
+        0 0 24px rgba(239, 68, 68, 0.6) !important;
+}
+
+@keyframes badgePulseUrgent {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.25); }
+    50% { transform: scale(1.15); }
+    75% { transform: scale(1.25); }
+}
+
+/* New notification animation */
+.notification-badge.new-notification {
+    animation: badgeNewNotificationStrong 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+}
+
+@keyframes badgeNewNotificationStrong {
+    0% { 
+        transform: scale(0) rotate(0deg);
+        opacity: 0;
+    }
+    60% { 
+        transform: scale(1.5) rotate(360deg);
+        opacity: 1;
+    }
+    100% { 
+        transform: scale(1) rotate(360deg);
+        opacity: 1;
+    }
+}
+
+/* DARK MODE */
+body.dark .notification-badge {
+    box-shadow: 
+        0 0 0 3px var(--panel),
+        0 4px 16px rgba(239, 68, 68, 0.9),
+        0 0 0 5px rgba(239, 68, 68, 0.5),
+        0 0 20px rgba(239, 68, 68, 0.4) !important;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .notification-badge {
+        min-width: 22px !important;
+        height: 22px !important;
+        font-size: 0.7rem !important;
+        top: -8px !important;
+        right: -8px !important;
+    }
+    
+    .notification-badge.two-digits {
+        min-width: 26px !important;
+        height: 26px !important;
+        top: -10px !important;
+        right: -10px !important;
+    }
+}
+
+/* HIGH CONTRAST MODE */
+@media (prefers-contrast: high) {
+    .notification-badge {
+        border: 3px solid white !important;
+        font-weight: 900 !important;
+    }
+}
+
+/* ENSURE BADGE IS NEVER HIDDEN */
+.notification-bell-btn,
+.notification-bell-container,
+.header-right {
+    overflow: visible !important;
+}

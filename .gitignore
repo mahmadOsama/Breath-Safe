@@ -1,0 +1,61 @@
+# Local environment files and secrets
+.env
+.env.*
+!.env.example
+# Internal review notes contain identifiers and are not part of the public showcase.
+PREPUSH_SECURITY_REPORT.md
+serviceAccountKey.json
+serviceAccount*.json
+*service-account*.json
+*serviceAccount*.json
+firebase-admin-key*.json
+*-firebase-adminsdk-*.json
+firebase-debug.log
+.firebase/
+.runtimeconfig.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Generated output and caches
+dist/
+build/
+coverage/
+.nyc_output/
+.cache/
+.tmp/
+.vite/
+.codeboarding/
+node-compile-cache/
+
+# Unreferenced legacy files retained locally and excluded from this showcase.
+Login-codes/firebase-config.js
+Login-codes/username-worker.js
+Login-codes/breathsafe-admin-login.css
+js/admin-dashboard-utils.js
+user-dashboard/sw.js
+
+# Separate VS Code extension project; it is not part of BreathSafe.
+js-code-tree-extension/
+
+# Logs and local data
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Editor and operating system files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

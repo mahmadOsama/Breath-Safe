@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="BreathSafe Admin Portal - Secure administrative access">
+    <meta name="theme-color" content="#10b981">
+    
+    <title>Admin Login - BreathSafe</title>
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="admin-login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Blocked Screen Styles -->
+    <link rel="stylesheet" href="blocked-screen.css">
+</head>
+<body class="light">
+    
+    <!-- Animated Background -->
+    <div class="animated-bg" aria-hidden="true">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="login-main">
+        
+        <!-- Left Side - Features Panel (Desktop Only) -->
+        <div class="login-features" aria-hidden="true">
+            <div class="features-content">
+                
+                <!-- Brand Header -->
+                <div class="features-header">
+                    <div class="brand-logo">
+                        <div class="brand-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="brand-text">
+                            <h2>BreathSafe</h2>
+                            <span class="brand-tag">Admin Portal</span>
+                        </div>
+                    </div>
+                    <p class="features-description">
+                        Access the administrative dashboard to manage users, monitor sensors, and configure system settings for the BreathSafe platform.
+                    </p>
+                </div>
+
+                <!-- Admin Features -->
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <div>
+                            <h4>User Management</h4>
+                            <p>Activate, suspend, and manage user accounts with full control over permissions</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div>
+                            <h4>Sensor Assignment</h4>
+                            <p>Assign and configure sensors to users with real-time monitoring capabilities</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div>
+                            <h4>Analytics Dashboard</h4>
+                            <p>View comprehensive reports, activity logs, and system performance metrics</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <h4>Security Center</h4>
+                            <p>Monitor security events, manage blocked devices, and review audit trails</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Levels -->
+                <div class="admin-levels">
+                    <div class="levels-header">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Access Levels</span>
+                    </div>
+                    <div class="levels-grid">
+                        <div class="level-item executive">
+                            <i class="fas fa-crown"></i>
+                            <span>Executive</span>
+                        </div>
+                        <div class="level-item regular">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Regular</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trust Indicators -->
+                <div class="trust-indicators">
+                    <div class="trust-badge">
+                        <i class="fas fa-lock"></i>
+                        <span>Enhanced Security</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="fas fa-fingerprint"></i>
+                        <span>Device Verified</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="fas fa-history"></i>
+                        <span>Activity Logged</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Right Side - Login Form -->
+        <div class="login-container">
+            
+            <!-- Glass Card -->
+            <div class="login-card glass-card">
+                
+                <!-- Security Status Bar -->
+                <div class="security-status-bar admin">
+                    <div class="status-item active">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin Portal</span>
+                    </div>
+                    <div class="status-indicator"></div>
+                </div>
+                
+                <!-- Logo Section -->
+                <div class="login-logo">
+                    <div class="logo-icon-wrapper">
+                        <div class="logo-icon admin">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="logo-pulse admin"></div>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">BreathSafe</span>
+                        <span class="logo-subtitle">Admin Portal</span>
+                    </div>
+                </div>
+
+                <!-- Header -->
+                <div class="login-header">
+                    <h1 class="page-title">Welcome Back</h1>
+                    <p class="page-subtitle">Sign in to access your admin dashboard</p>
+                </div>
+
+                <!-- Login Form -->
+                <form id="adminLoginForm" class="login-form" autocomplete="on">
+                    
+                    <!-- Username Field -->
+                    <div class="form-group" id="usernameGroup">
+                        <label class="modern-label" for="adminUsername">
+                            <i class="fas fa-user"></i>
+                            <span>Username</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="adminUsername" 
+                                name="username"
+                                class="modern-input"
+                                placeholder="Enter your admin username" 
+                                required
+                                autocomplete="username"
+                                maxlength="50"
+                                spellcheck="false"
+                                autocapitalize="none"
+                            >
+                            <div class="input-border"></div>
+                            <div class="input-indicator" id="usernameIndicator">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                            </div>
+                        </div>
+                        <small class="form-hint" id="usernameHint">
+                            <i class="fas fa-info-circle"></i>
+                            Enter your admin username
+                        </small>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group" id="passwordGroup">
+                        <label class="modern-label" for="adminPassword">
+                            <i class="fas fa-lock"></i>
+                            <span>Password</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="adminPassword" 
+                                name="password"
+                                class="modern-input"
+                                placeholder="Enter your password" 
+                                required
+                                autocomplete="current-password"
+                                maxlength="50"
+                            >
+                            <div class="input-border"></div>
+                            <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <small class="form-hint">
+                            <i class="fas fa-info-circle"></i>
+                            Enter your secure password
+                        </small>
+                    </div>
+
+                    <!-- API Token Field -->
+                    <div class="form-group" id="tokenGroup">
+                        <label class="modern-label" for="adminAPI">
+                            <i class="fas fa-key"></i>
+                            <span>API Token</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="adminAPI" 
+                                name="apiToken"
+                                class="modern-input token-input"
+                                placeholder="64-character token" 
+                                required
+                                autocomplete="off"
+                                maxlength="64"
+                                spellcheck="false"
+                                autocapitalize="characters"
+                            >
+                            <div class="input-border"></div>
+                            <div class="input-indicator" id="tokenIndicator">
+                                <i class="fas fa-circle-notch fa-spin"></i>
+                            </div>
+                        </div>
+                        <div class="validation-feedback" id="tokenValidation"></div>
+                        <small class="form-hint" id="tokenHint">
+                            <i class="fas fa-info-circle"></i>
+                            Enter your 64-character API token.
+                        </small>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="modern-btn btn-primary btn-admin" id="loginBtn">
+                        <span class="btn-content">
+                            <span class="btn-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </span>
+                            <span class="btn-text">Sign In to Dashboard</span>
+                        </span>
+                        <span class="btn-loading" style="display: none;">
+                            <span class="loading-spinner"></span>
+                            <span>Verifying...</span>
+                        </span>
+                    </button>
+
+                    <!-- Lockout Timer -->
+                    <div class="admin-lockout-timer" id="adminLockoutTimer">
+                        <div class="lockout-icon">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <div class="lockout-text">Admin Account Security Lock</div>
+                        <div class="lockout-countdown" id="adminLockoutCountdown">20:00</div>
+                        <div class="lockout-progress">
+                            <div class="lockout-progress-bar" id="lockoutProgressBar"></div>
+                        </div>
+                        <div class="lockout-message">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Enhanced security for admin accounts</span>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="divider">
+                        <span>Not an admin?</span>
+                    </div>
+
+                    <!-- Action Links -->
+                    <div class="action-links">
+                        <a href="../index.html" class="action-link">
+                            <i class="fas fa-user"></i>
+                            <span>User Login</span>
+                        </a>
+                        <a href="forgot-password.html" class="action-link">
+                            <i class="fas fa-key"></i>
+                            <span>Reset Credentials</span>
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Message Display -->
+                <div id="message" class="modern-message" role="alert" aria-live="polite"></div>
+
+                <!-- Footer -->
+                <div class="login-footer">
+                    <div class="footer-badges">
+                        <p class="security-badge">
+                            <i class="fas fa-shield-halved"></i>
+                            Admin Protected
+                        </p>
+                        <span class="footer-divider">•</span>
+                        <a href="privacy-policy.html" class="privacy-link">
+                            <i class="fas fa-user-shield"></i>
+                            Privacy Policy
+                        </a>
+                    </div>
+                    <p class="copyright-text">
+                        © 2025 BreathSafe Technologies. All rights reserved.
+                    </p>
+                </div>
+
+                <!-- Decorative Elements -->
+                <div class="decorative-elements" aria-hidden="true">
+                    <div class="deco-circle circle-1"></div>
+                    <div class="deco-circle circle-2"></div>
+                </div>
+
+            </div>
+
+            <!-- Mobile Trust Badges -->
+            <div class="professional-badges" aria-hidden="true">
+                <div class="badge-item">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Admin</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fas fa-lock"></i>
+                    <span>Secure</span>
+                </div>
+                <div class="badge-item">
+                    <i class="fas fa-fingerprint"></i>
+                    <span>Verified</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="modern-theme-toggle" aria-label="Toggle dark mode" type="button">
+        <span class="toggle-icon">
+            <i class="fas fa-sun" id="themeIcon"></i>
+        </span>
+    </button>
+
+    <!-- Firebase SDK v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Theme Toggle Script -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(savedTheme);
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                const themeToggle = document.getElementById('themeToggle');
+                const themeIcon = document.getElementById('themeIcon');
+                
+                function updateThemeIcon() {
+                    const isDark = document.body.classList.contains('dark');
+                    themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+                }
+                
+                updateThemeIcon();
+                
+                themeToggle.addEventListener('click', function() {
+                    document.body.classList.toggle('dark');
+                    document.body.classList.toggle('light');
+                    const isDark = document.body.classList.contains('dark');
+                    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                    updateThemeIcon();
+                });
+
+                // Password toggle
+                const togglePassword = document.getElementById('togglePassword');
+                const passwordInput = document.getElementById('adminPassword');
+                
+                if (togglePassword && passwordInput) {
+                    togglePassword.addEventListener('click', function() {
+                        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                        passwordInput.setAttribute('type', type);
+                        this.querySelector('i').classList.toggle('fa-eye');
+                        this.querySelector('i').classList.toggle('fa-eye-slash');
+                    });
+                }
+
+                // Token input formatting
+                const tokenInput = document.getElementById('adminAPI');
+                if (tokenInput) {
+                    tokenInput.addEventListener('input', function() {
+                        this.value = this.value.toUpperCase();
+                    });
+                }
+            });
+        })();
+    </script>
+    
+    <!-- Login Scripts -->
+    <script src="device-fingerprint.js"></script>
+    <script src="breathsafe-admin-login.js"></script>
+    <script src="breathsafe-login-security.js"></script>
+    <script src="blocked-screen.js"></script>
+
+</body>
+</html>
